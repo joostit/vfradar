@@ -15,6 +15,7 @@
 
         <fragment
             android:id="@+id/radarViewFrag"
+            android:tag="radarViewFragTag"
             android:name="com.joostit.vfradar.RadarViewFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"

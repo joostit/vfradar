@@ -1,4 +1,4 @@
-package com.joostit.vfradar;
+package com.joostit.vfradar.radardrawing;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,7 +9,12 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.joostit.vfradar.data.JSonTrackedAircraft;
+import com.joostit.vfradar.data.TrackedAircraft;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Joost on 15-1-2018.
@@ -26,35 +31,37 @@ public class RadarView extends View {
         Selected
     }
 
-    Paint mTextPaint;
-    int mTextColor = Color.BLUE;
-    float mTextHeight;
-    Boolean mShowText = true;
-    int mTextWidth = 70;
+    private List<AircraftPlot> plots = new ArrayList<>();
 
-    Paint acNamePaint;
-    Paint acInfoPaint;
-    Paint crosshairPaint;
-    Paint aircraftForePaint;
-    Paint aircraftBackPaint;
-    Paint acTextGuideLinePaint;
-    Paint sitePaint;
-    Paint acWarningBoxPaint;
-    Paint acNoteBoxPaint;
-    Paint acSelectedBoxPaint;
-    Paint circuitPaint;
+    private Paint mTextPaint;
+    private int mTextColor = Color.BLUE;
+    private float mTextHeight;
+    private Boolean mShowText = true;
+    private int mTextWidth = 70;
 
-    int crosshairColor = 0xFF003300;
-    int siteColor = 0x50ff9900;
-    int acForeColor = 0xFF00FF00;
-    int acBackColor = 0xFF008000;
-    int acTextGuideLineColor = 0xAA008000;
-    int acNameTextColor = 0xFF00FF00;
-    int acInfoTextColor = 0xFF00AA00;
-    int acWarningBoxColor = 0xFFFF0000;
-    int acSelectedBoxColor = 0xFFFFFFFF;
-    int acNoteBoxColor = 0xFFFFFF00;
-    int circuitColor = 0x70ff9900;
+    private Paint acNamePaint;
+    private Paint acInfoPaint;
+    private Paint crosshairPaint;
+    private Paint aircraftForePaint;
+    private Paint aircraftBackPaint;
+    private Paint acTextGuideLinePaint;
+    private Paint sitePaint;
+    private Paint acWarningBoxPaint;
+    private Paint acNoteBoxPaint;
+    private Paint acSelectedBoxPaint;
+    private Paint circuitPaint;
+
+    private int crosshairColor = 0xFF003300;
+    private int siteColor = 0x50ff9900;
+    private int acForeColor = 0xFF00FF00;
+    private int acBackColor = 0xFF008000;
+    private int acTextGuideLineColor = 0xAA008000;
+    private int acNameTextColor = 0xFF00FF00;
+    private int acInfoTextColor = 0xFF00AA00;
+    private int acWarningBoxColor = 0xFFFF0000;
+    private int acSelectedBoxColor = 0xFFFFFFFF;
+    private int acNoteBoxColor = 0xFFFFFF00;
+    private int circuitColor = 0x70ff9900;
 
     public RadarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -62,8 +69,9 @@ public class RadarView extends View {
     }
 
 
-
     private void init() {
+
+
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setColor(mTextColor);
         if (mTextHeight == 0) {
@@ -124,23 +132,15 @@ public class RadarView extends View {
         circuitPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         circuitPaint.setColor(circuitColor);
         circuitPaint.setStrokeWidth(20);
+}
+
+
+
+    public synchronized void UpdateAircraft(List<TrackedAircraft> ac){
+        updateAircraftPlotObjects(ac);
+        invalidate();
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-// Account for padding
-        float xpad = (float)(getPaddingLeft() + getPaddingRight());
-        float ypad = (float)(getPaddingTop() + getPaddingBottom());
-
-        // Account for the label
-        if (mShowText) xpad += mTextWidth;
-
-        float ww = (float)w - xpad;
-        float hh = (float)h - ypad;
-
-        // Figure out how big we can make the pie.
-        float diameter = Math.min(ww, hh);
-    }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -151,23 +151,15 @@ public class RadarView extends View {
         drawCrosshair(canvas);
         drawSite(canvas);
 
-
         float width = getWidth();
         float height = getHeight();
         float cX = width / 2;
         float cY = height / 2;
 
-        DrawAircraft(canvas, cX - 400, cY + 300, 230, "PH-TWM", 331, 7.4, AircraftStates.None);
-        DrawAircraft(canvas, cX - 420, cY - 340, 178, "PH-TWK", 950, 0, AircraftStates.None);
-        DrawAircraft(canvas, cX - 220, cY - 40, 50, "PH-RRR", 335, -0.1, AircraftStates.Warning);
-        DrawAircraft(canvas, cX + 100, cY - 90, 230, "PH-798", 80, -0.7, AircraftStates.Note);
-        DrawAircraft(canvas, cX + 50, cY + 30, 45, "PH-712 (T4)", 140, -0.8, AircraftStates.Note);
-        DrawAircraft(canvas, cX + 250, cY + 230, 281, "PH-648", 1270, 0.5, AircraftStates.None);
-        DrawAircraft(canvas, cX + 400, cY - 370, 346, "PH-1471 (T8)", 867, 2.8, AircraftStates.Selected);
-        DrawAircraft(canvas, cX + 400, cY + 450, 160, "PH-1480 (T7)", 1560, 3.1, AircraftStates.None);
-        DrawAircraft(canvas, cX + 348, cY + 412, 20, "PH-764", 764, -3.2, AircraftStates.None);
-        DrawAircraft(canvas, cX + 358, cY + 432, 170, "PH-973 (T6)", 1420, 1.4, AircraftStates.None);
+        plotAllAircraft(canvas);
+
     }
+
 
 
     private void drawCrosshair(Canvas canvas){
@@ -190,6 +182,91 @@ public class RadarView extends View {
 
     }
 
+    private synchronized void updateAircraftPlotObjects(List<TrackedAircraft> tracks){
+        for(TrackedAircraft track : tracks){
+            AircraftPlot plot = findPlotByTrackid(track.Data.Trackid);
+
+            if(plot == null){
+                plot = new AircraftPlot();
+                plot.TrackId = track.Data.Trackid;
+                plots.add(plot);
+            }
+
+            updateAircraftPlot(track, plot);
+        }
+    }
+
+
+    private AircraftPlot findPlotByTrackid(int trackId){
+        AircraftPlot found = null;
+
+        for(AircraftPlot plot : plots){
+            if(plot.TrackId == trackId){
+                found = plot;
+                break;
+            }
+        }
+
+        return found;
+    }
+
+
+    private synchronized void updateAircraftPlot(TrackedAircraft aircraft, AircraftPlot plot){
+
+        String vRateString = "";
+        String nameString = "";
+
+        if(!IsNullOrEmpty(aircraft.Data.Reg)){
+            nameString = aircraft.Data.Reg;
+            if(IsNullOrEmpty(aircraft.Data.CallSign)){
+                nameString += " (" + aircraft.Data.CallSign + ")";
+            }
+        }
+        else if(IsNullOrEmpty(aircraft.Data.CallSign)){
+            nameString = aircraft.Data.CallSign;
+        }
+        else if(IsNullOrEmpty(aircraft.Data.Icao24)){
+            nameString = aircraft.Data.Icao24;
+        }
+        else if(IsNullOrEmpty(aircraft.Data.FlarmId)){
+            nameString = aircraft.Data.FlarmId;
+        }
+        else if(IsNullOrEmpty(aircraft.Data.OgnId)){
+            nameString = aircraft.Data.OgnId;
+        }
+
+        if(!IsNullOrEmpty(aircraft.Data.Cn)){
+            nameString += " (" + aircraft.Data.Cn + ")";
+        }
+        plot.DisplayName = nameString;
+
+
+        if(aircraft.Data.VRate != 0) {
+            double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
+            String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
+            vRateString = "   " + plusSign + df1.format(vRateRounded);
+        }
+
+        plot.InfoLine = aircraft + vRateString;
+
+        plot.Track = aircraft.Data.Track;
+
+        // ToDo: Calculate screen coordinates from Lat/Lon
+
+        plot.ScreenX = 400;
+        plot.ScreenY = 400;
+    }
+
+    private Boolean IsNullOrEmpty(String input){
+        if((input != null) && (!input.trim().equals(""))){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+
     private void drawSite(Canvas canvas){
         float centerX = getWidth() / 2;
         float centerY = getHeight() / 2;
@@ -199,15 +276,19 @@ public class RadarView extends View {
         runway.lineTo(centerX - 276, centerY + 197);
         canvas.drawPath(runway, sitePaint);
 
-        //Path circuit = new Path();
-        //circuit.moveTo(centerX + 80, centerY - 10);
-        //circuit.lineTo(centerX - 226, centerY + 247);
-        //canvas.drawPath(circuit, circuitPaint);
     }
 
 
 
-    private void DrawAircraft(Canvas canvas, float x, float y, double bearing, String name, int altitude, double vRate, AircraftStates marker) {
+    private synchronized void plotAllAircraft(Canvas canvas){
+
+        for(AircraftPlot ac : plots){
+            drawAircraft(canvas, ac);
+        }
+    }
+
+
+    private void drawAircraft(Canvas canvas, AircraftPlot ac){
 
         float arrowAngle = 135;
         float longArrowLength = 11;
@@ -217,6 +298,14 @@ public class RadarView extends View {
         int boxRound = 7;
         double shortLineLength = 20;
         double longLineLength = 22;
+
+        // Copy numerical data only once to prevent multithreading inconsistencies
+        double bearing = ac.Track;
+        float x  = ac.ScreenX;
+        float y = ac.ScreenY;
+        String nameLine = ac.DisplayName;
+        String infoLine = ac.InfoLine;
+
         double arrRightBearing = bearing + arrowAngle;
         double arrLeftBearing = bearing - arrowAngle;
 
@@ -231,7 +320,6 @@ public class RadarView extends View {
         float longEndX = x + (float) (longLineLength * Math.sin(rad));
         float longEndY = y - (float) (longLineLength * Math.cos(rad));
 
-
         float longArrRightX = shortEndX + (float) (longArrowLength * Math.sin(arrRightRad));
         float longArrRightY = shortEndY - (float) (longArrowLength * Math.cos(arrRightRad));
 
@@ -244,20 +332,17 @@ public class RadarView extends View {
         float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
         float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
 
-
-
-        if(marker == AircraftStates.Warning){
+        if(ac.IsWarningMarker){
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acWarningBoxPaint);
         }
-        if(marker == AircraftStates.Note){
+        if(ac.IsNotificationMarker){
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acNoteBoxPaint);
         }
 
-        if(marker == AircraftStates.Selected){
+        if(ac.IsSelectedMarker){
             boxSize += 5;
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acSelectedBoxPaint);
         }
-
 
         canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
 
@@ -266,25 +351,14 @@ public class RadarView extends View {
         canvas.drawLine(x, y, shortEndX, shortEndY, aircraftBackPaint);
         canvas.drawCircle(x, y, 7, aircraftBackPaint);
 
-
         canvas.drawLine(x, y, longEndX, longEndY, aircraftForePaint);
         canvas.drawCircle(x, y, 6, aircraftForePaint);
-
 
         canvas.drawLine(longEndX, longEndY, longArrRightX, longArrRightY, aircraftForePaint);
         canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, aircraftForePaint);
 
-        String vRateString = "";
-        if(vRate != 0) {
-            double vRateRounded = Math.round(vRate * 10) / 10.0;
-            String plusSign = (vRate > 0.0) ? "+" : "";
-            vRateString = "   " + plusSign + df1.format(vRateRounded);
-        }
-
-        String altLine = altitude + vRateString;
-
-        canvas.drawText(name, x + 20, y - 64, acNamePaint);
-        canvas.drawText(altLine, x + 20, y - 40, acInfoPaint);
+        canvas.drawText(nameLine, x + 20, y - 64, acNamePaint);
+        canvas.drawText(infoLine, x + 20, y - 40, acInfoPaint);
     }
 
 

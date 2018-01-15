@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.radardrawing.RadarView;
+
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,6 +88,11 @@ public class RadarViewFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void UpdateAircraft(List<TrackedAircraft> ac){
+        RadarView rView = getView().findViewById(R.id.radarView);
+        rView.UpdateAircraft(ac);
     }
 
     /**
