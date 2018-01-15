@@ -6,13 +6,36 @@
     android:layout_height="match_parent"
     tools:context="com.joostit.vfradar.OperationalActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:weightSum="4">
+
+
+        <fragment
+            android:id="@+id/radarViewFrag"
+            android:name="com.joostit.vfradar.RadarViewFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <View
+            android:id="@+id/separator1"
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="#90909090" />
+
+        <fragment
+            android:id="@+id/sidePanelFrag"
+            android:name="com.joostit.vfradar.SidePanelFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

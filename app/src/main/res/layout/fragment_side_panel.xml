@@ -1,0 +1,13 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.joostit.vfradar.SidePanelFragment">
+
+    <fragment
+        android:name="com.joostit.vfradar.AircraftListFragment"
+        android:id="@+id/aircraftList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>
