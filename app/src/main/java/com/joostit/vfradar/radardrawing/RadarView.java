@@ -189,7 +189,7 @@ public class RadarView extends View {
 
     private synchronized void updateAircraftPlotObjects(List<TrackedAircraft> tracks){
 
-        projection.setWorldSize(this.getWidth(), this.getWidth(), this.getHeight(), 40000, 52.278758, 6.899437);
+        projection.setScreen(this.getWidth(), this.getWidth(), this.getHeight(), 40000, 52.278758, 6.899437);
         for(TrackedAircraft track : tracks){
             AircraftPlot plot = findPlotByTrackid(track.Data.Trackid);
 
@@ -261,7 +261,7 @@ public class RadarView extends View {
         plot.Track = aircraft.Data.Track;
 
         // ToDo: Calculate screen coordinates from Lat/Lon
-        PointF screenPoint = projection.toPoint(aircraft.Data.Lat, aircraft.Data.Lon);
+        PointF screenPoint = projection.toScreenPoint(aircraft.Data.Lat, aircraft.Data.Lon);
         plot.ScreenX = screenPoint.x;
         plot.ScreenY = screenPoint.y;
     }
