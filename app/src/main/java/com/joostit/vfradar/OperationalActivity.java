@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.joostit.vfradar.data.TrackedAircraft;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OperationalActivity extends AppCompatActivity
@@ -14,17 +13,17 @@ public class OperationalActivity extends AppCompatActivity
         RadarViewFragment.OnRadarViewInteractionListener,
         AircraftListFragment.OnAircraftListInteractionListener{
 
-    private long startTime = 0;
+
     private DebugAircraftDataGenerator debugGenerator = new DebugAircraftDataGenerator();
 
-
+    private long startTime = 0;
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
             long millis = System.currentTimeMillis() - startTime;
-            timerHandler.postDelayed(this, 5000);
+            timerHandler.postDelayed(this, 500);
 
             UpdateAircraft(debugGenerator.GetAircraft());
         }
@@ -33,7 +32,7 @@ public class OperationalActivity extends AppCompatActivity
 
     private  void startTimer(){
         startTime = System.currentTimeMillis();
-        timerHandler.postDelayed(timerRunnable, 5000);
+        timerHandler.postDelayed(timerRunnable, 1000);
     }
 
 
