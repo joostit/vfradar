@@ -8,6 +8,7 @@ import com.joostit.vfradar.data.TrackedAircraft;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Joost on 15-1-2018.
@@ -17,7 +18,7 @@ public class DebugAircraftDataGenerator {
 
     private List<TrackedAircraft> aircraftList = new ArrayList<>();
 
-    private int timerMs = 500;
+    private int timerMs = 250;
 
     private long startTime = 0;
 
@@ -98,17 +99,25 @@ public class DebugAircraftDataGenerator {
 
     private synchronized void UpdateAircraft() {
 
+        double threshold = 0.3;
+        Random rd = new Random();
+
         for(TrackedAircraft ac : aircraftList){
-            ac.Data.Track += 10;
 
-            LatLon current = new LatLon(ac.Data.Lat, ac.Data.Lon);
+            double val = rd.nextDouble();
+            if(val < threshold) {
+                ac.Data.Track += 6;
+                ac.Data.Track = ac.Data.Track % 360;
 
-            double dist = (1000.0 / timerMs) * ac.Data.Speed;
+                LatLon current = new LatLon(ac.Data.Lat, ac.Data.Lon);
 
-            LatLon newPoint = current.Move(ac.Data.Track, dist );
+                double dist = (1000.0 / timerMs) * ac.Data.Speed;
 
-            ac.Data.Lat = newPoint.Latitude;
-            ac.Data.Lon = newPoint.Longitude;
+                LatLon newPoint = current.Move(ac.Data.Track, dist);
+
+                ac.Data.Lat = newPoint.Latitude;
+                ac.Data.Lon = newPoint.Longitude;
+            }
         }
 
     }
