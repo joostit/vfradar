@@ -20,15 +20,15 @@ public class DebugAircraftDataGenerator {
 
         List<TrackedAircraft> retVal = new ArrayList<>();
 
-        AddAircraft(retVal, 1, 1, "ABDEF1", "PH-TWM", "", 331, 501, 7.4, false, false, false);
-        AddAircraft(retVal, 1, 1, "ABDEF2", "PH-TWK", "", 335, 301, -0.1, true, false, false);
-        AddAircraft(retVal, 1, 1, "ABDEF3", "PH-712", "T4", 45, 140, -0.8, false, false, true);
-        AddAircraft(retVal, 1, 1, "ABDEF4", "PH-798", "", 230, 230, -1.8, false, false, true);
-        AddAircraft(retVal, 1, 1, "ABDEF5", "PH-648", "", 281, 1270, 0.5, false, false, false);
-        AddAircraft(retVal, 1, 1, "ABDEF6", "PH-1471", "T8", 346, 867, 2.8, false, true, false);
-        AddAircraft(retVal, 1, 1, "ABDEF7", "PH-1480", "T7", 160, 1560, 3.1, false, false, false);
-        AddAircraft(retVal, 1, 1, "ABDEF8", "PH-764", "", 20, 600, -3.2, false, false, false);
-        AddAircraft(retVal, 1, 1, "ABDEF9", "PH-974", "T6", 172, 1436, 1.4, false, false, false);
+        AddAircraft(retVal, 52.274143, 6.895478, "ABDEF1", "PH-TWM", "", 331, 501, 7.4, false, false, false);
+        AddAircraft(retVal, 52.284818, 6.873783, "ABDEF2", "PH-TWK", "", 335, 301, -0.1, true, false, false);
+        AddAircraft(retVal, 52.283179, 6.908719, "ABDEF3", "PH-712", "T4", 45, 140, -0.8, false, false, true);
+        AddAircraft(retVal, 52.275418, 6.899414, "ABDEF4", "PH-798", "", 230, 230, -1.8, false, false, true);
+        AddAircraft(retVal, 52.259443, 6.926437, "ABDEF5", "PH-648", "", 281, 1270, 0.5, false, false, false);
+        AddAircraft(retVal, 52.291826, 6.933838, "ABDEF6", "PH-1471", "T8", 346, 867, 2.8, false, true, false);
+        AddAircraft(retVal, 52.231618, 6.942367, "ABDEF7", "PH-1480", "T7", 160, 1560, 3.1, false, false, false);
+        AddAircraft(retVal, 52.243716, 6.865389, "ABDEF8", "PH-764", "", 20, 600, -3.2, false, false, false);
+        AddAircraft(retVal, 52.245094, 6.864513, "ABDEF9", "PH-974", "T6", 172, 1436, 1.4, false, false, false);
 
         return retVal;
     }

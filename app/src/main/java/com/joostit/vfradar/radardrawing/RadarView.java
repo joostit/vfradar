@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -62,6 +63,8 @@ public class RadarView extends View {
     private int acSelectedBoxColor = 0xFFFFFFFF;
     private int acNoteBoxColor = 0xFFFFFF00;
     private int circuitColor = 0x70ff9900;
+
+    private SphericalMercatorProjection projection;
 
     public RadarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -132,6 +135,8 @@ public class RadarView extends View {
         circuitPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         circuitPaint.setColor(circuitColor);
         circuitPaint.setStrokeWidth(20);
+
+        projection = new SphericalMercatorProjection(800);
 }
 
 
@@ -183,6 +188,8 @@ public class RadarView extends View {
     }
 
     private synchronized void updateAircraftPlotObjects(List<TrackedAircraft> tracks){
+
+        projection.setWorldSize(this.getWidth(), this.getWidth(), this.getHeight(), 40000, 52.278758, 6.899437);
         for(TrackedAircraft track : tracks){
             AircraftPlot plot = findPlotByTrackid(track.Data.Trackid);
 
@@ -218,20 +225,20 @@ public class RadarView extends View {
 
         if(!IsNullOrEmpty(aircraft.Data.Reg)){
             nameString = aircraft.Data.Reg;
-            if(IsNullOrEmpty(aircraft.Data.CallSign)){
+            if(!IsNullOrEmpty(aircraft.Data.CallSign)){
                 nameString += " (" + aircraft.Data.CallSign + ")";
             }
         }
-        else if(IsNullOrEmpty(aircraft.Data.CallSign)){
+        else if(!IsNullOrEmpty(aircraft.Data.CallSign)){
             nameString = aircraft.Data.CallSign;
         }
-        else if(IsNullOrEmpty(aircraft.Data.Icao24)){
+        else if(!IsNullOrEmpty(aircraft.Data.Icao24)){
             nameString = aircraft.Data.Icao24;
         }
-        else if(IsNullOrEmpty(aircraft.Data.FlarmId)){
+        else if(!IsNullOrEmpty(aircraft.Data.FlarmId)){
             nameString = aircraft.Data.FlarmId;
         }
-        else if(IsNullOrEmpty(aircraft.Data.OgnId)){
+        else if(!IsNullOrEmpty(aircraft.Data.OgnId)){
             nameString = aircraft.Data.OgnId;
         }
 
@@ -244,17 +251,19 @@ public class RadarView extends View {
         if(aircraft.Data.VRate != 0) {
             double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
             String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
-            vRateString = "   " + plusSign + df1.format(vRateRounded);
+            vRateString = "    " + plusSign + df1.format(vRateRounded);
         }
 
-        plot.InfoLine = aircraft + vRateString;
+
+
+        plot.InfoLine = aircraft.Data.Alt + vRateString;
 
         plot.Track = aircraft.Data.Track;
 
         // ToDo: Calculate screen coordinates from Lat/Lon
-
-        plot.ScreenX = 400;
-        plot.ScreenY = 400;
+        PointF screenPoint = projection.toPoint(aircraft.Data.Lat, aircraft.Data.Lon);
+        plot.ScreenX = screenPoint.x;
+        plot.ScreenY = screenPoint.y;
     }
 
     private Boolean IsNullOrEmpty(String input){
