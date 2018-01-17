@@ -13,20 +13,21 @@ import java.util.List;
 public class ZoomLevelCalculator {
 
     private List<ZoomLevelInfo> zoomLevels = new ArrayList<>();
+    private int currentZoomLevel = 3;
 
     public ZoomLevelCalculator(){
         loadZoomLevels();
     }
 
-    public ZoomLevelInfo getZoomLevelInfo(int zoomLevel){
-        return zoomLevels.get(zoomLevel);
+    public ZoomLevelInfo getZoomLevelInfo(){
+        return zoomLevels.get(currentZoomLevel);
     }
 
     private void loadZoomLevels() {
 
         zoomLevels.add(new ZoomLevelInfo()
         {{
-            RangeRadius = 6000;
+            RangeRadius = 600;
             RingRadius1 = 200;
             RingRadius2 = 400;
             RingRadius3 = 600;
@@ -103,5 +104,17 @@ public class ZoomLevelCalculator {
         }});
     }
 
+
+    public void zoomIn(){
+        if(currentZoomLevel > 0){
+            currentZoomLevel--;
+        }
+    }
+
+    public void zoomOut(){
+        if(currentZoomLevel < zoomLevels.size() - 1){
+            currentZoomLevel++;
+        }
+    }
 
 }

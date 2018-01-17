@@ -11,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.joostit.vfradar.RadarViewFragment;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
@@ -28,8 +27,11 @@ public class RadarView extends View {
 
 
     private float TOUCH_ACCURACY = 50;
-    private int currentZoomLevel = 3;
     private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
+
+    private float zoomButtonDimension = 70;
+    private float zoomButtonSpacing = 70;
+
     private static DecimalFormat df1 = new DecimalFormat("#.#");
 
 
@@ -51,6 +53,8 @@ public class RadarView extends View {
     private int mTextColor = Color.BLUE;
     private float mTextHeight;
 
+    private Paint buttonForePaint;
+    private Paint buttonBackPaint;
     private Paint acNamePaint;
     private Paint acInfoPaint;
     private Paint crosshairPaint;
@@ -63,6 +67,8 @@ public class RadarView extends View {
     private Paint acSelectedBoxPaint;
     private Paint crosshairTextPaint;
 
+    private int buttonForeColor = 0xFF009900;
+    private int buttonBackColor = 0xFF002200;
     private int crosshairColor = 0xFF003300;
     private int siteColor = 0x50ff9900;
     private int acForeColor = 0xFF00FF00;
@@ -146,6 +152,18 @@ public class RadarView extends View {
         crosshairTextPaint.setColor(crosshairTextColor);
         crosshairTextPaint.setTextSize(20);
 
+        buttonForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        buttonForePaint.setStyle(Paint.Style.STROKE);
+        buttonForePaint.setColor(buttonForeColor);
+        buttonForePaint.setStrokeWidth(10);
+        buttonForePaint.setTextSize(60);
+        //buttonForePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+        buttonBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        buttonBackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        buttonBackPaint.setColor(buttonBackColor);
+        buttonBackPaint.setStrokeWidth(20);
+
         // The world width is a fake value. It will be overwritten on the first drawing pass
         projection = new SphericalMercatorProjection(800);
 }
@@ -165,7 +183,7 @@ public class RadarView extends View {
 
     private synchronized void refreshDrawing(){
 
-        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo(currentZoomLevel).RangeRadius * 1.08, centerPosition);
+        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, centerPosition);
         RecalculateAircraftPlots();
         calculateCrosshair();
         invalidate();
@@ -173,7 +191,7 @@ public class RadarView extends View {
 
     private void calculateCrosshair(){
 
-        ZoomLevelInfo zlInfo = zoomLevels.getZoomLevelInfo(currentZoomLevel);
+        ZoomLevelInfo zlInfo = zoomLevels.getZoomLevelInfo();
 
         ring1Annot = DistanceString.getString(zlInfo.RingRadius1);
         ring2Annot = DistanceString.getString(zlInfo.RingRadius2);
@@ -204,11 +222,39 @@ public class RadarView extends View {
         drawCrosshair(canvas);
         drawSite(canvas);
 
-        float width = getWidth();
-        float height = getHeight();
+        drawAllAircraft(canvas);
 
-        plotAllAircraft(canvas);
+        drawButtons(canvas);
 
+    }
+
+    private float getZoomOutButtonX(){
+       return this.getWidth() - (2 * zoomButtonSpacing) - (2 * zoomButtonDimension);
+    }
+
+
+    private float getZoomInButtonX(){
+        return this.getWidth() - zoomButtonSpacing - zoomButtonDimension;
+    }
+
+    private float getZoomButtonY(){
+        return zoomButtonSpacing;
+    }
+
+    private void drawButtons(Canvas canvas) {
+
+        float zoomInButtonX = getZoomInButtonX();
+        float zoomOutButtonX = getZoomOutButtonX();
+        float zoomButtonY = getZoomButtonY();
+
+        canvas.drawRoundRect(zoomInButtonX, zoomButtonY, zoomInButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonBackPaint);
+        canvas.drawRoundRect(zoomInButtonX, zoomButtonY, zoomInButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonForePaint);
+
+        canvas.drawRoundRect(zoomOutButtonX, zoomButtonY, zoomOutButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonBackPaint);
+        canvas.drawRoundRect(zoomOutButtonX, zoomButtonY, zoomOutButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonForePaint);
+
+        canvas.drawText("+", zoomInButtonX + 18, zoomButtonY + 55, buttonForePaint);
+        canvas.drawText("-", zoomOutButtonX + 28, zoomButtonY + 53, buttonForePaint);
     }
 
     private float getCenterX(){
@@ -339,7 +385,7 @@ public class RadarView extends View {
         canvas.drawPath(runway, sitePaint);
     }
 
-    private synchronized void plotAllAircraft(Canvas canvas){
+    private synchronized void drawAllAircraft(Canvas canvas){
 
         AircraftPlot deferredPlot = null;
 
@@ -455,6 +501,50 @@ public class RadarView extends View {
 
     private synchronized void processTouchDown(MotionEvent event) {
 
+        if(processButtonTouchEvent(event)){
+            return;
+        }
+
+        if(processAircraftTouchEvent(event)){
+            return;
+        }
+
+    }
+
+    private boolean processButtonTouchEvent(MotionEvent event) {
+
+        boolean isHandled = false;
+        float x = event.getX();
+        float y = event.getY();
+
+
+        if((y > getZoomButtonY()) && (y < getZoomButtonY() + zoomButtonDimension)) {
+            if ((x > getZoomInButtonX()) && (x < getZoomInButtonX() + zoomButtonDimension)) {
+                zoomIn();
+            }
+
+            if ((x > getZoomOutButtonX()) && (x < getZoomOutButtonX() + zoomButtonDimension)) {
+                zoomOut();
+            }
+        }
+
+        return isHandled;
+    }
+
+    private void zoomOut() {
+        zoomLevels.zoomOut();
+        refreshDrawing();
+    }
+
+    private void zoomIn() {
+        zoomLevels.zoomIn();
+        refreshDrawing();
+    }
+
+    private boolean processAircraftTouchEvent(MotionEvent event){
+
+        boolean isHandled = true;
+
         float x = event.getX();
         float y = event.getY();
         double dist;
@@ -488,6 +578,8 @@ public class RadarView extends View {
         else{
             dispatchSelectionChanged(null);
         }
+
+        return isHandled;
     }
 
     private void dispatchSelectionChanged(Integer trackId) {
