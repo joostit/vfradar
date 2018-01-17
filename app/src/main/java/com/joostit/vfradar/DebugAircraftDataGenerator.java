@@ -82,7 +82,7 @@ public class DebugAircraftDataGenerator {
                              int speed,
                              Boolean warn,
                              Boolean sel,
-                             Boolean note){
+                             Boolean highlight){
         TrackedAircraft ta = new TrackedAircraft();
         ta.Data = new JSonTrackedAircraft();
 
@@ -96,6 +96,10 @@ public class DebugAircraftDataGenerator {
         ta.Data.VRate = vRate;
         ta.Data.Speed = speed;
         ta.Data.Trackid = list.size();
+
+        ta.isHighlighted = highlight;
+        ta.isSelected = sel;
+        ta.isWarning = warn;
 
         list.add(ta);
 

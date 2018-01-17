@@ -60,7 +60,7 @@ public class RadarView extends View {
     private Paint acTextGuideLinePaint;
     private Paint sitePaint;
     private Paint acWarningBoxPaint;
-    private Paint acNoteBoxPaint;
+    private Paint acHighlightBoxPaint;
     private Paint acSelectedBoxPaint;
     private Paint crosshairTextPaint;
 
@@ -72,7 +72,7 @@ public class RadarView extends View {
     private int acInfoTextColor = 0xFF00AA00;
     private int acWarningBoxColor = 0xFFFF0000;
     private int acSelectedBoxColor = 0xFFFFFFFF;
-    private int acNoteBoxColor = 0xFFFFFF00;
+    private int acHighlightBoxColor = 0xFFFFFF00;
     private int acTextGuideLineColor = 0xAA008000;
     private int crosshairTextColor = 0xAA008000;
 
@@ -134,9 +134,9 @@ public class RadarView extends View {
         acWarningBoxPaint.setStyle(Paint.Style.FILL);
         acWarningBoxPaint.setColor(acWarningBoxColor);
 
-        acNoteBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acNoteBoxPaint.setStyle(Paint.Style.FILL);
-        acNoteBoxPaint.setColor(acNoteBoxColor);
+        acHighlightBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        acHighlightBoxPaint.setStyle(Paint.Style.FILL);
+        acHighlightBoxPaint.setColor(acHighlightBoxColor);
 
         acSelectedBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acSelectedBoxPaint.setStyle(Paint.Style.FILL);
@@ -306,7 +306,9 @@ public class RadarView extends View {
             vRateString = "    " + plusSign + df1.format(vRateRounded);
         }
 
-
+        plot.isSelected = aircraft.isSelected;
+        plot.isHighlighted = aircraft.isHighlighted;
+        plot.isWarning = aircraft.isWarning;
 
         plot.InfoLine = aircraft.Data.Alt + vRateString;
 
@@ -393,14 +395,14 @@ public class RadarView extends View {
         float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
         float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
 
-        if(ac.IsWarningMarker){
+        if(ac.isWarning){
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acWarningBoxPaint);
         }
-        if(ac.IsNotificationMarker){
-            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acNoteBoxPaint);
+        if(ac.isHighlighted){
+            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acHighlightBoxPaint);
         }
 
-        if(ac.IsSelectedMarker){
+        if(ac.isSelected){
             boxSize += 5;
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acSelectedBoxPaint);
         }

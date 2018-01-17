@@ -7,5 +7,7 @@ package com.joostit.vfradar.data;
 public class TrackedAircraft {
     public JSonTrackedAircraft Data;
 
-    public Boolean FilterPassed = true;
+    public Boolean isSelected = false;
+    public Boolean isHighlighted = false;
+    public Boolean isWarning = false;
 }

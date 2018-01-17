@@ -11,9 +11,9 @@ public class AircraftPlot {
 
     public Integer Track;
 
-    public Boolean IsSelectedMarker = false;
-    public Boolean IsNotificationMarker = false;;
-    public Boolean IsWarningMarker = false;;
+    public Boolean isSelected = false;
+    public Boolean isHighlighted = false;
+    public Boolean isWarning = false;
 
     public String DisplayName;
     public String InfoLine;
