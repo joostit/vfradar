@@ -1,4 +1,4 @@
-package com.joostit.vfradar.Geo;
+package com.joostit.vfradar.geo;
 
 import java.util.Locale;
 

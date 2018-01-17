@@ -10,8 +10,9 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.joostit.vfradar.data.JSonTrackedAircraft;
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.geo.LatLon;
+import com.joostit.vfradar.utilities.DistanceString;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -25,6 +26,9 @@ public class RadarView extends View {
 
     private static DecimalFormat df1 = new DecimalFormat("#.#");
 
+    private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
+
+
     private enum AircraftStates{
         None,
         Note,
@@ -32,13 +36,21 @@ public class RadarView extends View {
         Selected
     }
 
+    private float ring1Radius = 0;
+    private float ring2Radius = 0;
+    private float ring3Radius = 0;
+    private String ring1Annot = "";
+    private String ring2Annot = "";
+    private String ring3Annot = "";
+
+
     private List<AircraftPlot> plots = new ArrayList<>();
+    private ZoomLevelCalculator zoomLevels = new ZoomLevelCalculator();
+    private int currentZoomLevel = 2;
 
     private Paint mTextPaint;
     private int mTextColor = Color.BLUE;
     private float mTextHeight;
-    private Boolean mShowText = true;
-    private int mTextWidth = 70;
 
     private Paint acNamePaint;
     private Paint acInfoPaint;
@@ -50,19 +62,19 @@ public class RadarView extends View {
     private Paint acWarningBoxPaint;
     private Paint acNoteBoxPaint;
     private Paint acSelectedBoxPaint;
-    private Paint circuitPaint;
+    private Paint crosshairTextPaint;
 
     private int crosshairColor = 0xFF003300;
     private int siteColor = 0x50ff9900;
     private int acForeColor = 0xFF00FF00;
     private int acBackColor = 0xFF008000;
-    private int acTextGuideLineColor = 0xAA008000;
     private int acNameTextColor = 0xFF00FF00;
     private int acInfoTextColor = 0xFF00AA00;
     private int acWarningBoxColor = 0xFFFF0000;
     private int acSelectedBoxColor = 0xFFFFFFFF;
     private int acNoteBoxColor = 0xFFFFFF00;
-    private int circuitColor = 0x70ff9900;
+    private int acTextGuideLineColor = 0xAA008000;
+    private int crosshairTextColor = 0xAA008000;
 
     private SphericalMercatorProjection projection;
 
@@ -130,20 +142,56 @@ public class RadarView extends View {
         acSelectedBoxPaint.setStyle(Paint.Style.FILL);
         acSelectedBoxPaint.setColor(acSelectedBoxColor);
 
+        crosshairTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        crosshairTextPaint.setStyle(Paint.Style.STROKE);
+        crosshairTextPaint.setColor(crosshairTextColor);
+        crosshairTextPaint.setTextSize(20);
 
-        circuitPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circuitPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        circuitPaint.setColor(circuitColor);
-        circuitPaint.setStrokeWidth(20);
-
+        // The world width is a fake value. It will be overwritten on the first drawing pass
         projection = new SphericalMercatorProjection(800);
 }
 
 
 
     public synchronized void UpdateAircraft(List<TrackedAircraft> ac){
+
+        // ToDo: We probably don't have to recalculate the crosshair here
+        refreshDrawObjects();
+
         updateAircraftPlotObjects(ac);
         invalidate();
+    }
+
+    private void refreshDrawObjects(){
+
+        Double rangeRadius = zoomLevels.getZoomLevelInfo(currentZoomLevel).RangeRadius;
+        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), rangeRadius * 1.08, centerPosition);
+        rangeRadius.byteValue();
+        // ToDo recalculate aircraft drawing positions here
+        calculateCrosshair();
+    }
+
+    private void calculateCrosshair(){
+
+        ZoomLevelInfo zlInfo = zoomLevels.getZoomLevelInfo(currentZoomLevel);
+
+        ring1Annot = DistanceString.getString(zlInfo.RingRadius1);
+        ring2Annot = DistanceString.getString(zlInfo.RingRadius2);
+        ring3Annot = DistanceString.getString(zlInfo.RingRadius3);
+
+        LatLon ring1NorthPoint = centerPosition.Move(0, zlInfo.RingRadius1);
+        LatLon ring2NorthPoint = centerPosition.Move(0, zlInfo.RingRadius2);
+        LatLon ring3NorthPoint = centerPosition.Move(0, zlInfo.RingRadius3);
+
+        PointF ring1ScreenTop = projection.toScreenPoint(ring1NorthPoint.Latitude, ring1NorthPoint.Longitude);
+        PointF ring2ScreenTop = projection.toScreenPoint(ring2NorthPoint.Latitude, ring2NorthPoint.Longitude);
+        PointF ring3ScreenTop = projection.toScreenPoint(ring3NorthPoint.Latitude, ring3NorthPoint.Longitude);
+
+        float centerY = getCenterY();
+
+        ring1Radius = centerY - ring1ScreenTop.y;
+        ring2Radius = centerY - ring2ScreenTop.y;
+        ring3Radius = centerY - ring3ScreenTop.y;
     }
 
 
@@ -158,8 +206,6 @@ public class RadarView extends View {
 
         float width = getWidth();
         float height = getHeight();
-        float cX = width / 2;
-        float cY = height / 2;
 
         plotAllAircraft(canvas);
 
@@ -167,29 +213,35 @@ public class RadarView extends View {
 
 
 
+    private float getCenterX(){
+        return getWidth() / 2;
+    }
+
+    private float getCenterY(){
+        return getHeight() / 2;
+    }
+
+
     private void drawCrosshair(Canvas canvas){
         float width = getWidth();
         float height = getHeight();
-        float centerX = width / 2;
-        float centerY = height / 2;
-
-        // Draw crosshair
-        float minDimension = width < height ? width : height;
-        float circle1Radius = minDimension / 8;
-        float circle2Radius = minDimension / 4;
-        float circle3Radius = minDimension / 2;
+        float centerX = getCenterX();
+        float centerY = getCenterY();
 
         canvas.drawLine(centerX, 0, centerX, height, crosshairPaint);
-        canvas.drawLine(0, centerY, width, centerY, crosshairPaint);
-        canvas.drawCircle(centerX, centerY, circle1Radius, crosshairPaint);
-        canvas.drawCircle(centerX, centerY, circle2Radius, crosshairPaint);
-        canvas.drawCircle(centerX, centerY, circle3Radius, crosshairPaint);
 
+        canvas.drawLine(0, centerY, width, centerY, crosshairPaint);
+        canvas.drawCircle(centerX, centerY, ring1Radius, crosshairPaint);
+        canvas.drawCircle(centerX, centerY, ring2Radius, crosshairPaint);
+        canvas.drawCircle(centerX, centerY, ring3Radius, crosshairPaint);
+
+        canvas.drawText(ring1Annot, centerX + 5, centerY - ring1Radius - 10, crosshairTextPaint);
+        canvas.drawText(ring2Annot, centerX + 5, centerY - ring2Radius - 10, crosshairTextPaint);
+        canvas.drawText(ring3Annot, centerX + 5, centerY - ring3Radius - 10, crosshairTextPaint);
     }
 
     private synchronized void updateAircraftPlotObjects(List<TrackedAircraft> tracks){
 
-        projection.setScreen(this.getWidth(), this.getWidth(), this.getHeight(), 40000, 52.278758, 6.899437);
         for(TrackedAircraft track : tracks){
             AircraftPlot plot = findPlotByTrackid(track.Data.Trackid);
 
@@ -309,25 +361,25 @@ public class RadarView extends View {
         double longLineLength = 22;
 
         // Copy numerical data only once to prevent multithreading inconsistencies
-        double bearing = ac.Track;
+        Boolean hasTrack = (ac.Track != null);
+        double track = hasTrack ? ac.Track : 0;
         float x  = ac.ScreenX;
         float y = ac.ScreenY;
         String nameLine = ac.DisplayName;
         String infoLine = ac.InfoLine;
 
-        double arrRightBearing = bearing + arrowAngle;
-        double arrLeftBearing = bearing - arrowAngle;
+        double arrRightBearing = track + arrowAngle;
+        double arrLeftBearing = track - arrowAngle;
 
-        double rad = bearing * Math.PI / 180.0;
+        double trackRad = track * Math.PI / 180.0;
         double arrRightRad = arrRightBearing * Math.PI / 180.0;
         double arrLeftRad = arrLeftBearing * Math.PI / 180.0;
 
-        float shortEndX = x + (float) (shortLineLength * Math.sin(rad));
-        float shortEndY = y - (float) (shortLineLength * Math.cos(rad));
+        float shortEndX = x + (float) (shortLineLength * Math.sin(trackRad));
+        float shortEndY = y - (float) (shortLineLength * Math.cos(trackRad));
 
-
-        float longEndX = x + (float) (longLineLength * Math.sin(rad));
-        float longEndY = y - (float) (longLineLength * Math.cos(rad));
+        float longEndX = x + (float) (longLineLength * Math.sin(trackRad));
+        float longEndY = y - (float) (longLineLength * Math.cos(trackRad));
 
         float longArrRightX = shortEndX + (float) (longArrowLength * Math.sin(arrRightRad));
         float longArrRightY = shortEndY - (float) (longArrowLength * Math.cos(arrRightRad));
@@ -355,16 +407,25 @@ public class RadarView extends View {
 
         canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
 
-        canvas.drawLine(shortEndX, shortEndY, shortArrLeftX, shortArrLeftY, aircraftBackPaint);
-        canvas.drawLine(shortEndX, shortEndY, shortArrRightX, shortArrRightY, aircraftBackPaint);
-        canvas.drawLine(x, y, shortEndX, shortEndY, aircraftBackPaint);
+        // Track arrow line
+        if(hasTrack) {
+            canvas.drawLine(shortEndX, shortEndY, shortArrLeftX, shortArrLeftY, aircraftBackPaint);
+            canvas.drawLine(shortEndX, shortEndY, shortArrRightX, shortArrRightY, aircraftBackPaint);
+            canvas.drawLine(x, y, shortEndX, shortEndY, aircraftBackPaint);
+        }
+
         canvas.drawCircle(x, y, 7, aircraftBackPaint);
 
-        canvas.drawLine(x, y, longEndX, longEndY, aircraftForePaint);
+        if(hasTrack) {
+            canvas.drawLine(x, y, longEndX, longEndY, aircraftForePaint);
+        }
+
         canvas.drawCircle(x, y, 6, aircraftForePaint);
 
-        canvas.drawLine(longEndX, longEndY, longArrRightX, longArrRightY, aircraftForePaint);
-        canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, aircraftForePaint);
+        if(hasTrack) {
+            canvas.drawLine(longEndX, longEndY, longArrRightX, longArrRightY, aircraftForePaint);
+            canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, aircraftForePaint);
+        }
 
         canvas.drawText(nameLine, x + 20, y - 64, acNamePaint);
         canvas.drawText(infoLine, x + 20, y - 40, acInfoPaint);

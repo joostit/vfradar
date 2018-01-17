@@ -3,6 +3,8 @@ package com.joostit.vfradar.radardrawing;
 
 import android.graphics.PointF;
 
+import com.joostit.vfradar.geo.LatLon;
+
 /**
  * Created by Joost on 16-1-2018.
  */
@@ -34,15 +36,13 @@ public class SphericalMercatorProjection {
         mWorldWidth = worldWidth;
     }
 
-    public synchronized void setScreen(double screenSize, double screenWidth, double screenHeight, double screenViewMeters, double centerLat, double centerLon){
-        mWorldWidth = (WORLD_CIRCUMFERENCE / screenViewMeters) * screenSize;    // The word size in pixels
+    public synchronized void setScreen(double screenSize, double screenWidth, double screenHeight, double screenViewRadius, LatLon centerPosition){
+        mWorldWidth = ((WORLD_CIRCUMFERENCE / 1.65) / (screenViewRadius * 2)) * screenSize;    // The word size in pixels
 
-        PointF screenCenterpoint = toWorldPoint(centerLat, centerLon);
+        PointF screenCenterpoint = toWorldPoint(centerPosition);
 
         offsetX = screenCenterpoint.x - (0.5 * screenWidth);
         offsetY = screenCenterpoint.y - (0.5 * screenHeight);
-
-
     }
 
     @SuppressWarnings("deprecation")
@@ -60,9 +60,9 @@ public class SphericalMercatorProjection {
     }
 
     @SuppressWarnings("deprecation")
-    public synchronized PointF toWorldPoint(final double lat, final double lon) {
-        final double x = lon / 360 + .5;
-        final double siny = Math.sin(Math.toRadians(lat));
+    public synchronized PointF toWorldPoint(final LatLon position) {
+        final double x = position.Longitude / 360 + .5;
+        final double siny = Math.sin(Math.toRadians(position.Latitude));
         final double y = 0.5 * Math.log((1 + siny) / (1 - siny)) / -(2 * Math.PI) + .5;
         PointF retVal = new PointF((float)( x * mWorldWidth), (float) ( y * mWorldWidth));
         return retVal;

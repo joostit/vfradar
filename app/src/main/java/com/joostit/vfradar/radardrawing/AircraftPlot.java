@@ -9,7 +9,7 @@ public class AircraftPlot {
     public float ScreenX;
     public float ScreenY;
 
-    public int Track;
+    public Integer Track;
 
     public Boolean IsSelectedMarker = false;
     public Boolean IsNotificationMarker = false;;

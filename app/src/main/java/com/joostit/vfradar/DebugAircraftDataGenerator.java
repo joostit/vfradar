@@ -2,7 +2,7 @@ package com.joostit.vfradar;
 
 import android.os.Handler;
 
-import com.joostit.vfradar.Geo.LatLon;
+import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.data.JSonTrackedAircraft;
 import com.joostit.vfradar.data.TrackedAircraft;
 
@@ -48,6 +48,11 @@ public class DebugAircraftDataGenerator {
     }
 
     private void createAircraft() {
+        AddAircraft(aircraftList, 52.27874982, 6.85548136, "ZBDEF5", "3_KM_WEST", "", null, 501, 7.4,0, false, false, false);
+        AddAircraft(aircraftList, 52.25179713, 6.899437, "ZBDEF4", "3_KM_SOUTH", "", null, 501, 7.4,0, false, false, false);
+        AddAircraft(aircraftList, 52.27874982, 6.94339264, "ZBDEF3", "3_KM_EAST", "", null, 501, 7.4,0, false, false, false);
+        AddAircraft(aircraftList, 52.30571874, 6.899437, "ZBDEF2", "3_KM_NORTH", "", null, 501, 7.4,0, false, false, false);
+        AddAircraft(aircraftList, 52.278758, 6.899437, "ZBDEF1", "CENTER", "", null, 501, 7.4,0, false, false, false);
         AddAircraft(aircraftList, 52.274143, 6.895478, "ABDEF1", "PH-TWM", "", 331, 501, 7.4,50, false, false, false);
         AddAircraft(aircraftList, 52.284818, 6.873783, "ABDEF2", "PH-TWK", "", 335, 301, -0.1,100, true, false, false);
         AddAircraft(aircraftList, 52.283179, 6.908719, "ABDEF3", "PH-712", "T4", 45, 140, -0.8,60, false, false, true);
@@ -71,7 +76,7 @@ public class DebugAircraftDataGenerator {
                              String icao24,
                              String reg,
                              String cn,
-                             int track,
+                             Integer track,
                              int alt,
                              double vRate,
                              int speed,
@@ -104,19 +109,26 @@ public class DebugAircraftDataGenerator {
 
         for(TrackedAircraft ac : aircraftList){
 
-            double val = rd.nextDouble();
-            if(val < threshold) {
-                ac.Data.Track += 6;
-                ac.Data.Track = ac.Data.Track % 360;
+            if(ac.Data.Speed != 0) {
 
-                LatLon current = new LatLon(ac.Data.Lat, ac.Data.Lon);
+                double val = rd.nextDouble();
+                if (val < threshold) {
 
-                double dist = (1000.0 / timerMs) * ac.Data.Speed;
+                    if(ac.Data.Track != null) {
+                        ac.Data.Track += 6;
+                        ac.Data.Track = ac.Data.Track % 360;
+                    }
 
-                LatLon newPoint = current.Move(ac.Data.Track, dist);
+                    LatLon current = new LatLon(ac.Data.Lat, ac.Data.Lon);
 
-                ac.Data.Lat = newPoint.Latitude;
-                ac.Data.Lon = newPoint.Longitude;
+                    double dist = (1000.0 / timerMs) * ac.Data.Speed;
+
+                    LatLon newPoint = current.Move(ac.Data.Track, dist);
+
+                    ac.Data.Lat = newPoint.Latitude;
+                    ac.Data.Lon = newPoint.Longitude;
+                }
+
             }
         }
 

@@ -1,4 +1,4 @@
-package com.joostit.vfradar.Geo;
+package com.joostit.vfradar.geo;
 
 /**
  * Created by Joost on 16-1-2018.

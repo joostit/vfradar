@@ -17,11 +17,11 @@ public class JSonTrackedAircraft {
     public String Type;
     public double Lat;
     public double Lon;
-    public int Speed;
-    public int Track;
-    public double TurnRate;
-    public int Alt;
-    public double VRate;
+    public Integer Speed;
+    public Integer Track;
+    public Double TurnRate;
+    public Integer Alt;
+    public Double VRate;
     public String RxStation;
     public String RxChannel;
 
