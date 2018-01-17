@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.joostit.vfradar.RadarViewFragment;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
@@ -31,12 +32,8 @@ public class RadarView extends View {
     private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
     private static DecimalFormat df1 = new DecimalFormat("#.#");
 
-    private enum AircraftStates{
-        None,
-        Note,
-        Warning,
-        Selected
-    }
+
+    private OnRadarViewInteractionListener selectionListener;
 
     private float ring1Radius = 0;
     private float ring2Radius = 0;
@@ -84,12 +81,10 @@ public class RadarView extends View {
         super(context, attrs);
         init();
 
-
     }
 
 
     private void init() {
-
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setColor(mTextColor);
@@ -156,6 +151,9 @@ public class RadarView extends View {
 }
 
 
+    public void AttachSelectionListener(OnRadarViewInteractionListener radarViewFragment) {
+        selectionListener = radarViewFragment;
+    }
 
     public synchronized void UpdateAircraft(List<TrackedAircraft> ac){
 
@@ -483,6 +481,17 @@ public class RadarView extends View {
         }
 
         refreshDrawing();
+
+        if(nearestHit.isSelected){
+            dispatchSelectionChanged(nearestHit.TrackId);
+        }
+        else{
+            dispatchSelectionChanged(null);
+        }
+    }
+
+    private void dispatchSelectionChanged(Integer trackId) {
+        selectionListener.onUserSelectedAircraftChanged(trackId);
     }
 
     private void deselectAllPlots(){
@@ -495,6 +504,11 @@ public class RadarView extends View {
     private double getScreenDistance(float x1, float y1, float x2, float y2){
         double dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         return dist;
+    }
+
+
+    public interface OnRadarViewInteractionListener{
+        void onUserSelectedAircraftChanged(Integer TrackId);
     }
 
 

@@ -22,7 +22,7 @@ import java.util.List;
  * Use the {@link RadarViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RadarViewFragment extends Fragment {
+public class RadarViewFragment extends Fragment implements RadarView.OnRadarViewInteractionListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,8 +70,16 @@ public class RadarViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_radar_view, container, false);
+
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        RadarView rView = getView().findViewById(R.id.radarView);
+        rView.AttachSelectionListener(this);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -82,6 +90,7 @@ public class RadarViewFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnRadarViewInteractionListener");
         }
+
     }
 
     @Override
@@ -95,6 +104,11 @@ public class RadarViewFragment extends Fragment {
         rView.UpdateAircraft(ac);
     }
 
+    @Override
+    public void onUserSelectedAircraftChanged(Integer trackId) {
+        mListener.onAircraftSelected(trackId);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -106,7 +120,6 @@ public class RadarViewFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnRadarViewInteractionListener {
-        // TODO: Update argument type and name
         void onAircraftSelected(Integer trackid);
     }
 }

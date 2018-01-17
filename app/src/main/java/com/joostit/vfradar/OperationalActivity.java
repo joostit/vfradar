@@ -54,7 +54,12 @@ public class OperationalActivity extends AppCompatActivity
         timerHandler.removeCallbacks(timerRunnable);
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
 
+        startTimer();
+    }
 
     @Override
     public void onAircraftSelected(Integer trackId) {
@@ -63,11 +68,6 @@ public class OperationalActivity extends AppCompatActivity
 
     public void UpdateAircraft(List<TrackedAircraft> ac){
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
-
-
-
-        //if(rView != null) {
-            rView.UpdateAircraft(ac);
-        //}
+        rView.UpdateAircraft(ac);
     }
 }
