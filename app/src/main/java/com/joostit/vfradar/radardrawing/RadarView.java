@@ -26,7 +26,7 @@ import java.util.List;
 public class RadarView extends View {
 
 
-    private float TOUCH_ACCURACY = 30;
+    private float TOUCH_ACCURACY = 50;
     private int currentZoomLevel = 3;
     private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
     private static DecimalFormat df1 = new DecimalFormat("#.#");
@@ -159,26 +159,18 @@ public class RadarView extends View {
 
     public synchronized void UpdateAircraft(List<TrackedAircraft> ac){
 
-        updatePlotData(ac);
+        updateAircraftPlotData(ac);
+        refreshDrawing();
 
-        // ToDo: We probably don't have to recalculate the crosshair here
-        refreshDrawObjects();
-
-        updateAircraftPlotObjects(ac);
-        invalidate();
-    }
-
-    private void updatePlotData(List<TrackedAircraft> ac) {
 
     }
 
-    private void refreshDrawObjects(){
+    private synchronized void refreshDrawing(){
 
-        Double rangeRadius = zoomLevels.getZoomLevelInfo(currentZoomLevel).RangeRadius;
-        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), rangeRadius * 1.08, centerPosition);
-        rangeRadius.byteValue();
-        // ToDo recalculate aircraft drawing positions here
+        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo(currentZoomLevel).RangeRadius * 1.08, centerPosition);
+        RecalculateAircraftPlots();
         calculateCrosshair();
+        invalidate();
     }
 
     private void calculateCrosshair(){
@@ -221,8 +213,6 @@ public class RadarView extends View {
 
     }
 
-
-
     private float getCenterX(){
         return getWidth() / 2;
     }
@@ -230,7 +220,6 @@ public class RadarView extends View {
     private float getCenterY(){
         return getHeight() / 2;
     }
-
 
     private void drawCrosshair(Canvas canvas){
         float width = getWidth();
@@ -250,7 +239,8 @@ public class RadarView extends View {
         canvas.drawText(ring3Annot, centerX + 5, centerY - ring3Radius - 10, crosshairTextPaint);
     }
 
-    private synchronized void updateAircraftPlotObjects(List<TrackedAircraft> tracks){
+    private synchronized void updateAircraftPlotData(List<TrackedAircraft> tracks){
+        // ToDo: remove deleted aircraft
 
         for(TrackedAircraft track : tracks){
             AircraftPlot plot = findPlotByTrackid(track.Data.Trackid);
@@ -261,12 +251,12 @@ public class RadarView extends View {
                 plots.add(plot);
             }
 
-            updateAircraftPlot(track, plot);
+            updateAircraftPlotData(track, plot);
         }
     }
 
 
-    private AircraftPlot findPlotByTrackid(int trackId){
+    private synchronized AircraftPlot findPlotByTrackid(int trackId){
         AircraftPlot found = null;
 
         for(AircraftPlot plot : plots){
@@ -280,11 +270,9 @@ public class RadarView extends View {
     }
 
 
-    private synchronized void updateAircraftPlot(TrackedAircraft aircraft, AircraftPlot plot){
+    private synchronized void updateAircraftPlotData(TrackedAircraft aircraft, AircraftPlot plot){
 
-        String vRateString = "";
         String nameString = "";
-
         if(!IsNullOrEmpty(aircraft.Data.Reg)){
             nameString = aircraft.Data.Reg;
             if(!IsNullOrEmpty(aircraft.Data.CallSign)){
@@ -309,25 +297,28 @@ public class RadarView extends View {
         }
         plot.DisplayName = nameString;
 
-
+        String infoLineString = "";
         if(aircraft.Data.VRate != 0) {
             double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
             String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
-            vRateString = "    " + plusSign + df1.format(vRateRounded);
+            infoLineString = "    " + plusSign + df1.format(vRateRounded);
         }
-
-        //plot.isSelected = aircraft.isSelected;
-        plot.isHighlighted = aircraft.isHighlighted;
-        plot.isWarning = aircraft.isWarning;
-
-        plot.InfoLine = aircraft.Data.Alt + vRateString;
+        plot.InfoLine = aircraft.Data.Alt + infoLineString;
 
         plot.Track = aircraft.Data.Track;
+        plot.lat = aircraft.Data.Lat;
+        plot.lon = aircraft.Data.Lon;
+        plot.isHighlighted = aircraft.isHighlighted;
+        plot.isWarning = aircraft.isWarning;
+    }
 
-        // ToDo: Calculate screen coordinates from Lat/Lon
-        PointF screenPoint = projection.toScreenPoint(aircraft.Data.Lat, aircraft.Data.Lon);
-        plot.ScreenX = screenPoint.x;
-        plot.ScreenY = screenPoint.y;
+
+    private synchronized void RecalculateAircraftPlots(){
+        for(AircraftPlot plot : plots) {
+            PointF screenPoint = projection.toScreenPoint(plot.lat, plot.lon);
+            plot.ScreenX = screenPoint.x;
+            plot.ScreenY = screenPoint.y;
+        }
     }
 
     private Boolean IsNullOrEmpty(String input){
@@ -348,20 +339,28 @@ public class RadarView extends View {
         runway.moveTo(centerX + 30, centerY - 60);
         runway.lineTo(centerX - 276, centerY + 197);
         canvas.drawPath(runway, sitePaint);
-
     }
-
-
 
     private synchronized void plotAllAircraft(Canvas canvas){
 
+        AircraftPlot deferredPlot = null;
+
         for(AircraftPlot ac : plots){
-            drawAircraft(canvas, ac);
+            if(ac.isSelected) {
+                deferredPlot = ac;
+            }
+            else{
+                drawAircraft(canvas, ac);
+            }
+        }
+
+        // Make sure to plot a selected aircraft always last, so on top of the Z-order
+        if(deferredPlot != null){
+            drawAircraft(canvas, deferredPlot);
         }
     }
 
-
-    private void drawAircraft(Canvas canvas, AircraftPlot ac){
+    private synchronized void drawAircraft(Canvas canvas, AircraftPlot ac){
 
         float arrowAngle = 135;
         float longArrowLength = 11;
@@ -444,8 +443,6 @@ public class RadarView extends View {
     }
 
 
-
-
     @Override
     public boolean onTouchEvent(MotionEvent event){
 
@@ -458,7 +455,7 @@ public class RadarView extends View {
         return true;
     }
 
-    private void processTouchDown(MotionEvent event) {
+    private synchronized void processTouchDown(MotionEvent event) {
 
         float x = event.getX();
         float y = event.getY();
@@ -485,6 +482,7 @@ public class RadarView extends View {
             deselectAllPlots();
         }
 
+        refreshDrawing();
     }
 
     private void deselectAllPlots(){

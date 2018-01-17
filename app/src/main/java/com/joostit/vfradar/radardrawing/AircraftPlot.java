@@ -6,6 +6,9 @@ package com.joostit.vfradar.radardrawing;
 
 public class AircraftPlot {
 
+    public double lat;
+    public double lon;
+
     public float ScreenX;
     public float ScreenY;
 
