@@ -65,8 +65,19 @@ public class DebugAircraftDataGenerator {
 
     }
 
-    public List<TrackedAircraft> GetAircraft(){
-        return aircraftList;
+    public synchronized List<TrackedAircraft> GetAircraft(){
+        List<TrackedAircraft> aircraftUpdateList = new ArrayList<>();
+        double threshold = 0.8;
+        Random rd = new Random();
+
+        for(TrackedAircraft ac : aircraftList){
+            double val = rd.nextDouble();
+            if (val < threshold) {
+                aircraftUpdateList.add(ac);
+            }
+        }
+
+        return aircraftUpdateList;
     }
 
 
@@ -108,31 +119,23 @@ public class DebugAircraftDataGenerator {
 
     private synchronized void UpdateAircraft() {
 
-        double threshold = 0.3;
-        Random rd = new Random();
-
         for(TrackedAircraft ac : aircraftList){
 
             if(ac.Data.Speed != 0) {
 
-                double val = rd.nextDouble();
-                if (val < threshold) {
-
-                    if(ac.Data.Track != null) {
-                        ac.Data.Track += 6;
-                        ac.Data.Track = ac.Data.Track % 360;
-                    }
-
-                    LatLon current = new LatLon(ac.Data.Lat, ac.Data.Lon);
-
-                    double dist = (1000.0 / timerMs) * ac.Data.Speed;
-
-                    LatLon newPoint = current.Move(ac.Data.Track, dist);
-
-                    ac.Data.Lat = newPoint.Latitude;
-                    ac.Data.Lon = newPoint.Longitude;
+                if(ac.Data.Track != null) {
+                    ac.Data.Track += 4;
+                    ac.Data.Track = ac.Data.Track % 360;
                 }
 
+                LatLon current = new LatLon(ac.Data.Lat, ac.Data.Lon);
+
+                double dist =((1000.0 / timerMs) * ac.Data.Speed) / (1.8 * 3.6);
+
+                LatLon newPoint = current.Move(ac.Data.Track, dist);
+
+                ac.Data.Lat = newPoint.Latitude;
+                ac.Data.Lon = newPoint.Longitude;
             }
         }
 

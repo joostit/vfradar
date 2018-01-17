@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.joostit.vfradar.data.TrackedAircraft;
@@ -24,10 +25,11 @@ import java.util.List;
 
 public class RadarView extends View {
 
-    private static DecimalFormat df1 = new DecimalFormat("#.#");
 
+    private float TOUCH_ACCURACY = 30;
+    private int currentZoomLevel = 3;
     private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
-
+    private static DecimalFormat df1 = new DecimalFormat("#.#");
 
     private enum AircraftStates{
         None,
@@ -46,7 +48,7 @@ public class RadarView extends View {
 
     private List<AircraftPlot> plots = new ArrayList<>();
     private ZoomLevelCalculator zoomLevels = new ZoomLevelCalculator();
-    private int currentZoomLevel = 2;
+
 
     private Paint mTextPaint;
     private int mTextColor = Color.BLUE;
@@ -81,6 +83,8 @@ public class RadarView extends View {
     public RadarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+
+
     }
 
 
@@ -155,11 +159,17 @@ public class RadarView extends View {
 
     public synchronized void UpdateAircraft(List<TrackedAircraft> ac){
 
+        updatePlotData(ac);
+
         // ToDo: We probably don't have to recalculate the crosshair here
         refreshDrawObjects();
 
         updateAircraftPlotObjects(ac);
         invalidate();
+    }
+
+    private void updatePlotData(List<TrackedAircraft> ac) {
+
     }
 
     private void refreshDrawObjects(){
@@ -306,7 +316,7 @@ public class RadarView extends View {
             vRateString = "    " + plusSign + df1.format(vRateRounded);
         }
 
-        plot.isSelected = aircraft.isSelected;
+        //plot.isSelected = aircraft.isSelected;
         plot.isHighlighted = aircraft.isHighlighted;
         plot.isWarning = aircraft.isWarning;
 
@@ -431,6 +441,62 @@ public class RadarView extends View {
 
         canvas.drawText(nameLine, x + 20, y - 64, acNamePaint);
         canvas.drawText(infoLine, x + 20, y - 40, acInfoPaint);
+    }
+
+
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                processTouchDown(event);
+                break;
+        }
+
+        return true;
+    }
+
+    private void processTouchDown(MotionEvent event) {
+
+        float x = event.getX();
+        float y = event.getY();
+        double dist;
+
+        AircraftPlot nearestHit = new AircraftPlot();
+        double nearestDist = Double.MAX_VALUE;
+
+        for(AircraftPlot ac : plots){
+
+            dist = getScreenDistance(x, y, ac.ScreenX, ac.ScreenY);
+            if(dist < nearestDist){
+                nearestHit = ac;
+                nearestDist = dist;
+            }
+        }
+
+        if (nearestDist <= TOUCH_ACCURACY) {
+            boolean wasSelected = nearestHit.isSelected;
+            deselectAllPlots();
+            nearestHit.isSelected = !wasSelected;
+        }
+        else{
+            deselectAllPlots();
+        }
+
+    }
+
+    private void deselectAllPlots(){
+        for (AircraftPlot ac : plots) {
+            ac.isSelected = false;
+        }
+    }
+
+
+    private double getScreenDistance(float x1, float y1, float x2, float y2){
+        double dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        return dist;
     }
 
 
