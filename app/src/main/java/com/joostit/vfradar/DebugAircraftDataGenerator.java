@@ -48,11 +48,11 @@ public class DebugAircraftDataGenerator {
     }
 
     private void createAircraft() {
-        AddAircraft(aircraftList, 52.27874982, 6.85548136, "ZBDEF5", "3_KM_WEST", "", null, 501, 7.4,0, false, false, false);
-        AddAircraft(aircraftList, 52.25179713, 6.899437, "ZBDEF4", "3_KM_SOUTH", "", null, 501, 7.4,0, false, false, false);
-        AddAircraft(aircraftList, 52.27874982, 6.94339264, "ZBDEF3", "3_KM_EAST", "", null, 501, 7.4,0, false, false, false);
-        AddAircraft(aircraftList, 52.30571874, 6.899437, "ZBDEF2", "3_KM_NORTH", "", null, 501, 7.4,0, false, false, false);
-        AddAircraft(aircraftList, 52.278758, 6.899437, "ZBDEF1", "CENTER", "", null, 501, 7.4,0, false, false, false);
+        AddAircraft(aircraftList, 52.27874982, 6.85548136, "ZBDEF5", "3_KM_WEST", "", null, null, null,0, false, false, false);
+        AddAircraft(aircraftList, 52.25179713, 6.899437, "ZBDEF4", "3_KM_SOUTH", "", null, null, 7.4,0, false, false, false);
+        AddAircraft(aircraftList, 52.27874982, 6.94339264, "ZBDEF3", "3_KM_EAST", "", null, 501, null,0, false, false, false);
+        AddAircraft(aircraftList, 52.30571874, 6.899437, "ZBDEF2", "3_KM_NORTH", "", null, null, 7.4,0, false, false, false);
+        AddAircraft(aircraftList, 52.278758, 6.899437, "ZBDEF1", "CENTER", "", null, 501, 7.4,null, false, false, false);
         AddAircraft(aircraftList, 52.274143, 6.895478, "ABDEF1", "PH-TWM", "", 331, 501, 7.4,50, false, false, false);
         AddAircraft(aircraftList, 52.284818, 6.873783, "ABDEF2", "PH-TWK", "", 335, 301, -0.1,100, true, false, false);
         AddAircraft(aircraftList, 52.283179, 6.908719, "ABDEF3", "PH-712", "T4", 45, 140, -0.8,60, false, false, true);
@@ -88,9 +88,9 @@ public class DebugAircraftDataGenerator {
                              String reg,
                              String cn,
                              Integer track,
-                             int alt,
-                             double vRate,
-                             int speed,
+                             Integer alt,
+                             Double vRate,
+                             Integer speed,
                              Boolean warn,
                              Boolean sel,
                              Boolean highlight){
@@ -121,7 +121,7 @@ public class DebugAircraftDataGenerator {
 
         for(TrackedAircraft ac : aircraftList){
 
-            if(ac.Data.Speed != 0) {
+            if((ac.Data.Speed != null) && (ac.Data.Speed != 0)) {
 
                 if(ac.Data.Track != null) {
                     ac.Data.Track += 4;

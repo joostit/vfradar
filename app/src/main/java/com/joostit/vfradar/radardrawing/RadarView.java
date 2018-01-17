@@ -342,12 +342,19 @@ public class RadarView extends View {
         plot.DisplayName = nameString;
 
         String infoLineString = "";
-        if(aircraft.Data.VRate != 0) {
-            double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
-            String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
-            infoLineString = "    " + plusSign + df1.format(vRateRounded);
+
+        if(aircraft.Data.Alt != null) {
+
+            infoLineString =  aircraft.Data.Alt.toString();
+
+            if ((aircraft.Data.VRate != null) && (aircraft.Data.VRate != 0)) {
+                double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
+                String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
+                infoLineString += "    " + plusSign + df1.format(vRateRounded);
+            }
         }
-        plot.InfoLine = aircraft.Data.Alt + infoLineString;
+
+        plot.InfoLine = infoLineString;
 
         plot.Track = aircraft.Data.Track;
         plot.lat = aircraft.Data.Lat;
