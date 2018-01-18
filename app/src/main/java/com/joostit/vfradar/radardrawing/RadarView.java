@@ -18,7 +18,9 @@ import com.joostit.vfradar.utilities.DistanceString;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Joost on 15-1-2018.
@@ -35,6 +37,9 @@ public class RadarView extends View {
 
     private static DecimalFormat df1 = new DecimalFormat("#.#");
 
+    private final String ZOOM_IN = "ZoomIn";
+    private final String ZOOM_OUT = "ZoomOUT";
+
 
     private OnRadarViewInteractionListener selectionListener;
 
@@ -45,25 +50,14 @@ public class RadarView extends View {
     private String ring2Annot = "";
     private String ring3Annot = "";
 
-
     private List<AircraftPlot> plots = new ArrayList<>();
+    private Map<String, Button> buttons = new HashMap<>();
     private ZoomLevelCalculator zoomLevels = new ZoomLevelCalculator();
 
-
-    private Paint mTextPaint;
-    private int mTextColor = Color.BLUE;
-    private float mTextHeight;
-
-    private Paint buttonForePaint;
-    private Paint buttonBackPaint;
     private Paint crosshairPaint;
     private Paint sitePaint;
     private Paint crosshairTextPaint;
 
-
-
-    private int buttonForeColor = 0xFF009900;
-    private int buttonBackColor = 0xFF002200;
     private int crosshairColor = 0xFF003300;
     private int siteColor = 0x50ff9900;
     private int crosshairTextColor = 0xAA008000;
@@ -73,19 +67,10 @@ public class RadarView extends View {
     public RadarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
-
     }
 
 
     private void init() {
-
-        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setColor(mTextColor);
-        if (mTextHeight == 0) {
-            mTextHeight = mTextPaint.getTextSize();
-        } else {
-            mTextPaint.setTextSize(mTextHeight);
-        }
 
         crosshairPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         crosshairPaint.setStyle(Paint.Style.STROKE);
@@ -102,21 +87,11 @@ public class RadarView extends View {
         crosshairTextPaint.setColor(crosshairTextColor);
         crosshairTextPaint.setTextSize(20);
 
-        buttonForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        buttonForePaint.setStyle(Paint.Style.STROKE);
-        buttonForePaint.setColor(buttonForeColor);
-        buttonForePaint.setStrokeWidth(10);
-        buttonForePaint.setTextAlign(Paint.Align.CENTER);
-        buttonForePaint.setTextSize(60);
-        //buttonForePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-
-        buttonBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        buttonBackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        buttonBackPaint.setColor(buttonBackColor);
-        buttonBackPaint.setStrokeWidth(20);
-
         // The world width is a fake value. It will be overwritten on the first drawing pass
         projection = new SphericalMercatorProjection(800);
+
+        buttons.put(ZOOM_IN, new Button("+", 0, 0, zoomButtonDimension));
+        buttons.put(ZOOM_OUT, new Button("-", 0, 0, zoomButtonDimension));
 }
 
 
@@ -128,16 +103,20 @@ public class RadarView extends View {
 
         updateAircraftPlotData(ac);
         refreshDrawing();
-
-
     }
 
     private synchronized void refreshDrawing(){
 
         projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, centerPosition);
+        RecalculateButtons();
         RecalculateAircraftPlots();
         calculateCrosshair();
         invalidate();
+    }
+
+    private void RecalculateButtons() {
+        buttons.get(ZOOM_IN).updatePosition(getZoomInButtonX(), getZoomButtonY());
+        buttons.get(ZOOM_OUT).updatePosition(getZoomOutButtonX(), getZoomButtonY());
     }
 
     private void calculateCrosshair(){
@@ -194,24 +173,10 @@ public class RadarView extends View {
 
     private void drawButtons(Canvas canvas) {
 
-        float zoomInButtonX = getZoomInButtonX();
-        float zoomOutButtonX = getZoomOutButtonX();
-        float zoomButtonY = getZoomButtonY();
+        for(Button button : buttons.values()) {
+            button.Draw(canvas);
+        }
 
-        RectF zoomInBounds = new RectF(zoomInButtonX, zoomButtonY, (float) zoomInButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension);
-        RectF zoomOutBounds = new RectF(zoomOutButtonX, zoomButtonY, (float) zoomOutButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension);
-
-        canvas.drawRoundRect(zoomInBounds, 10, 10, buttonBackPaint);
-        canvas.drawRoundRect(zoomInBounds, 10, 10, buttonForePaint);
-
-        canvas.drawRoundRect(zoomOutBounds, 10, 10, buttonBackPaint);
-        canvas.drawRoundRect(zoomOutBounds, 10, 10, buttonForePaint);
-
-        float textHeight = buttonForePaint.descent() - buttonForePaint.ascent();
-        float textOffset = (textHeight / 2) - buttonForePaint.descent();
-
-        canvas.drawText("+", zoomInBounds.centerX(), zoomInBounds.centerY() + textOffset, buttonForePaint);
-        canvas.drawText("–", zoomOutBounds.centerX(), zoomOutBounds.centerY() + textOffset, buttonForePaint);
     }
 
     private float getCenterX(){
@@ -390,7 +355,6 @@ public class RadarView extends View {
         if(processAircraftTouchEvent(event)){
             return;
         }
-
     }
 
     private boolean processButtonTouchEvent(MotionEvent event) {
@@ -399,15 +363,13 @@ public class RadarView extends View {
         float x = event.getX();
         float y = event.getY();
 
-
-        if((y > getZoomButtonY()) && (y < getZoomButtonY() + zoomButtonDimension)) {
-            if ((x > getZoomInButtonX()) && (x < getZoomInButtonX() + zoomButtonDimension)) {
-                zoomIn();
-            }
-
-            if ((x > getZoomOutButtonX()) && (x < getZoomOutButtonX() + zoomButtonDimension)) {
-                zoomOut();
-            }
+        if(buttons.get(ZOOM_IN).DoHitTest(x, y)){
+            zoomIn();
+            isHandled = true;
+        }
+        else if(buttons.get(ZOOM_OUT).DoHitTest(x, y)){
+            zoomOut();
+            isHandled = true;
         }
 
         return isHandled;
