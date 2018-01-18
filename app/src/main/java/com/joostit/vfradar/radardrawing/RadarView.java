@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -55,30 +56,16 @@ public class RadarView extends View {
 
     private Paint buttonForePaint;
     private Paint buttonBackPaint;
-    private Paint acNamePaint;
-    private Paint acInfoPaint;
     private Paint crosshairPaint;
-    private Paint aircraftForePaint;
-    private Paint aircraftBackPaint;
-    private Paint acTextGuideLinePaint;
     private Paint sitePaint;
-    private Paint acWarningBoxPaint;
-    private Paint acHighlightBoxPaint;
-    private Paint acSelectedBoxPaint;
     private Paint crosshairTextPaint;
+
+
 
     private int buttonForeColor = 0xFF009900;
     private int buttonBackColor = 0xFF002200;
     private int crosshairColor = 0xFF003300;
     private int siteColor = 0x50ff9900;
-    private int acForeColor = 0xFF00FF00;
-    private int acBackColor = 0xFF008000;
-    private int acNameTextColor = 0xFF00FF00;
-    private int acInfoTextColor = 0xFF00AA00;
-    private int acWarningBoxColor = 0xFFFF0000;
-    private int acSelectedBoxColor = 0xFFFFFFFF;
-    private int acHighlightBoxColor = 0xFFFFFF00;
-    private int acTextGuideLineColor = 0xAA008000;
     private int crosshairTextColor = 0xAA008000;
 
     private SphericalMercatorProjection projection;
@@ -105,47 +92,10 @@ public class RadarView extends View {
         crosshairPaint.setStrokeWidth(3);
         crosshairPaint.setColor(crosshairColor);
 
-        aircraftForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        aircraftForePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        aircraftForePaint.setStrokeWidth(3);
-        aircraftForePaint.setColor(acForeColor);
-
-        aircraftBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        aircraftBackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        aircraftBackPaint.setStrokeWidth(8);
-        aircraftBackPaint.setColor(acBackColor);
-
         sitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         sitePaint.setStyle(Paint.Style.STROKE);
         sitePaint.setColor(siteColor);
         sitePaint.setStrokeWidth(20);
-
-        acNamePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acNamePaint.setStyle(Paint.Style.FILL);
-        acNamePaint.setColor(acNameTextColor);
-        acNamePaint.setTextSize(26);
-
-        acInfoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acInfoPaint.setStyle(Paint.Style.FILL);
-        acInfoPaint.setColor(acInfoTextColor);
-        acInfoPaint.setTextSize(22);
-
-        acTextGuideLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acTextGuideLinePaint.setStyle(Paint.Style.STROKE);
-        acTextGuideLinePaint.setStrokeWidth(2);
-        acTextGuideLinePaint.setColor(acTextGuideLineColor);
-
-        acWarningBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acWarningBoxPaint.setStyle(Paint.Style.FILL);
-        acWarningBoxPaint.setColor(acWarningBoxColor);
-
-        acHighlightBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acHighlightBoxPaint.setStyle(Paint.Style.FILL);
-        acHighlightBoxPaint.setColor(acHighlightBoxColor);
-
-        acSelectedBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acSelectedBoxPaint.setStyle(Paint.Style.FILL);
-        acSelectedBoxPaint.setColor(acSelectedBoxColor);
 
         crosshairTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         crosshairTextPaint.setStyle(Paint.Style.STROKE);
@@ -156,6 +106,7 @@ public class RadarView extends View {
         buttonForePaint.setStyle(Paint.Style.STROKE);
         buttonForePaint.setColor(buttonForeColor);
         buttonForePaint.setStrokeWidth(10);
+        buttonForePaint.setTextAlign(Paint.Align.CENTER);
         buttonForePaint.setTextSize(60);
         //buttonForePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
@@ -247,14 +198,20 @@ public class RadarView extends View {
         float zoomOutButtonX = getZoomOutButtonX();
         float zoomButtonY = getZoomButtonY();
 
-        canvas.drawRoundRect(zoomInButtonX, zoomButtonY, zoomInButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonBackPaint);
-        canvas.drawRoundRect(zoomInButtonX, zoomButtonY, zoomInButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonForePaint);
+        RectF zoomInBounds = new RectF(zoomInButtonX, zoomButtonY, (float) zoomInButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension);
+        RectF zoomOutBounds = new RectF(zoomOutButtonX, zoomButtonY, (float) zoomOutButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension);
 
-        canvas.drawRoundRect(zoomOutButtonX, zoomButtonY, zoomOutButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonBackPaint);
-        canvas.drawRoundRect(zoomOutButtonX, zoomButtonY, zoomOutButtonX + zoomButtonDimension, zoomButtonY + zoomButtonDimension, 10, 10, buttonForePaint);
+        canvas.drawRoundRect(zoomInBounds, 10, 10, buttonBackPaint);
+        canvas.drawRoundRect(zoomInBounds, 10, 10, buttonForePaint);
 
-        canvas.drawText("+", zoomInButtonX + 18, zoomButtonY + 55, buttonForePaint);
-        canvas.drawText("-", zoomOutButtonX + 28, zoomButtonY + 53, buttonForePaint);
+        canvas.drawRoundRect(zoomOutBounds, 10, 10, buttonBackPaint);
+        canvas.drawRoundRect(zoomOutBounds, 10, 10, buttonForePaint);
+
+        float textHeight = buttonForePaint.descent() - buttonForePaint.ascent();
+        float textOffset = (textHeight / 2) - buttonForePaint.descent();
+
+        canvas.drawText("+", zoomInBounds.centerX(), zoomInBounds.centerY() + textOffset, buttonForePaint);
+        canvas.drawText("–", zoomOutBounds.centerX(), zoomOutBounds.centerY() + textOffset, buttonForePaint);
     }
 
     private float getCenterX(){
@@ -401,96 +358,14 @@ public class RadarView extends View {
                 deferredPlot = ac;
             }
             else{
-                drawAircraft(canvas, ac);
+                ac.Draw(canvas);
             }
         }
 
         // Make sure to plot a selected aircraft always last, so on top of the Z-order
         if(deferredPlot != null){
-            drawAircraft(canvas, deferredPlot);
+            deferredPlot.Draw(canvas);
         }
-    }
-
-    private synchronized void drawAircraft(Canvas canvas, AircraftPlot ac){
-
-        float arrowAngle = 135;
-        float longArrowLength = 11;
-        float shortArrowLength = 9;
-
-        int boxSize = 25;
-        int boxRound = 7;
-        double shortLineLength = 20;
-        double longLineLength = 22;
-
-        // Copy numerical data only once to prevent multithreading inconsistencies
-        Boolean hasTrack = (ac.Track != null);
-        double track = hasTrack ? ac.Track : 0;
-        float x  = ac.ScreenX;
-        float y = ac.ScreenY;
-        String nameLine = ac.DisplayName;
-        String infoLine = ac.InfoLine;
-
-        double arrRightBearing = track + arrowAngle;
-        double arrLeftBearing = track - arrowAngle;
-
-        double trackRad = track * Math.PI / 180.0;
-        double arrRightRad = arrRightBearing * Math.PI / 180.0;
-        double arrLeftRad = arrLeftBearing * Math.PI / 180.0;
-
-        float shortEndX = x + (float) (shortLineLength * Math.sin(trackRad));
-        float shortEndY = y - (float) (shortLineLength * Math.cos(trackRad));
-
-        float longEndX = x + (float) (longLineLength * Math.sin(trackRad));
-        float longEndY = y - (float) (longLineLength * Math.cos(trackRad));
-
-        float longArrRightX = shortEndX + (float) (longArrowLength * Math.sin(arrRightRad));
-        float longArrRightY = shortEndY - (float) (longArrowLength * Math.cos(arrRightRad));
-
-        float shortArrRightX = shortEndX + (float) (shortArrowLength * Math.sin(arrRightRad));
-        float shortArrRightY = shortEndY - (float) (shortArrowLength * Math.cos(arrRightRad));
-
-        float longArrLeftX = shortEndX + (float) (longArrowLength * Math.sin(arrLeftRad));
-        float longArrLeftY = shortEndY - (float) (longArrowLength * Math.cos(arrLeftRad));
-
-        float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
-        float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
-
-        if(ac.isWarning){
-            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acWarningBoxPaint);
-        }
-        if(ac.isHighlighted){
-            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acHighlightBoxPaint);
-        }
-
-        if(ac.isSelected){
-            boxSize += 5;
-            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acSelectedBoxPaint);
-        }
-
-        canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
-
-        // Track arrow line
-        if(hasTrack) {
-            canvas.drawLine(shortEndX, shortEndY, shortArrLeftX, shortArrLeftY, aircraftBackPaint);
-            canvas.drawLine(shortEndX, shortEndY, shortArrRightX, shortArrRightY, aircraftBackPaint);
-            canvas.drawLine(x, y, shortEndX, shortEndY, aircraftBackPaint);
-        }
-
-        canvas.drawCircle(x, y, 7, aircraftBackPaint);
-
-        if(hasTrack) {
-            canvas.drawLine(x, y, longEndX, longEndY, aircraftForePaint);
-        }
-
-        canvas.drawCircle(x, y, 6, aircraftForePaint);
-
-        if(hasTrack) {
-            canvas.drawLine(longEndX, longEndY, longArrRightX, longArrRightY, aircraftForePaint);
-            canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, aircraftForePaint);
-        }
-
-        canvas.drawText(nameLine, x + 20, y - 64, acNamePaint);
-        canvas.drawText(infoLine, x + 20, y - 40, acInfoPaint);
     }
 
 
