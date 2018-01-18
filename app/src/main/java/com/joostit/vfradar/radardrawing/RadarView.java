@@ -2,11 +2,9 @@ package com.joostit.vfradar.radardrawing;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -16,7 +14,6 @@ import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,8 +31,6 @@ public class RadarView extends View {
 
     private float zoomButtonDimension = 70;
     private float zoomButtonSpacing = 70;
-
-    private static DecimalFormat df1 = new DecimalFormat("#.#");
 
     private final String ZOOM_IN = "ZoomIn";
     private final String ZOOM_OUT = "ZoomOUT";
@@ -217,7 +212,7 @@ public class RadarView extends View {
                 plots.add(plot);
             }
 
-            updateAircraftPlotData(track, plot);
+            plot.updateAircraftPlotData(track);
         }
     }
 
@@ -236,54 +231,7 @@ public class RadarView extends View {
     }
 
 
-    private synchronized void updateAircraftPlotData(TrackedAircraft aircraft, AircraftPlot plot){
 
-        String nameString = "";
-        if(!IsNullOrEmpty(aircraft.Data.Reg)){
-            nameString = aircraft.Data.Reg;
-            if(!IsNullOrEmpty(aircraft.Data.CallSign)){
-                nameString += " (" + aircraft.Data.CallSign + ")";
-            }
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.CallSign)){
-            nameString = aircraft.Data.CallSign;
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.Icao24)){
-            nameString = aircraft.Data.Icao24;
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.FlarmId)){
-            nameString = aircraft.Data.FlarmId;
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.OgnId)){
-            nameString = aircraft.Data.OgnId;
-        }
-
-        if(!IsNullOrEmpty(aircraft.Data.Cn)){
-            nameString += " (" + aircraft.Data.Cn + ")";
-        }
-        plot.DisplayName = nameString;
-
-        String infoLineString = "";
-
-        if(aircraft.Data.Alt != null) {
-
-            infoLineString =  aircraft.Data.Alt.toString();
-
-            if ((aircraft.Data.VRate != null) && (aircraft.Data.VRate != 0)) {
-                double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
-                String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
-                infoLineString += "    " + plusSign + df1.format(vRateRounded);
-            }
-        }
-
-        plot.InfoLine = infoLineString;
-
-        plot.Track = aircraft.Data.Track;
-        plot.lat = aircraft.Data.Lat;
-        plot.lon = aircraft.Data.Lon;
-        plot.isHighlighted = aircraft.isHighlighted;
-        plot.isWarning = aircraft.isWarning;
-    }
 
 
     private synchronized void RecalculateAircraftPlots(){
@@ -294,14 +242,6 @@ public class RadarView extends View {
         }
     }
 
-    private Boolean IsNullOrEmpty(String input){
-        if((input != null) && (!input.trim().equals(""))){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
 
 
     private void drawSite(Canvas canvas){

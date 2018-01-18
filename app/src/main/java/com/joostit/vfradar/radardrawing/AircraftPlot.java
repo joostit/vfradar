@@ -3,11 +3,17 @@ package com.joostit.vfradar.radardrawing;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.joostit.vfradar.data.TrackedAircraft;
+
+import java.text.DecimalFormat;
+
 /**
  * Created by Joost on 15-1-2018.
  */
 
 public class AircraftPlot extends DrawableItem {
+
+    private static DecimalFormat df1 = new DecimalFormat("#.#");
 
     public double lat;
     public double lon;
@@ -171,8 +177,64 @@ public class AircraftPlot extends DrawableItem {
         canvas.drawText(infoLine, x + 20, y - 40, acInfoPaint);
     }
 
-    @Override
-    public Boolean DoHitTest(float hitX, float hitY) {
-        return super.DoHitTest(hitX, hitY);
+
+    public void updateAircraftPlotData(TrackedAircraft aircraft){
+
+        String nameString = "";
+        if(!IsNullOrEmpty(aircraft.Data.Reg)){
+            nameString = aircraft.Data.Reg;
+            if(!IsNullOrEmpty(aircraft.Data.CallSign)){
+                nameString += " (" + aircraft.Data.CallSign + ")";
+            }
+        }
+        else if(!IsNullOrEmpty(aircraft.Data.CallSign)){
+            nameString = aircraft.Data.CallSign;
+        }
+        else if(!IsNullOrEmpty(aircraft.Data.Icao24)){
+            nameString = aircraft.Data.Icao24;
+        }
+        else if(!IsNullOrEmpty(aircraft.Data.FlarmId)){
+            nameString = aircraft.Data.FlarmId;
+        }
+        else if(!IsNullOrEmpty(aircraft.Data.OgnId)){
+            nameString = aircraft.Data.OgnId;
+        }
+
+        if(!IsNullOrEmpty(aircraft.Data.Cn)){
+            nameString += " (" + aircraft.Data.Cn + ")";
+        }
+        DisplayName = nameString;
+
+        String infoLineString = "";
+
+        if(aircraft.Data.Alt != null) {
+
+            infoLineString =  aircraft.Data.Alt.toString();
+
+            if ((aircraft.Data.VRate != null) && (aircraft.Data.VRate != 0)) {
+                double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
+                String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
+                infoLineString += "    " + plusSign + df1.format(vRateRounded);
+            }
+        }
+
+        InfoLine = infoLineString;
+
+        Track = aircraft.Data.Track;
+        lat = aircraft.Data.Lat;
+        lon = aircraft.Data.Lon;
+        isHighlighted = aircraft.isHighlighted;
+        isWarning = aircraft.isWarning;
     }
+
+
+    private Boolean IsNullOrEmpty(String input){
+        if((input != null) && (!input.trim().equals(""))){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
 }
