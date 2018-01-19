@@ -23,26 +23,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="0dp"
+        android:padding="2dp">
 
         <TextView
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
+            android:layout_margin="0dp"
             android:textAppearance="?attr/textAppearanceListItem"
             android:background="#FF000000"
-            android:textColor="#FF00CC00"/>
+            android:textColor="#FF00CC00"
+            android:textSize="12dp"/>
 
         <TextView
             android:id="@+id/altitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
+            android:layout_margin="0dp"
             android:textAppearance="?attr/textAppearanceListItem"
             android:background="#FF000000"
             android:textColor="#FF00CC00"
-            android:text="1346"/>
+            android:textSize="12dp"
+            android:text="1346 m"/>
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:background="#FF000000"
+            android:textColor="#FF00CC00"
+            android:textSize="12dp"
+            android:text="13.6km @ 274°"/>
     </LinearLayout>
 
 
