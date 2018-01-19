@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.listing.dummy.DummyContent;
-import com.joostit.vfradar.listing.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 

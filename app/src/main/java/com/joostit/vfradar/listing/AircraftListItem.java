@@ -6,6 +6,7 @@ package com.joostit.vfradar.listing;
 
 public class AircraftListItem {
 
+    public int trackId;
     public String name = "";
     public String altitude = "";
     public String distanceString = "";
