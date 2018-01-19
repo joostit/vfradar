@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.joostit.vfradar.OperationalActivity">
+    tools:context="com.joostit.vfradar.OperationalActivity"
+    android:background="#FF000000">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fragment_container"
@@ -21,13 +22,13 @@
             android:layout_height="match_parent"
             android:layout_weight="3" />
 
-        <View
-            android:id="@+id/separator1"
-            android:layout_width="1px"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="#90909090" />
+        <!--<View-->
+            <!--android:id="@+id/separator1"-->
+            <!--android:layout_width="4px"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:background="#FF00AA00" />-->
 
         <fragment
             android:id="@+id/sidePanelFrag"

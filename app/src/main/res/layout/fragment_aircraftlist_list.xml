@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.joostit.vfradar.listing.AircraftListFragment"
-    tools:listitem="@layout/fragment_aircraftlist" />
+    tools:listitem="@layout/fragment_aircraftlist"
+    android:background="#FF005000"/>

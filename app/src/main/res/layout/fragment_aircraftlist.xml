@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/aircraftlistitemback"
+
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="2dp">
 
     <TextView
         android:id="@+id/id"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="10dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="25dp"/>
+        android:textSize="30dp"
+        android:textColor="#FF00FF00"/>
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:background="#FF000000"
+            android:textColor="#FF00CC00"/>
+
+        <TextView
+            android:id="@+id/altitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:background="#FF000000"
+            android:textColor="#FF00CC00"
+            android:text="1346"/>
+    </LinearLayout>
+
+
 </LinearLayout>
