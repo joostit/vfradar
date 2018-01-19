@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.joostit.vfradar.R;
-import com.joostit.vfradar.listing.dummy.DummyContent;
+import com.joostit.vfradar.data.TrackedAircraft;
 
 import java.util.List;
 
@@ -28,6 +28,8 @@ public class AircraftListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    private AircraftListCollection aircraftCollection = new AircraftListCollection();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,6 +60,8 @@ public class AircraftListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_aircraftlist_list, container, false);
 
         // Set the adapter
@@ -69,11 +73,17 @@ public class AircraftListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyAircraftListRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+
+
+            recyclerView.setAdapter(new MyAircraftListRecyclerViewAdapter(aircraftCollection.items, mListener));
         }
         return view;
     }
 
+    public void UpdateAircraft(List<TrackedAircraft> ac){
+
+    }
 
     @Override
     public void onAttach(Context context) {

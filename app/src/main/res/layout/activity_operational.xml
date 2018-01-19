@@ -31,8 +31,9 @@
             <!--android:background="#FF00AA00" />-->
 
         <fragment
-            android:id="@+id/sidePanelFrag"
-            android:name="com.joostit.vfradar.SidePanelFragment"
+            android:id="@+id/aircraftListFrag"
+            android:tag="aircraftListFragTag"
+            android:name="com.joostit.vfradar.listing.AircraftListFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>

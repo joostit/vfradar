@@ -1,5 +1,6 @@
 package com.joostit.vfradar;
 
+import android.app.FragmentManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,8 +11,7 @@ import com.joostit.vfradar.listing.AircraftListFragment;
 import java.util.List;
 
 public class OperationalActivity extends AppCompatActivity
-        implements SidePanelFragment.OnSidePanelInteractionListener,
-        RadarViewFragment.OnRadarViewInteractionListener,
+        implements RadarViewFragment.OnRadarViewInteractionListener,
         AircraftListFragment.OnListFragmentInteractionListener{
 
 
@@ -70,6 +70,9 @@ public class OperationalActivity extends AppCompatActivity
     public void UpdateAircraft(List<TrackedAircraft> ac){
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
         rView.UpdateAircraft(ac);
+
+        AircraftListFragment acListFragment = (AircraftListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
+        acListFragment.UpdateAircraft(ac);
     }
 
     @Override
