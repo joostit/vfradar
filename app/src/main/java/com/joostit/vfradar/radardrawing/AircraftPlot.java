@@ -2,6 +2,8 @@ package com.joostit.vfradar.radardrawing;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.joostit.vfradar.data.TrackedAircraft;
 
@@ -14,6 +16,8 @@ import java.text.DecimalFormat;
 public class AircraftPlot extends DrawableItem {
 
     private static DecimalFormat df1 = new DecimalFormat("#.#");
+
+    private final int txtBackMargin = 2;
 
     public double lat;
     public double lon;
@@ -40,6 +44,7 @@ public class AircraftPlot extends DrawableItem {
     private int acSelectedBoxColor = 0xFFFFFFFF;
     private int acHighlightBoxColor = 0xFFFFFF00;
     private int acTextGuideLineColor = 0xAA008000;
+    private int acTextBackColor = 0xBB000000;
 
     private Paint acNamePaint;
     private Paint acInfoPaint;
@@ -49,6 +54,7 @@ public class AircraftPlot extends DrawableItem {
     private Paint acWarningBoxPaint;
     private Paint acHighlightBoxPaint;
     private Paint acSelectedBoxPaint;
+    private Paint acTextBackPaint;
 
     public AircraftPlot(){
         init();
@@ -92,6 +98,10 @@ public class AircraftPlot extends DrawableItem {
         acSelectedBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acSelectedBoxPaint.setStyle(Paint.Style.FILL);
         acSelectedBoxPaint.setColor(acSelectedBoxColor);
+
+        acTextBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        acTextBackPaint.setStyle(Paint.Style.FILL);
+        acTextBackPaint.setColor(acTextBackColor);
     }
 
 
@@ -151,6 +161,34 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acSelectedBoxPaint);
         }
 
+
+        float nameTxtX = x + 20;
+        float nameTxtY = y - 64;
+        float infoTxtX = x + 20;
+        float infoTxtY = y - 37;
+
+        if(isWarning || isHighlighted || isSelected) {
+            Rect nameTxtBounds = new Rect();
+            Rect infoTxtBounds = new Rect();
+            acNamePaint.getTextBounds(nameLine, 0, nameLine.length(), nameTxtBounds);
+            acInfoPaint.getTextBounds(infoLine, 0,infoLine.length(), infoTxtBounds);
+
+            float nameBackX = nameTxtX - txtBackMargin - 3;
+            float nameBackY = nameTxtY - nameTxtBounds.height() - txtBackMargin - 3;
+            float nameBackRight = nameTxtX + nameTxtBounds.width() + txtBackMargin + 3;
+            float nameBackBottom = nameTxtY + txtBackMargin;
+            RectF nameBackRect= new RectF(nameBackX, nameBackY, nameBackRight, nameBackBottom);
+
+            float infoBackX = infoTxtX - txtBackMargin - 3;
+            float infoBackY = infoTxtY - infoTxtBounds.height() - txtBackMargin;
+            float infoBackRight = infoTxtX + infoTxtBounds.width() + txtBackMargin + 3;
+            float infoBackBottom = infoTxtY + txtBackMargin + 3;
+            RectF infoBackRect= new RectF(infoBackX, infoBackY, infoBackRight, infoBackBottom);
+
+            canvas.drawRoundRect(nameBackRect, 3, 3, acTextBackPaint);
+            canvas.drawRoundRect(infoBackRect, 3, 3, acTextBackPaint);
+        }
+
         canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
 
         // Track arrow line
@@ -173,8 +211,8 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, aircraftForePaint);
         }
 
-        canvas.drawText(nameLine, x + 20, y - 64, acNamePaint);
-        canvas.drawText(infoLine, x + 20, y - 40, acInfoPaint);
+        canvas.drawText(nameLine, nameTxtX, nameTxtY, acNamePaint);
+        canvas.drawText(infoLine, infoTxtX, infoTxtY, acInfoPaint);
     }
 
 
