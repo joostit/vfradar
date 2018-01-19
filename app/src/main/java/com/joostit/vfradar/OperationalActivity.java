@@ -5,13 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.listing.AircraftListFragment;
 
 import java.util.List;
 
 public class OperationalActivity extends AppCompatActivity
         implements SidePanelFragment.OnSidePanelInteractionListener,
         RadarViewFragment.OnRadarViewInteractionListener,
-        AircraftListFragment.OnAircraftListInteractionListener{
+        AircraftListFragment.OnListFragmentInteractionListener{
 
 
     private DebugAircraftDataGenerator debugGenerator = new DebugAircraftDataGenerator();
@@ -69,5 +70,10 @@ public class OperationalActivity extends AppCompatActivity
     public void UpdateAircraft(List<TrackedAircraft> ac){
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
         rView.UpdateAircraft(ac);
+    }
+
+    @Override
+    public void onAircraftSelectedFromList(Integer trackId) {
+
     }
 }

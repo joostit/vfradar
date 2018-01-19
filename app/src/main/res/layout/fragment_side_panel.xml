@@ -5,7 +5,7 @@
     tools:context="com.joostit.vfradar.SidePanelFragment">
 
     <fragment
-        android:name="com.joostit.vfradar.AircraftListFragment"
+        android:name="com.joostit.vfradar.listing.AircraftListFragment"
         android:id="@+id/aircraftList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

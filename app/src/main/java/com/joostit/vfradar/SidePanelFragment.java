@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.joostit.vfradar.listing.AircraftListFragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,7 +19,7 @@ import android.view.ViewGroup;
  * Use the {@link SidePanelFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SidePanelFragment extends Fragment implements AircraftListFragment.OnAircraftListInteractionListener {
+public class SidePanelFragment extends Fragment implements AircraftListFragment.OnListFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,9 +87,10 @@ public class SidePanelFragment extends Fragment implements AircraftListFragment.
     }
 
     @Override
-    public void onAircraftSelected(Integer trackId) {
+    public void onAircraftSelectedFromList(Integer trackId) {
 
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
