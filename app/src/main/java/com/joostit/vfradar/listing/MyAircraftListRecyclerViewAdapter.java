@@ -36,8 +36,12 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).name);
-        holder.altitudeView.setText(mValues.get(position).name);
+        holder.mNameView.setText(mValues.get(position).name);
+        holder.altitudeView.setText(mValues.get(position).altitude);
+        holder.modelView.setText(mValues.get(position).model);
+        holder.vrateView.setText(mValues.get(position).vRate);
+        holder.relPositionView.setText(mValues.get(position).relativePosition);
+        holder.cnView.setText(mValues.get(position).cn);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,15 +63,23 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        public final TextView mNameView;
         public final TextView altitudeView;
+        public final TextView modelView;
+        public final TextView relPositionView;
+        public final TextView vrateView;
+        public final TextView cnView;
         public AircraftListItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            altitudeView = (TextView) view.findViewById(R.id.altitude);
+            mNameView = (TextView) view.findViewById(R.id.nameView);
+            altitudeView = (TextView) view.findViewById(R.id.altitudeView);
+            modelView = (TextView) view.findViewById(R.id.modelView);
+            vrateView = (TextView) view.findViewById(R.id.vRateView);
+            relPositionView = (TextView) view.findViewById(R.id.relativePositionView);
+            cnView = (TextView) view.findViewById(R.id.competitionNumberView);
         }
 
         @Override

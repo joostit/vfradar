@@ -43,6 +43,11 @@ public class DummyContent {
         return new AircraftListItem(){{
             trackId = position;
             name = "PH-12" + position;
+            model = "Duo Discus XLT";
+            cn = "T7";
+            altitude = "1537";
+            vRate = "+3.2";
+            relativePosition = "15.8km @ 286°";
         }};
     }
 

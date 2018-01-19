@@ -8,8 +8,11 @@ public class AircraftListItem {
 
     public int trackId;
     public String name = "";
+    public String cn = "";
+    public String model = "";
     public String altitude = "";
-    public String distanceString = "";
+    public String relativePosition = "";
+    public String vRate = "";
 
 
 }
