@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 public abstract class DrawableItem {
 
 
-    public Boolean DoHitTest(float hitX, float hitY){
+    public Boolean DoHitTest(float hitX, float hitY) {
         return false;
     }
 

@@ -30,7 +30,7 @@ public class Crosshair extends DrawableItem {
     private float width;
     private float height;
 
-    public Crosshair(){
+    public Crosshair() {
         init();
     }
 
@@ -49,7 +49,7 @@ public class Crosshair extends DrawableItem {
     }
 
 
-    public void UpdateDrawing(SphericalMercatorProjection projection, ZoomLevelInfo zlInfo, LatLon centerPosition, float width, float height){
+    public void UpdateDrawing(SphericalMercatorProjection projection, ZoomLevelInfo zlInfo, LatLon centerPosition, float width, float height) {
 
         this.width = width;
         this.height = height;

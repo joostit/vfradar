@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.listing.AircraftListFragment.OnListFragmentInteractionListener;
+import com.joostit.vfradar.utilities.Numbers;
 
 import java.util.List;
 
@@ -34,14 +35,24 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
     }
 
     @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mNameView.setText(mValues.get(position).name);
-        holder.altitudeView.setText(mValues.get(position).altitude);
-        holder.modelView.setText(mValues.get(position).model);
-        holder.vrateView.setText(mValues.get(position).vRate);
-        holder.relPositionView.setText(mValues.get(position).relativePosition);
-        holder.cnView.setText(mValues.get(position).cn);
+
+
+        AircraftListItem item = mValues.get(position);
+
+        holder.mItem = item;
+        holder.mNameView.setText(item.name);
+        holder.altitudeView.setText(item.altitude);
+        holder.modelView.setText(item.model);
+        holder.vrateView.setText(item.vRate);
+        holder.relDistanceView.setText(item.relativeDistance);
+        holder.relBearingView.setText(item.relativeBearing);
+        holder.cnView.setText(item.cn);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,17 +67,20 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
         });
     }
 
+
     @Override
     public int getItemCount() {
         return mValues.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mNameView;
         public final TextView altitudeView;
         public final TextView modelView;
-        public final TextView relPositionView;
+        public final TextView relDistanceView;
+        public final TextView relBearingView;
         public final TextView vrateView;
         public final TextView cnView;
         public AircraftListItem mItem;
@@ -78,7 +92,8 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
             altitudeView = (TextView) view.findViewById(R.id.altitudeView);
             modelView = (TextView) view.findViewById(R.id.modelView);
             vrateView = (TextView) view.findViewById(R.id.vRateView);
-            relPositionView = (TextView) view.findViewById(R.id.relativePositionView);
+            relDistanceView = (TextView) view.findViewById(R.id.relativeDistanceView);
+            relBearingView = (TextView) view.findViewById(R.id.relativeBearingView);
             cnView = (TextView) view.findViewById(R.id.competitionNumberView);
         }
 

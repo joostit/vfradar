@@ -31,15 +31,15 @@ public class LatLon {
         return latStr + ", " + lonStr;
     }
 
-    public double DistanceTo(LatLon to){
+    public double DistanceTo(LatLon to) {
         return GeoUtils.Distance(this, to);
     }
 
-    public double BearingTo(LatLon to){
+    public double BearingTo(LatLon to) {
         return GeoUtils.Bearing(this, to);
     }
 
-    public LatLon Move(double bearing, double distanceM){
+    public LatLon Move(double bearing, double distanceM) {
         return GeoUtils.Move(this, bearing, distanceM);
     }
 }

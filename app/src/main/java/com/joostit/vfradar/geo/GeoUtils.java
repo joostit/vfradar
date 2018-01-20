@@ -9,7 +9,7 @@ public class GeoUtils {
     /**
      * Calculate distance between two points in latitude and longitude.
      * Uses Haversine method as its base.
-     *
+     * <p>
      * lat1, lon1 Start point lat2, lon2 End point
      *
      * @returns Distance in Meters
@@ -22,7 +22,7 @@ public class GeoUtils {
      * Calculate distance between two points in latitude and longitude taking
      * into account height difference. If you are not interested in height
      * difference pass 0.0. Uses Haversine method as its base.
-     *
+     * <p>
      * lat1, lon1 Start point lat2, lon2 End point el1 Start altitude in meters
      * el2 End altitude in meters
      *
@@ -64,19 +64,19 @@ public class GeoUtils {
         return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
     }
 
-    public static LatLon Move(LatLon start, double bearing, double distanceM){
-            double lat1 = Math.toRadians(start.Latitude);
-            double lng1 = Math.toRadians(start.Longitude);
-            double brng = Math.toRadians(bearing);
+    public static LatLon Move(LatLon start, double bearing, double distanceM) {
+        double lat1 = Math.toRadians(start.Latitude);
+        double lng1 = Math.toRadians(start.Longitude);
+        double brng = Math.toRadians(bearing);
 
-            double R = 6371000;
-            double lat2 = Math.asin( Math.sin(lat1)*Math.cos(distanceM/R) +
-                    Math.cos(lat1)*Math.sin(distanceM/R)*Math.cos(brng) );
-            double lng2 = lng1 + Math.atan2(Math.sin(brng)*Math.sin(distanceM/R)*Math.cos(lat1),
-                    Math.cos(distanceM/R)-Math.sin(lat1)*Math.sin(lat2));
+        double R = 6371000;
+        double lat2 = Math.asin(Math.sin(lat1) * Math.cos(distanceM / R) +
+                Math.cos(lat1) * Math.sin(distanceM / R) * Math.cos(brng));
+        double lng2 = lng1 + Math.atan2(Math.sin(brng) * Math.sin(distanceM / R) * Math.cos(lat1),
+                Math.cos(distanceM / R) - Math.sin(lat1) * Math.sin(lat2));
 
-            LatLon result = new LatLon(Math.toDegrees(lat2), Math.toDegrees(lng2));
+        LatLon result = new LatLon(Math.toDegrees(lat2), Math.toDegrees(lng2));
 
-            return result;
+        return result;
     }
 }

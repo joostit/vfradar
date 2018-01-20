@@ -11,7 +11,8 @@ public class AircraftListItem {
     public String cn = "";
     public String model = "";
     public String altitude = "";
-    public String relativePosition = "";
+    public String relativeDistance = "";
+    public String relativeBearing = "";
     public String vRate = "";
 
 

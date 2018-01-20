@@ -15,34 +15,31 @@ public class ZoomLevelCalculator {
     private List<ZoomLevelInfo> zoomLevels = new ArrayList<>();
     private int currentZoomLevel = 3;
 
-    public ZoomLevelCalculator(){
+    public ZoomLevelCalculator() {
         loadZoomLevels();
     }
 
-    public ZoomLevelInfo getZoomLevelInfo(){
+    public ZoomLevelInfo getZoomLevelInfo() {
         return zoomLevels.get(currentZoomLevel);
     }
 
     private void loadZoomLevels() {
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 600;
             RingRadius1 = 200;
             RingRadius2 = 400;
             RingRadius3 = 600;
         }});
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 1200;
             RingRadius1 = 400;
             RingRadius2 = 800;
             RingRadius3 = 1200;
         }});
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 3000;
             RingRadius1 = 500;
             RingRadius2 = 1500;
@@ -50,8 +47,7 @@ public class ZoomLevelCalculator {
         }});
 
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 6000;
             RingRadius1 = 1000;
             RingRadius2 = 3000;
@@ -59,8 +55,7 @@ public class ZoomLevelCalculator {
         }});
 
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 15000;
             RingRadius1 = 5000;
             RingRadius2 = 10000;
@@ -68,8 +63,7 @@ public class ZoomLevelCalculator {
         }});
 
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 30000;
             RingRadius1 = 10000;
             RingRadius2 = 20000;
@@ -77,8 +71,7 @@ public class ZoomLevelCalculator {
         }});
 
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 60000;
             RingRadius1 = 20000;
             RingRadius2 = 40000;
@@ -86,8 +79,7 @@ public class ZoomLevelCalculator {
         }});
 
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 120000;
             RingRadius1 = 40000;
             RingRadius2 = 80000;
@@ -95,8 +87,7 @@ public class ZoomLevelCalculator {
         }});
 
 
-        zoomLevels.add(new ZoomLevelInfo()
-        {{
+        zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 240000;
             RingRadius1 = 80000;
             RingRadius2 = 160000;
@@ -105,14 +96,14 @@ public class ZoomLevelCalculator {
     }
 
 
-    public void zoomIn(){
-        if(currentZoomLevel > 0){
+    public void zoomIn() {
+        if (currentZoomLevel > 0) {
             currentZoomLevel--;
         }
     }
 
-    public void zoomOut(){
-        if(currentZoomLevel < zoomLevels.size() - 1){
+    public void zoomOut() {
+        if (currentZoomLevel < zoomLevels.size() - 1) {
             currentZoomLevel++;
         }
     }

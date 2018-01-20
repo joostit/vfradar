@@ -1,6 +1,11 @@
 package com.joostit.vfradar.listing;
 
+import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.geo.LatLon;
+import com.joostit.vfradar.radardrawing.AircraftPlot;
+import com.joostit.vfradar.utilities.DistanceString;
+import com.joostit.vfradar.utilities.Numbers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,43 +24,111 @@ public class AircraftListCollection {
      */
     public final Map<Integer, AircraftListItem> itemMap = new HashMap<>();
 
-    private static final int COUNT = 25;
 
-    public void UpdateItems(List<TrackedAircraft> ac){
+    public AircraftListCollection() {
 
     }
 
-    public AircraftListCollection(){
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
+
+    public synchronized void UpdateItems(List<TrackedAircraft> aircraftUpdate) {
+
+
+        List<AircraftListItem> itemsToRemove = new ArrayList<>(items);
+
+        for (TrackedAircraft tracked : aircraftUpdate) {
+            AircraftListItem acItem;
+            if (hasItem(tracked.Data.Trackid)) {
+                acItem = getItem(tracked.Data.Trackid);
+                itemsToRemove.remove(acItem);
+            } else {
+                acItem = new AircraftListItem();
+                acItem.trackId = tracked.Data.Trackid;
+                addItem(acItem);
+            }
+
+            updateListItemData(acItem, tracked);
+        }
+
+        // Remove aircraft
+        for (AircraftListItem acToRemove : itemsToRemove) {
+            removeItem(acToRemove.trackId);
         }
     }
 
 
-    private void addItem(AircraftListItem item) {
+    private void updateListItemData(AircraftListItem acItem, TrackedAircraft tracked) {
+
+        if (tracked.Data.VRate != null) {
+            double val = Numbers.round(tracked.Data.VRate, 1);
+            if (val > 0) {
+                acItem.vRate = "+" + String.valueOf(val);
+            } else {
+                acItem.vRate = String.valueOf(val);
+            }
+        } else {
+            acItem.vRate = "";
+        }
+
+
+        acItem.altitude = tracked.Data.Alt != null ? tracked.Data.Alt.toString() : "";
+        acItem.model = tracked.Data.Model != null ? tracked.Data.Model : "";
+        acItem.name = determineName(tracked);
+        acItem.cn = tracked.Data.Cn != null ? tracked.Data.Cn.toString() : "";
+        updateRelativePosition(acItem, tracked);
+    }
+
+    private String determineName(TrackedAircraft tracked) {
+        return tracked.Data.Reg;
+    }
+
+    private void updateRelativePosition(AircraftListItem listItem, TrackedAircraft tracked) {
+
+        LatLon acPos = new LatLon(tracked.Data.Lat, tracked.Data.Lon);
+        LatLon here = SysConfig.getCenterPosition();
+
+        double distance = here.DistanceTo(acPos);
+        int bearing = (int) Math.round(here.BearingTo(acPos));
+
+        listItem.relativeDistance = DistanceString.getString(distance);
+        listItem.relativeBearing = getBearingIndicator(bearing) + " " + bearing + "°";
+    }
+
+    private synchronized boolean hasItem(int trackId) {
+        return itemMap.containsKey(trackId);
+    }
+
+    private synchronized AircraftListItem getItem(int trackId) {
+        return itemMap.get(trackId);
+    }
+
+    private synchronized void addItem(AircraftListItem item) {
         items.add(item);
         itemMap.put(item.trackId, item);
     }
 
-    private AircraftListItem createDummyItem(final int position) {
-        return new AircraftListItem(){{
-            trackId = position;
-            name = "PH-12" + position;
-            model = "Duo Discus XLT";
-            cn = "T7";
-            altitude = "1537";
-            vRate = "+3.2";
-            relativePosition = "15.8km @ 286°";
-        }};
+    private synchronized void removeItem(int trackId) {
+        AircraftListItem toRemove = itemMap.get(trackId);
+        items.remove(toRemove);
+        itemMap.remove(toRemove.trackId);
     }
 
-    private String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
+
+    private String getBearingIndicator(int bearing) {
+        int b = bearing % 360;
+
+        if (b < 45) {
+            return "↑";
+        } else if (b < 135) {
+            return "→";
+        } else if (b < 225) {
+            return "↓";
+        } else if (b < 315) {
+            return "←";
+        } else if (b <= 360) {
+            return "↑";
+        } else {
+            return " ";
         }
-        return builder.toString();
     }
 
 }

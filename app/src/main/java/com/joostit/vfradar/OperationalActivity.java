@@ -12,7 +12,7 @@ import java.util.List;
 
 public class OperationalActivity extends AppCompatActivity
         implements RadarViewFragment.OnRadarViewInteractionListener,
-        AircraftListFragment.OnListFragmentInteractionListener{
+        AircraftListFragment.OnListFragmentInteractionListener {
 
 
     private DebugAircraftDataGenerator debugGenerator = new DebugAircraftDataGenerator();
@@ -31,11 +31,10 @@ public class OperationalActivity extends AppCompatActivity
     };
 
 
-    private  void startTimer(){
+    private void startTimer() {
         startTime = System.currentTimeMillis();
         timerHandler.postDelayed(timerRunnable, 1000);
     }
-
 
 
     @Override
@@ -45,8 +44,6 @@ public class OperationalActivity extends AppCompatActivity
 
         startTimer();
     }
-
-
 
 
     @Override
@@ -67,7 +64,7 @@ public class OperationalActivity extends AppCompatActivity
 
     }
 
-    public void UpdateAircraft(List<TrackedAircraft> ac){
+    public void UpdateAircraft(List<TrackedAircraft> ac) {
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
         rView.UpdateAircraft(ac);
 

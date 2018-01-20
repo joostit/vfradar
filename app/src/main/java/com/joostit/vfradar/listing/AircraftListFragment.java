@@ -31,6 +31,8 @@ public class AircraftListFragment extends Fragment {
 
     private AircraftListCollection aircraftCollection = new AircraftListCollection();
 
+    private MyAircraftListRecyclerViewAdapter listAdapter;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -74,15 +76,16 @@ public class AircraftListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
+            listAdapter = new MyAircraftListRecyclerViewAdapter(aircraftCollection.items, mListener);
 
-
-            recyclerView.setAdapter(new MyAircraftListRecyclerViewAdapter(aircraftCollection.items, mListener));
+            recyclerView.setAdapter(listAdapter);
         }
         return view;
     }
 
-    public void UpdateAircraft(List<TrackedAircraft> ac){
-
+    public void UpdateAircraft(List<TrackedAircraft> ac) {
+        aircraftCollection.UpdateItems(ac);
+        listAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -56,11 +56,11 @@ public class AircraftPlot extends DrawableItem {
     private Paint acSelectedBoxPaint;
     private Paint acTextBackPaint;
 
-    public AircraftPlot(){
+    public AircraftPlot() {
         init();
     }
 
-    private void init(){
+    private void init() {
 
         aircraftForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         aircraftForePaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -119,7 +119,7 @@ public class AircraftPlot extends DrawableItem {
         // Copy numerical data only once to prevent multithreading inconsistencies
         Boolean hasTrack = (Track != null);
         double track = hasTrack ? Track : 0;
-        float x  = ScreenX;
+        float x = ScreenX;
         float y = ScreenY;
         String nameLine = DisplayName;
         String infoLine = InfoLine;
@@ -149,14 +149,14 @@ public class AircraftPlot extends DrawableItem {
         float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
         float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
 
-        if(isWarning){
+        if (isWarning) {
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acWarningBoxPaint);
         }
-        if(isHighlighted){
+        if (isHighlighted) {
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acHighlightBoxPaint);
         }
 
-        if(isSelected){
+        if (isSelected) {
             boxSize += 5;
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acSelectedBoxPaint);
         }
@@ -167,23 +167,23 @@ public class AircraftPlot extends DrawableItem {
         float infoTxtX = x + 20;
         float infoTxtY = y - 37;
 
-        if(isWarning || isHighlighted || isSelected) {
+        if (isWarning || isHighlighted || isSelected) {
             Rect nameTxtBounds = new Rect();
             Rect infoTxtBounds = new Rect();
             acNamePaint.getTextBounds(nameLine, 0, nameLine.length(), nameTxtBounds);
-            acInfoPaint.getTextBounds(infoLine, 0,infoLine.length(), infoTxtBounds);
+            acInfoPaint.getTextBounds(infoLine, 0, infoLine.length(), infoTxtBounds);
 
             float nameBackX = nameTxtX - txtBackMargin - 3;
             float nameBackY = nameTxtY - nameTxtBounds.height() - txtBackMargin - 3;
             float nameBackRight = nameTxtX + nameTxtBounds.width() + txtBackMargin + 3;
             float nameBackBottom = nameTxtY + txtBackMargin;
-            RectF nameBackRect= new RectF(nameBackX, nameBackY, nameBackRight, nameBackBottom);
+            RectF nameBackRect = new RectF(nameBackX, nameBackY, nameBackRight, nameBackBottom);
 
             float infoBackX = infoTxtX - txtBackMargin - 3;
             float infoBackY = infoTxtY - infoTxtBounds.height() - txtBackMargin;
             float infoBackRight = infoTxtX + infoTxtBounds.width() + txtBackMargin + 3;
             float infoBackBottom = infoTxtY + txtBackMargin + 3;
-            RectF infoBackRect= new RectF(infoBackX, infoBackY, infoBackRight, infoBackBottom);
+            RectF infoBackRect = new RectF(infoBackX, infoBackY, infoBackRight, infoBackBottom);
 
             canvas.drawRoundRect(nameBackRect, 3, 3, acTextBackPaint);
             canvas.drawRoundRect(infoBackRect, 3, 3, acTextBackPaint);
@@ -192,7 +192,7 @@ public class AircraftPlot extends DrawableItem {
         canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
 
         // Track arrow line
-        if(hasTrack) {
+        if (hasTrack) {
             canvas.drawLine(shortEndX, shortEndY, shortArrLeftX, shortArrLeftY, aircraftBackPaint);
             canvas.drawLine(shortEndX, shortEndY, shortArrRightX, shortArrRightY, aircraftBackPaint);
             canvas.drawLine(x, y, shortEndX, shortEndY, aircraftBackPaint);
@@ -200,13 +200,13 @@ public class AircraftPlot extends DrawableItem {
 
         canvas.drawCircle(x, y, 7, aircraftBackPaint);
 
-        if(hasTrack) {
+        if (hasTrack) {
             canvas.drawLine(x, y, longEndX, longEndY, aircraftForePaint);
         }
 
         canvas.drawCircle(x, y, 6, aircraftForePaint);
 
-        if(hasTrack) {
+        if (hasTrack) {
             canvas.drawLine(longEndX, longEndY, longArrRightX, longArrRightY, aircraftForePaint);
             canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, aircraftForePaint);
         }
@@ -216,38 +216,34 @@ public class AircraftPlot extends DrawableItem {
     }
 
 
-    public void updateAircraftPlotData(TrackedAircraft aircraft){
+    public void updateAircraftPlotData(TrackedAircraft aircraft) {
 
         String nameString = "";
-        if(!IsNullOrEmpty(aircraft.Data.Reg)){
+        if (!IsNullOrEmpty(aircraft.Data.Reg)) {
             nameString = aircraft.Data.Reg;
-            if(!IsNullOrEmpty(aircraft.Data.CallSign)){
+            if (!IsNullOrEmpty(aircraft.Data.CallSign)) {
                 nameString += " (" + aircraft.Data.CallSign + ")";
             }
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.CallSign)){
+        } else if (!IsNullOrEmpty(aircraft.Data.CallSign)) {
             nameString = aircraft.Data.CallSign;
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.Icao24)){
+        } else if (!IsNullOrEmpty(aircraft.Data.Icao24)) {
             nameString = aircraft.Data.Icao24;
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.FlarmId)){
+        } else if (!IsNullOrEmpty(aircraft.Data.FlarmId)) {
             nameString = aircraft.Data.FlarmId;
-        }
-        else if(!IsNullOrEmpty(aircraft.Data.OgnId)){
+        } else if (!IsNullOrEmpty(aircraft.Data.OgnId)) {
             nameString = aircraft.Data.OgnId;
         }
 
-        if(!IsNullOrEmpty(aircraft.Data.Cn)){
+        if (!IsNullOrEmpty(aircraft.Data.Cn)) {
             nameString += " (" + aircraft.Data.Cn + ")";
         }
         DisplayName = nameString;
 
         String infoLineString = "";
 
-        if(aircraft.Data.Alt != null) {
+        if (aircraft.Data.Alt != null) {
 
-            infoLineString =  aircraft.Data.Alt.toString();
+            infoLineString = aircraft.Data.Alt.toString();
 
             if ((aircraft.Data.VRate != null) && (aircraft.Data.VRate != 0)) {
                 double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
@@ -266,11 +262,10 @@ public class AircraftPlot extends DrawableItem {
     }
 
 
-    private Boolean IsNullOrEmpty(String input){
-        if((input != null) && (!input.trim().equals(""))){
+    private Boolean IsNullOrEmpty(String input) {
+        if ((input != null) && (!input.trim().equals(""))) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }

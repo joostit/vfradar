@@ -36,7 +36,7 @@ public class SphericalMercatorProjection {
         mWorldWidth = worldWidth;
     }
 
-    public synchronized void setScreen(double screenSize, double screenWidth, double screenHeight, double screenViewRadius, LatLon centerPosition){
+    public synchronized void setScreen(double screenSize, double screenWidth, double screenHeight, double screenViewRadius, LatLon centerPosition) {
         mWorldWidth = ((WORLD_CIRCUMFERENCE / 1.65) / (screenViewRadius * 2)) * screenSize;    // The word size in pixels
 
         PointF screenCenterpoint = toWorldPoint(centerPosition);
@@ -51,7 +51,7 @@ public class SphericalMercatorProjection {
         final double siny = Math.sin(Math.toRadians(lat));
         final double y = 0.5 * Math.log((1 + siny) / (1 - siny)) / -(2 * Math.PI) + .5;
 
-        PointF retVal = new PointF((float)( x * mWorldWidth), (float) ( y * mWorldWidth));
+        PointF retVal = new PointF((float) (x * mWorldWidth), (float) (y * mWorldWidth));
 
         retVal.x -= offsetX;
         retVal.y -= offsetY;
@@ -64,7 +64,7 @@ public class SphericalMercatorProjection {
         final double x = position.Longitude / 360 + .5;
         final double siny = Math.sin(Math.toRadians(position.Latitude));
         final double y = 0.5 * Math.log((1 + siny) / (1 - siny)) / -(2 * Math.PI) + .5;
-        PointF retVal = new PointF((float)( x * mWorldWidth), (float) ( y * mWorldWidth));
+        PointF retVal = new PointF((float) (x * mWorldWidth), (float) (y * mWorldWidth));
         return retVal;
     }
 

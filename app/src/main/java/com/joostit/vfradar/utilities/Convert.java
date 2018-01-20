@@ -6,19 +6,19 @@ package com.joostit.vfradar.utilities;
 
 public final class Convert {
 
-    public static double ft2m(double feet){
+    public static double ft2m(double feet) {
         return feet / 0.3048;
     }
 
-    public static double m2ft(double meters){
+    public static double m2ft(double meters) {
         return meters * 0.3048;
     }
 
-    public static double kn2kmh(double knots){
+    public static double kn2kmh(double knots) {
         return knots * 1.85200;
     }
 
-    public static double kmh2kn(double kilometersPerHour){
+    public static double kmh2kn(double kilometersPerHour) {
         return kilometersPerHour * 1.85200;
     }
 

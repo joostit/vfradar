@@ -10,8 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
-import com.joostit.vfradar.geo.LatLon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,6 @@ public class RadarView extends View {
 
 
     private float TOUCH_ACCURACY = 50;
-    private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
 
     private float zoomButtonDimension = 70;
     private float zoomButtonSpacing = 70;
@@ -67,22 +66,22 @@ public class RadarView extends View {
         buttons.put(ZOOM_OUT, new Button("-", 0, 0, zoomButtonDimension));
 
         crosshair = new Crosshair();
-}
+    }
 
 
     public void AttachSelectionListener(OnRadarViewInteractionListener radarViewFragment) {
         selectionListener = radarViewFragment;
     }
 
-    public synchronized void UpdateAircraft(List<TrackedAircraft> ac){
+    public synchronized void UpdateAircraft(List<TrackedAircraft> ac) {
 
         updateAircraftPlotData(ac);
         refreshDrawing();
     }
 
-    private synchronized void refreshDrawing(){
+    private synchronized void refreshDrawing() {
 
-        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, centerPosition);
+        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, SysConfig.getCenterPosition());
         RecalculateButtons();
         RecalculateAircraftPlots();
         calculateCrosshair();
@@ -94,8 +93,8 @@ public class RadarView extends View {
         buttons.get(ZOOM_OUT).updatePosition(getZoomOutButtonX(), getZoomButtonY());
     }
 
-    private void calculateCrosshair(){
-        crosshair.UpdateDrawing(projection, zoomLevels.getZoomLevelInfo(), centerPosition, this.getWidth(), this.getHeight());
+    private void calculateCrosshair() {
+        crosshair.UpdateDrawing(projection, zoomLevels.getZoomLevelInfo(), SysConfig.getCenterPosition(), this.getWidth(), this.getHeight());
     }
 
 
@@ -114,34 +113,34 @@ public class RadarView extends View {
 
     }
 
-    private float getZoomOutButtonX(){
-       return this.getWidth() - (2 * zoomButtonSpacing) - (2 * zoomButtonDimension);
+    private float getZoomOutButtonX() {
+        return this.getWidth() - (2 * zoomButtonSpacing) - (2 * zoomButtonDimension);
     }
 
 
-    private float getZoomInButtonX(){
+    private float getZoomInButtonX() {
         return this.getWidth() - zoomButtonSpacing - zoomButtonDimension;
     }
 
-    private float getZoomButtonY(){
+    private float getZoomButtonY() {
         return zoomButtonSpacing;
     }
 
     private void drawButtons(Canvas canvas) {
 
-        for(Button button : buttons.values()) {
+        for (Button button : buttons.values()) {
             button.Draw(canvas);
         }
 
     }
 
-    private synchronized void updateAircraftPlotData(List<TrackedAircraft> tracks){
+    private synchronized void updateAircraftPlotData(List<TrackedAircraft> tracks) {
         // ToDo: remove deleted aircraft
 
-        for(TrackedAircraft track : tracks){
+        for (TrackedAircraft track : tracks) {
             AircraftPlot plot = findPlotByTrackid(track.Data.Trackid);
 
-            if(plot == null){
+            if (plot == null) {
                 plot = new AircraftPlot();
                 plot.TrackId = track.Data.Trackid;
                 plots.add(plot);
@@ -152,11 +151,11 @@ public class RadarView extends View {
     }
 
 
-    private synchronized AircraftPlot findPlotByTrackid(int trackId){
+    private synchronized AircraftPlot findPlotByTrackid(int trackId) {
         AircraftPlot found = null;
 
-        for(AircraftPlot plot : plots){
-            if(plot.TrackId == trackId){
+        for (AircraftPlot plot : plots) {
+            if (plot.TrackId == trackId) {
                 found = plot;
                 break;
             }
@@ -166,8 +165,8 @@ public class RadarView extends View {
     }
 
 
-    private synchronized void RecalculateAircraftPlots(){
-        for(AircraftPlot plot : plots) {
+    private synchronized void RecalculateAircraftPlots() {
+        for (AircraftPlot plot : plots) {
             PointF screenPoint = projection.toScreenPoint(plot.lat, plot.lon);
             plot.ScreenX = screenPoint.x;
             plot.ScreenY = screenPoint.y;
@@ -175,7 +174,7 @@ public class RadarView extends View {
     }
 
 
-    private void drawSite(Canvas canvas){
+    private void drawSite(Canvas canvas) {
         float centerX = getWidth() / 2;
         float centerY = getHeight() / 2;
 
@@ -185,28 +184,27 @@ public class RadarView extends View {
         canvas.drawPath(runway, sitePaint);
     }
 
-    private synchronized void drawAllAircraft(Canvas canvas){
+    private synchronized void drawAllAircraft(Canvas canvas) {
 
         AircraftPlot deferredPlot = null;
 
-        for(AircraftPlot ac : plots){
-            if(ac.isSelected) {
+        for (AircraftPlot ac : plots) {
+            if (ac.isSelected) {
                 deferredPlot = ac;
-            }
-            else{
+            } else {
                 ac.Draw(canvas);
             }
         }
 
         // Make sure to plot a selected aircraft always last, so on top of the Z-order
-        if(deferredPlot != null){
+        if (deferredPlot != null) {
             deferredPlot.Draw(canvas);
         }
     }
 
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
+    public boolean onTouchEvent(MotionEvent event) {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -219,11 +217,11 @@ public class RadarView extends View {
 
     private synchronized void processTouchDown(MotionEvent event) {
 
-        if(processButtonTouchEvent(event)){
+        if (processButtonTouchEvent(event)) {
             return;
         }
 
-        if(processAircraftTouchEvent(event)){
+        if (processAircraftTouchEvent(event)) {
             return;
         }
     }
@@ -234,11 +232,10 @@ public class RadarView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        if(buttons.get(ZOOM_IN).DoHitTest(x, y)){
+        if (buttons.get(ZOOM_IN).DoHitTest(x, y)) {
             zoomIn();
             isHandled = true;
-        }
-        else if(buttons.get(ZOOM_OUT).DoHitTest(x, y)){
+        } else if (buttons.get(ZOOM_OUT).DoHitTest(x, y)) {
             zoomOut();
             isHandled = true;
         }
@@ -256,7 +253,7 @@ public class RadarView extends View {
         refreshDrawing();
     }
 
-    private boolean processAircraftTouchEvent(MotionEvent event){
+    private boolean processAircraftTouchEvent(MotionEvent event) {
 
         boolean isHandled = true;
 
@@ -267,10 +264,10 @@ public class RadarView extends View {
         AircraftPlot nearestHit = new AircraftPlot();
         double nearestDist = Double.MAX_VALUE;
 
-        for(AircraftPlot ac : plots){
+        for (AircraftPlot ac : plots) {
 
             dist = getScreenDistance(x, y, ac.ScreenX, ac.ScreenY);
-            if(dist < nearestDist){
+            if (dist < nearestDist) {
                 nearestHit = ac;
                 nearestDist = dist;
             }
@@ -280,17 +277,15 @@ public class RadarView extends View {
             boolean wasSelected = nearestHit.isSelected;
             deselectAllPlots();
             nearestHit.isSelected = !wasSelected;
-        }
-        else{
+        } else {
             deselectAllPlots();
         }
 
         refreshDrawing();
 
-        if(nearestHit.isSelected){
+        if (nearestHit.isSelected) {
             dispatchSelectionChanged(nearestHit.TrackId);
-        }
-        else{
+        } else {
             dispatchSelectionChanged(null);
         }
 
@@ -301,20 +296,20 @@ public class RadarView extends View {
         selectionListener.onUserSelectedAircraftChanged(trackId);
     }
 
-    private void deselectAllPlots(){
+    private void deselectAllPlots() {
         for (AircraftPlot ac : plots) {
             ac.isSelected = false;
         }
     }
 
 
-    private double getScreenDistance(float x1, float y1, float x2, float y2){
+    private double getScreenDistance(float x1, float y1, float x2, float y2) {
         double dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         return dist;
     }
 
 
-    public interface OnRadarViewInteractionListener{
+    public interface OnRadarViewInteractionListener {
         void onUserSelectedAircraftChanged(Integer TrackId);
     }
 

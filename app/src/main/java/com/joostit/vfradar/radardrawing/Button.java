@@ -23,7 +23,7 @@ public class Button extends DrawableItem {
 
     RectF buttonBounds = new RectF();
 
-    public Button(String character, float x, float y, float dimension){
+    public Button(String character, float x, float y, float dimension) {
         this.character = character;
         this.x = x;
         this.y = y;
@@ -49,7 +49,7 @@ public class Button extends DrawableItem {
     }
 
 
-    public void updatePosition(float x, float y){
+    public void updatePosition(float x, float y) {
         this.x = x;
         this.y = y;
 

@@ -22,7 +22,7 @@ import java.util.List;
  * Use the {@link RadarViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RadarViewFragment extends Fragment implements RadarView.OnRadarViewInteractionListener{
+public class RadarViewFragment extends Fragment implements RadarView.OnRadarViewInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -99,7 +99,7 @@ public class RadarViewFragment extends Fragment implements RadarView.OnRadarView
         mListener = null;
     }
 
-    public void UpdateAircraft(List<TrackedAircraft> ac){
+    public void UpdateAircraft(List<TrackedAircraft> ac) {
         RadarView rView = getView().findViewById(R.id.radarView);
         rView.UpdateAircraft(ac);
     }
