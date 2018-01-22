@@ -19,8 +19,6 @@ public class OperationalActivity extends AppCompatActivity
         AircraftListFragment.OnListFragmentInteractionListener,
         AircraftDataListener {
 
-
-    //private DebugAircraftDataGenerator debugGenerator = new DebugAircraftDataGenerator();
     private AircraftStateCollection aircaft = new AircraftStateCollection();
 
     private VFRadarCore radarCoreConnection = new VFRadarCore(this);
@@ -40,7 +38,6 @@ public class OperationalActivity extends AppCompatActivity
 
         timerHandler.postDelayed(runnable, 500);
 
-        //UpdateAircraft(debugGenerator.GetAircraft());
     }
 
 
