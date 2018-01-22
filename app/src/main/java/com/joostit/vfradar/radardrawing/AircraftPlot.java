@@ -218,21 +218,7 @@ public class AircraftPlot extends DrawableItem {
 
     public void updateAircraftPlotData(TrackedAircraft aircraft) {
 
-        String nameString = "";
-        if (aircraft.Data.hasRegistration()) {
-            nameString = aircraft.Data.reg;
-            if (aircraft.Data.hasCallsign()) {
-                nameString += " (" + aircraft.Data.callSign + ")";
-            }
-        } else if (aircraft.Data.hasCallsign()) {
-            nameString = aircraft.Data.callSign;
-        } else if (aircraft.Data.hasIcao24Id()) {
-            nameString = aircraft.Data.icao24;
-        } else if (aircraft.Data.hasFlarmId()) {
-            nameString = aircraft.Data.flarmId;
-        } else if (aircraft.Data.hasOgnId()) {
-            nameString = aircraft.Data.ognId;
-        }
+        String nameString = aircraft.getIdString();
 
         if (aircraft.Data.hasCn()) {
             nameString += " (" + aircraft.Data.cn + ")";

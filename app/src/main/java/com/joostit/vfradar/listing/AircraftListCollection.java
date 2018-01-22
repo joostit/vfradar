@@ -64,14 +64,11 @@ public class AircraftListCollection {
 
         acItem.altitude = tracked.Data.alt != null ? tracked.Data.alt.toString() : "";
         acItem.model = tracked.Data.model != null ? tracked.Data.model : "";
-        acItem.name = determineName(tracked);
+        acItem.name =tracked.getIdString();
         acItem.cn = tracked.Data.cn != null ? tracked.Data.cn.toString() : "";
         updateRelativePosition(acItem, tracked);
     }
 
-    private String determineName(TrackedAircraft tracked) {
-        return tracked.Data.reg;
-    }
 
     private void updateRelativePosition(AircraftListItem listItem, TrackedAircraft tracked) {
 

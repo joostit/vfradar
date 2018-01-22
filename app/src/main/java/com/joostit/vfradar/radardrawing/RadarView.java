@@ -135,7 +135,8 @@ public class RadarView extends View {
     }
 
     private synchronized void updateAircraftPlotData(List<TrackedAircraft> tracks) {
-        // ToDo: remove deleted aircraft
+
+        List<AircraftPlot> toRemove = new ArrayList<AircraftPlot>(plots);
 
         for (TrackedAircraft track : tracks) {
             AircraftPlot plot = findPlotByTrackid(track.Data.trackId);
@@ -145,10 +146,20 @@ public class RadarView extends View {
                 plot.TrackId = track.Data.trackId;
                 plots.add(plot);
             }
+            else{
+                toRemove.remove(plot);
+            }
 
             plot.updateAircraftPlotData(track);
         }
+
+
+        for(AircraftPlot removeMe : toRemove){
+            plots.remove(removeMe);
+        }
     }
+
+
 
 
     private synchronized AircraftPlot findPlotByTrackid(int trackId) {
