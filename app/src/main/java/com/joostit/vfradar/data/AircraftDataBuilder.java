@@ -59,8 +59,10 @@ public class AircraftDataBuilder {
             ac.turnRate = getNullableDouble(jsonAc, JsonKeys.turnRate);
             ac.alt = getNullableInt(jsonAc, JsonKeys.alt);
             ac.vRate = getNullableDouble(jsonAc, JsonKeys.vRate);
-            ac.rxStation = getNullableString(jsonAc, JsonKeys.rxStation);
-            ac.rxChannel = getNullableString(jsonAc, JsonKeys.rxChannel);
+            ac.ognStation = getNullableString(jsonAc, JsonKeys.ognStation);
+            ac.ognAge = getNullableInt(jsonAc, JsonKeys.ognAge);
+            ac.adsbStation = getNullableString(jsonAc, JsonKeys.adsbStation);
+            ac.adsbAge = getNullableInt(jsonAc, JsonKeys.adsbAge);
             ac.squawk = getNullableInt(jsonAc, JsonKeys.squawk);
 
         }catch (JSONException e){

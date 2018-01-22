@@ -11,7 +11,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:weightSum="4">
+        android:weightSum="32">
 
 
         <fragment
@@ -20,15 +20,15 @@
             android:name="com.joostit.vfradar.RadarViewFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3" />
+            android:layout_weight="23" />
 
-        <!--<View-->
-            <!--android:id="@+id/separator1"-->
-            <!--android:layout_width="4px"-->
-            <!--android:layout_height="fill_parent"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:background="#FF00AA00" />-->
+        <View
+            android:id="@+id/separator1"
+            android:layout_width="4px"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="#FF00AA00" />
 
         <fragment
             android:id="@+id/aircraftListFrag"
@@ -36,7 +36,7 @@
             android:name="com.joostit.vfradar.listing.AircraftListFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="9"/>
 
 
     </LinearLayout>

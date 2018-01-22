@@ -15,5 +15,9 @@ public class AircraftListItem {
     public String relativeBearing = "";
     public String vRate = "";
 
+    public String nameType = "";
+
+    public boolean hasAdsb;
+    public boolean hasOgn;
 
 }

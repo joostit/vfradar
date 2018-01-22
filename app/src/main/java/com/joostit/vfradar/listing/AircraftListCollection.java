@@ -1,10 +1,14 @@
 package com.joostit.vfradar.listing;
 
+import android.content.Context;
+
+import com.joostit.vfradar.R;
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
 import com.joostit.vfradar.utilities.Numbers;
+import com.joostit.vfradar.utilities.StringValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +26,7 @@ public class AircraftListCollection {
     }
 
 
-    public synchronized void UpdateItems(List<TrackedAircraft> aircraftUpdate) {
+    public synchronized void UpdateItems(List<TrackedAircraft> aircraftUpdate, Context context) {
 
 
         List<AircraftListItem> itemsToRemove = new ArrayList<>(items);
@@ -38,7 +42,7 @@ public class AircraftListCollection {
                 addItem(acItem);
             }
 
-            updateListItemData(acItem, tracked);
+            updateListItemData(acItem, tracked, context);
         }
 
         // Remove aircraft
@@ -48,7 +52,7 @@ public class AircraftListCollection {
     }
 
 
-    private void updateListItemData(AircraftListItem acItem, TrackedAircraft tracked) {
+    private void updateListItemData(AircraftListItem acItem, TrackedAircraft tracked, Context context) {
 
         if (tracked.Data.vRate != null) {
             double val = Numbers.round(tracked.Data.vRate, 1);
@@ -61,13 +65,128 @@ public class AircraftListCollection {
             acItem.vRate = "";
         }
 
+        TrackedAircraft.IdTypes nameType = tracked.getUserIdType();
 
         acItem.altitude = tracked.Data.alt != null ? tracked.Data.alt.toString() : "";
-        acItem.model = tracked.Data.model != null ? tracked.Data.model : "";
-        acItem.name =tracked.getIdString();
+        acItem.model = sanitizeModelString(tracked.Data.model, tracked.Data.type, context);
+        acItem.name =tracked.getId(nameType);
+        acItem.nameType = getNameTypeTranslation(nameType, context);
         acItem.cn = tracked.Data.cn != null ? tracked.Data.cn.toString() : "";
         updateRelativePosition(acItem, tracked);
+
+        acItem.hasAdsb = determineUpdateValid(tracked.Data.adsbStation, tracked.Data.adsbAge);
+        acItem.hasOgn = determineUpdateValid(tracked.Data.ognStation, tracked.Data.ognAge);
+
     }
+
+    private String sanitizeModelString(String rawModel, String type, Context context) {
+        String modelString = "";
+        String typeString = "";
+
+        if (!StringValue.nullOrEmpty(rawModel)
+            && !rawModel.equalsIgnoreCase("Unknown")){
+            modelString = rawModel;
+        }
+
+        if(!StringValue.nullOrEmpty(type)
+                && !type.equalsIgnoreCase("UNKNOWN")){
+            typeString = getTypeTranslation(type, context);
+        }
+
+        if(StringValue.nullOrEmpty(modelString) && StringValue.nullOrEmpty(typeString)){
+            return "-";
+        }
+
+        if(!StringValue.nullOrEmpty(modelString) && StringValue.nullOrEmpty(typeString)){
+            return modelString;
+        }
+
+        if(StringValue.nullOrEmpty(modelString) && !StringValue.nullOrEmpty(typeString)){
+            return typeString;
+        }
+
+        if(!StringValue.nullOrEmpty(modelString) && !StringValue.nullOrEmpty(typeString)){
+            return typeString + ": " + modelString;
+        }
+
+
+        return rawModel;
+    }
+
+    private String getTypeTranslation(String type, Context context) {
+
+        String lowercaseType = type.toLowerCase();
+
+        switch (lowercaseType){
+            case "unknown":
+                return context.getResources().getString(R.string.ognTypesUnknown);
+            case "glider":
+                return context.getResources().getString(R.string.ognTypesGlider);
+            case "tow_plane":
+                return context.getResources().getString(R.string.ognTypesTowPlane);
+            case "helicopter_rotorcraft":
+                return context.getResources().getString(R.string.ognTypesHelicopter);
+            case "parachute":
+                return context.getResources().getString(R.string.ognTypesParachute);
+            case "drop_plane":
+                return context.getResources().getString(R.string.ognTypesDropPlane);
+            case "hang_glider":
+                return context.getResources().getString(R.string.ognTypesHangGlider);
+            case "para_glider":
+                return context.getResources().getString(R.string.ognTypesParaGlider);
+            case "powered_aircraft":
+                return context.getResources().getString(R.string.ognTypesPoweredAircraft);
+            case "jet_aircraft":
+                return context.getResources().getString(R.string.ognTypesJetAircraft);
+            case "ufo":
+                return context.getResources().getString(R.string.ognTypesUfo);
+            case "balloon":
+                return context.getResources().getString(R.string.ognTypesBalloon);
+            case "airship":
+                return context.getResources().getString(R.string.ognTypesAirship);
+            case "uav":
+                return context.getResources().getString(R.string.ognTypesUav);
+            case "static_object":
+                return context.getResources().getString(R.string.ognTypesStaticObject);
+            default:
+                return lowercaseType;
+        }
+
+    }
+
+
+    private String getNameTypeTranslation(TrackedAircraft.IdTypes idType, Context context){
+        switch (idType) {
+            case Callsign:
+                return context.getResources().getString(R.string.idTypeCallSign) + ":";
+            case Registration:
+                return context.getResources().getString(R.string.idTypeRegistration) + ":";
+            case Icao24:
+                return context.getResources().getString(R.string.idTypeIcao24) + ":";
+            case FlarmId:
+                return context.getResources().getString(R.string.idTypeFlarmId) + ":";
+            case OgnId:
+                return context.getResources().getString(R.string.idTypeOgnId) + ":";
+            case Cn:
+                return context.getResources().getString(R.string.idTypeCn) + ":";
+            default:
+                return "UNKNOWN NAME TYPE";
+        }
+    }
+
+
+    private Boolean determineUpdateValid(String stationId, Integer age){
+        if(stationId == null){
+            return false;
+        }
+
+        if(age == null){
+            return false;
+        }
+
+        return (age < SysConfig.getMaxValidRxAge());
+    }
+
 
 
     private void updateRelativePosition(AircraftListItem listItem, TrackedAircraft tracked) {

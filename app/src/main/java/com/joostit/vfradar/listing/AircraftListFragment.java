@@ -84,7 +84,7 @@ public class AircraftListFragment extends Fragment {
     }
 
     public void UpdateAircraft(List<TrackedAircraft> ac) {
-        aircraftCollection.UpdateItems(ac);
+        aircraftCollection.UpdateItems(ac, getContext());
         listAdapter.notifyDataSetChanged();
     }
 

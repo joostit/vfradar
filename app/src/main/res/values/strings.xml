@@ -1,5 +1,26 @@
 <resources>
     <string name="app_name">VFRadar</string>
+    <string name="idTypeIcao24">ICAO24</string>
+    <string name="idTypeOgnId">OGN ID</string>
+    <string name="idTypeFlarmId">Flarm ID</string>
+    <string name="idTypeRegistration">Registration</string>
+    <string name="idTypeCn">CompNr</string>
+    <string name="idTypeCallSign">Call sign</string>
+    <string name="ognTypesUnknown">unknown</string>
+    <string name="ognTypesGlider">Glider</string>
+    <string name="ognTypesTowPlane">Tow plane</string>
+    <string name="ognTypesHelicopter">Helicopter</string>
+    <string name="ognTypesParachute">Parachute</string>
+    <string name="ognTypesDropPlane">Drop plane</string>
+    <string name="ognTypesHangGlider">Hangglider</string>
+    <string name="ognTypesParaGlider">Paraglider</string>
+    <string name="ognTypesPoweredAircraft">Aircraft</string>
+    <string name="ognTypesJetAircraft">Jet</string>
+    <string name="ognTypesUfo">Ufo</string>
+    <string name="ognTypesBalloon">Balloon</string>
+    <string name="ognTypesAirship">Airship</string>
+    <string name="ognTypesUav">UAV</string>
+    <string name="ognTypesStaticObject">Static</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

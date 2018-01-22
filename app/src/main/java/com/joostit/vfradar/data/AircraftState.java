@@ -24,10 +24,29 @@ public class AircraftState {
     public Double turnRate;
     public Integer alt;
     public Double vRate;
-    public String rxStation;
+    public String ognStation;
+    public Integer ognAge;
+    public String adsbStation;
+    public Integer adsbAge;
     public String rxChannel;
     public Integer squawk;
 
+    public boolean hasOgnStation(){
+        return ognStation != null;
+    }
+
+    public boolean hasOgnAge(){
+        return ognAge != null;
+    }
+
+    public boolean hasAdsbStation(){
+        return adsbStation != null;
+    }
+
+
+    public boolean hasAdsbAge(){
+        return adsbAge != null;
+    }
 
     public boolean hasAltitude(){
         return (alt != null);

@@ -90,9 +90,13 @@ public class OperationalActivity extends AppCompatActivity
 
     private void updateFragments(List<TrackedAircraft> ac){
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
-        rView.UpdateAircraft(ac);
+        if(rView != null) {
+            rView.UpdateAircraft(ac);
+        }
 
         AircraftListFragment acListFragment = (AircraftListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
-        acListFragment.UpdateAircraft(ac);
+        if(acListFragment != null) {
+            acListFragment.UpdateAircraft(ac);
+        }
     }
 }

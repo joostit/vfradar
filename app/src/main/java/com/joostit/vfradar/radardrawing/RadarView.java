@@ -189,10 +189,12 @@ public class RadarView extends View {
         float centerX = getWidth() / 2;
         float centerY = getHeight() / 2;
 
-        Path runway = new Path();
-        runway.moveTo(centerX + 30, centerY - 60);
-        runway.lineTo(centerX - 276, centerY + 197);
-        canvas.drawPath(runway, sitePaint);
+        // ToDo: Implement drawing site features
+
+//        Path runway = new Path();
+//        runway.moveTo(centerX + 30, centerY - 60);
+//        runway.lineTo(centerX - 276, centerY + 197);
+//        canvas.drawPath(runway, sitePaint);
     }
 
     private synchronized void drawAllAircraft(Canvas canvas) {

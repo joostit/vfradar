@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.joostit.vfradar.R;
+import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.listing.AircraftListFragment.OnListFragmentInteractionListener;
 import com.joostit.vfradar.utilities.Numbers;
 
@@ -53,6 +54,9 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
         holder.relDistanceView.setText(item.relativeDistance);
         holder.relBearingView.setText(item.relativeBearing);
         holder.cnView.setText(item.cn);
+        holder.nameTypeView.setText(item.nameType);
+        holder.setHasAdsb(item.hasAdsb);
+        holder.setHasOgn(item.hasOgn);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +79,13 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final int backColorTrue = 0xFF00FF00;
+        private final int backColorFalse = 0xFF005500;
+
+        private final int foreColorTrue = 0xFF000000;
+        private final int foreColorFalse = 0xFF000000;
+
         public final View mView;
         public final TextView mNameView;
         public final TextView altitudeView;
@@ -83,6 +94,10 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
         public final TextView relBearingView;
         public final TextView vrateView;
         public final TextView cnView;
+        public final TextView nameTypeView;
+        private final TextView hasOgnView;
+        private final TextView hasAdsbView;
+
         public AircraftListItem mItem;
 
         public ViewHolder(View view) {
@@ -95,11 +110,43 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
             relDistanceView = (TextView) view.findViewById(R.id.relativeDistanceView);
             relBearingView = (TextView) view.findViewById(R.id.relativeBearingView);
             cnView = (TextView) view.findViewById(R.id.competitionNumberView);
+            nameTypeView = (TextView) view.findViewById(R.id.nameTypeView);
+            hasOgnView = (TextView) view.findViewById(R.id.hasOgn);
+            hasAdsbView = (TextView) view.findViewById(R.id.hasAdsb);
         }
 
         @Override
         public String toString() {
             return super.toString() + " '" + altitudeView.getText() + "'";
+        }
+
+
+        public void setHasAdsb(boolean hasAdsb){
+            hasAdsbView.setTextColor(getForeColor(hasAdsb));
+            hasAdsbView.setBackgroundColor(getBackColor(hasAdsb));
+        }
+
+        public void setHasOgn(boolean hasOgn){
+            hasOgnView.setTextColor(getForeColor(hasOgn));
+            hasOgnView.setBackgroundColor(getBackColor(hasOgn));
+        }
+
+        private int getBackColor(boolean valueTrue){
+            if(valueTrue){
+                return backColorTrue;
+            }
+            else{
+                return backColorFalse;
+            }
+        }
+
+        private int getForeColor(boolean valueTrue){
+            if(valueTrue){
+                return foreColorTrue;
+            }
+            else{
+                return foreColorFalse;
+            }
         }
     }
 }

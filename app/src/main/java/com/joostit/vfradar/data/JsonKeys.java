@@ -22,8 +22,10 @@ public final class JsonKeys {
     public static String turnRate = "turnRate";
     public static String alt = "alt";
     public static String vRate = "vRate";
-    public static String rxStation = "rxStation";
-    public static String rxChannel = "rxChannel";
+    public static String ognStation = "ognStation";
+    public static String ognAge= "ognAge";
+    public static String adsbStation = "adsbStation";
+    public static String adsbAge= "adsbAge";
     public static String squawk = "squawk";
 
 }
