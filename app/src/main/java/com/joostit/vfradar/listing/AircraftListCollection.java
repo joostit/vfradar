@@ -58,8 +58,8 @@ public class AircraftListCollection {
 
     private void updateListItemData(AircraftListItem acItem, TrackedAircraft tracked) {
 
-        if (tracked.Data.VRate != null) {
-            double val = Numbers.round(tracked.Data.VRate, 1);
+        if (tracked.Data.vRate != null) {
+            double val = Numbers.round(tracked.Data.vRate, 1);
             if (val > 0) {
                 acItem.vRate = "+" + String.valueOf(val);
             } else {
@@ -70,20 +70,20 @@ public class AircraftListCollection {
         }
 
 
-        acItem.altitude = tracked.Data.Alt != null ? tracked.Data.Alt.toString() : "";
-        acItem.model = tracked.Data.Model != null ? tracked.Data.Model : "";
+        acItem.altitude = tracked.Data.alt != null ? tracked.Data.alt.toString() : "";
+        acItem.model = tracked.Data.model != null ? tracked.Data.model : "";
         acItem.name = determineName(tracked);
-        acItem.cn = tracked.Data.Cn != null ? tracked.Data.Cn.toString() : "";
+        acItem.cn = tracked.Data.cn != null ? tracked.Data.cn.toString() : "";
         updateRelativePosition(acItem, tracked);
     }
 
     private String determineName(TrackedAircraft tracked) {
-        return tracked.Data.Reg;
+        return tracked.Data.reg;
     }
 
     private void updateRelativePosition(AircraftListItem listItem, TrackedAircraft tracked) {
 
-        LatLon acPos = new LatLon(tracked.Data.Lat, tracked.Data.Lon);
+        LatLon acPos = new LatLon(tracked.Data.lat, tracked.Data.lon);
         LatLon here = SysConfig.getCenterPosition();
 
         double distance = here.DistanceTo(acPos);

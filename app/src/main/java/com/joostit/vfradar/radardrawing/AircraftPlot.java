@@ -219,55 +219,49 @@ public class AircraftPlot extends DrawableItem {
     public void updateAircraftPlotData(TrackedAircraft aircraft) {
 
         String nameString = "";
-        if (!IsNullOrEmpty(aircraft.Data.Reg)) {
-            nameString = aircraft.Data.Reg;
-            if (!IsNullOrEmpty(aircraft.Data.CallSign)) {
-                nameString += " (" + aircraft.Data.CallSign + ")";
+        if (aircraft.Data.hasRegistration()) {
+            nameString = aircraft.Data.reg;
+            if (aircraft.Data.hasCallsign()) {
+                nameString += " (" + aircraft.Data.callSign + ")";
             }
-        } else if (!IsNullOrEmpty(aircraft.Data.CallSign)) {
-            nameString = aircraft.Data.CallSign;
-        } else if (!IsNullOrEmpty(aircraft.Data.Icao24)) {
-            nameString = aircraft.Data.Icao24;
-        } else if (!IsNullOrEmpty(aircraft.Data.FlarmId)) {
-            nameString = aircraft.Data.FlarmId;
-        } else if (!IsNullOrEmpty(aircraft.Data.OgnId)) {
-            nameString = aircraft.Data.OgnId;
+        } else if (aircraft.Data.hasCallsign()) {
+            nameString = aircraft.Data.callSign;
+        } else if (aircraft.Data.hasIcao24Id()) {
+            nameString = aircraft.Data.icao24;
+        } else if (aircraft.Data.hasFlarmId()) {
+            nameString = aircraft.Data.flarmId;
+        } else if (aircraft.Data.hasOgnId()) {
+            nameString = aircraft.Data.ognId;
         }
 
-        if (!IsNullOrEmpty(aircraft.Data.Cn)) {
-            nameString += " (" + aircraft.Data.Cn + ")";
+        if (aircraft.Data.hasCn()) {
+            nameString += " (" + aircraft.Data.cn + ")";
         }
         DisplayName = nameString;
 
         String infoLineString = "";
 
-        if (aircraft.Data.Alt != null) {
+        if (aircraft.Data.hasAltitude()) {
 
-            infoLineString = aircraft.Data.Alt.toString();
+            infoLineString = aircraft.Data.alt.toString();
 
-            if ((aircraft.Data.VRate != null) && (aircraft.Data.VRate != 0)) {
-                double vRateRounded = Math.round(aircraft.Data.VRate * 10) / 10.0;
-                String plusSign = (aircraft.Data.VRate > 0.0) ? "+" : "";
+            if ((aircraft.Data.hasVRate()) && (aircraft.Data.vRate != 0)) {
+                double vRateRounded = Math.round(aircraft.Data.vRate * 10) / 10.0;
+                String plusSign = (aircraft.Data.vRate > 0.0) ? "+" : "";
                 infoLineString += "    " + plusSign + df1.format(vRateRounded);
             }
         }
 
         InfoLine = infoLineString;
 
-        Track = aircraft.Data.Track;
-        lat = aircraft.Data.Lat;
-        lon = aircraft.Data.Lon;
+        Track = aircraft.Data.track;
+        lat = aircraft.Data.lat;
+        lon = aircraft.Data.lon;
         isHighlighted = aircraft.isHighlighted;
         isWarning = aircraft.isWarning;
     }
 
 
-    private Boolean IsNullOrEmpty(String input) {
-        if ((input != null) && (!input.trim().equals(""))) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+
 
 }

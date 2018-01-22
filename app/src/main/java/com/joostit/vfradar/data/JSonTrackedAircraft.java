@@ -7,22 +7,23 @@ package com.joostit.vfradar.data;
 public class JSonTrackedAircraft {
 
     public int Trackid;
-    public String FlarmId;
-    public String OgnId;
-    public String Icao24;
-    public String Reg;
-    public String Cn;
-    public String CallSign;
-    public String Model;
-    public String Type;
-    public double Lat;
-    public double Lon;
-    public Integer Speed;
-    public Integer Track;
-    public Double TurnRate;
-    public Integer Alt;
-    public Double VRate;
-    public String RxStation;
-    public String RxChannel;
+    public String flarmId;
+    public String ognId;
+    public String icao24;
+    public String reg;
+    public String cn;
+    public String callSign;
+    public String model;
+    public String type;
+    public double lat;
+    public double lon;
+    public String speed;
+    public String track;
+    public String turnRate;
+    public String alt;
+    public String vRate;
+    public String rxStation;
+    public String rxChannel;
+    public String squawk;
 
 }

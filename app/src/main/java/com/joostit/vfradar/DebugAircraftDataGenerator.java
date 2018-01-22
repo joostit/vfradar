@@ -2,6 +2,7 @@ package com.joostit.vfradar;
 
 import android.os.Handler;
 
+import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.data.JSonTrackedAircraft;
 import com.joostit.vfradar.data.TrackedAircraft;
@@ -97,18 +98,18 @@ public class DebugAircraftDataGenerator {
                              Boolean sel,
                              Boolean highlight) {
         TrackedAircraft ta = new TrackedAircraft();
-        ta.Data = new JSonTrackedAircraft();
+        ta.Data = new AircraftState();
 
-        ta.Data.Lat = lat;
-        ta.Data.Lon = lon;
-        ta.Data.Icao24 = icao24;
-        ta.Data.Reg = reg;
-        ta.Data.Model = model;
-        ta.Data.Cn = cn;
-        ta.Data.Track = track;
-        ta.Data.Alt = alt;
-        ta.Data.VRate = vRate;
-        ta.Data.Speed = speed;
+        ta.Data.lat = lat;
+        ta.Data.lon = lon;
+        ta.Data.icao24 = icao24;
+        ta.Data.reg = reg;
+        ta.Data.model = model;
+        ta.Data.cn = cn;
+        ta.Data.track = Integer.valueOf(track);
+        ta.Data.alt = Integer.valueOf(alt);
+        ta.Data.vRate = Double.valueOf(vRate);
+        ta.Data.speed = Integer.valueOf(speed);
         ta.Data.Trackid = list.size();
 
         ta.isHighlighted = highlight;
@@ -127,32 +128,32 @@ public class DebugAircraftDataGenerator {
 
         for (TrackedAircraft ac : aircraftList) {
 
-            if ((ac.Data.Speed != null) && (ac.Data.Speed != 0)) {
+            if ((ac.Data.speed != null) && (ac.Data.speed != 0)) {
 
-                if (ac.Data.Track != null) {
-                    ac.Data.Track += 4;
-                    ac.Data.Track = ac.Data.Track % 360;
+                if (ac.Data.track != null) {
+                    ac.Data.track += 4;
+                    ac.Data.track = ac.Data.track % 360;
                 }
 
-                if (ac.Data.Alt != null) {
-                    ac.Data.Alt += rd.nextInt(10) - 5;
-                    if (ac.Data.Alt < 200) {
-                        ac.Data.Alt += 10;
+                if (ac.Data.alt != null) {
+                    ac.Data.alt += rd.nextInt(10) - 5;
+                    if (ac.Data.alt < 200) {
+                        ac.Data.alt += 10;
                     }
                 }
 
-                if (ac.Data.VRate != null) {
-                    ac.Data.VRate += (rd.nextInt(10) - 5.0) / 10.0;
+                if (ac.Data.vRate != null) {
+                    ac.Data.vRate += (rd.nextInt(10) - 5.0) / 10.0;
                 }
 
-                LatLon current = new LatLon(ac.Data.Lat, ac.Data.Lon);
+                LatLon current = new LatLon(ac.Data.lat, ac.Data.lon);
 
-                double dist = ((1000.0 / timerMs) * ac.Data.Speed) / (1.8 * 3.6);
+                double dist = ((1000.0 / timerMs) * ac.Data.speed) / (1.8 * 3.6);
 
-                LatLon newPoint = current.Move(ac.Data.Track, dist);
+                LatLon newPoint = current.Move(ac.Data.track, dist);
 
-                ac.Data.Lat = newPoint.Latitude;
-                ac.Data.Lon = newPoint.Longitude;
+                ac.Data.lat = newPoint.Latitude;
+                ac.Data.lon = newPoint.Longitude;
             }
         }
 
