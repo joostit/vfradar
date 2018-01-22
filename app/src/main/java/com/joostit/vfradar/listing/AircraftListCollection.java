@@ -3,7 +3,6 @@ package com.joostit.vfradar.listing;
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.radardrawing.AircraftPlot;
 import com.joostit.vfradar.utilities.DistanceString;
 import com.joostit.vfradar.utilities.Numbers;
 
@@ -14,14 +13,7 @@ import java.util.Map;
 
 public class AircraftListCollection {
 
-    /**
-     * An array of sample (dummy) items.
-     */
     public final List<AircraftListItem> items = new ArrayList<>();
-
-    /**
-     * A map of sample (dummy) items, by ID.
-     */
     public final Map<Integer, AircraftListItem> itemMap = new HashMap<>();
 
 
@@ -37,12 +29,12 @@ public class AircraftListCollection {
 
         for (TrackedAircraft tracked : aircraftUpdate) {
             AircraftListItem acItem;
-            if (hasItem(tracked.Data.Trackid)) {
-                acItem = getItem(tracked.Data.Trackid);
+            if (hasItem(tracked.Data.trackId)) {
+                acItem = getItem(tracked.Data.trackId);
                 itemsToRemove.remove(acItem);
             } else {
                 acItem = new AircraftListItem();
-                acItem.trackId = tracked.Data.Trackid;
+                acItem.trackId = tracked.Data.trackId;
                 addItem(acItem);
             }
 

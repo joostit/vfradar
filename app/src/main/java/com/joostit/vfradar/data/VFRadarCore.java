@@ -11,14 +11,15 @@ import java.util.List;
 public class VFRadarCore implements AircraftDataListener {
 
     private AircraftDataListener listener;
-    URL url;
-    boolean isExecuting = false;
+    private URL url;
+    private boolean isExecuting = false;
+    private String serverUrl = "http://192.168.178.101:60002/live/all";
 
     public VFRadarCore(AircraftDataListener listener){
         this.listener = listener;
 
         try {
-            url = new URL("http://192.168.178.101:60002/live/all");
+            url = new URL(serverUrl);
         }
         catch (MalformedURLException e){
             e.printStackTrace();
@@ -35,7 +36,7 @@ public class VFRadarCore implements AircraftDataListener {
     }
 
     @Override
-    public void newAircraftDataReceived(List<TrackedAircraft> ac) {
+    public void newAircraftDataReceived(List<AircraftState> ac) {
         isExecuting = false;
         if(ac != null) {
             listener.newAircraftDataReceived(ac);

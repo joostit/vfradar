@@ -15,19 +15,22 @@ import java.util.List;
  * Created by Joost on 22-1-2018.
  */
 
-public class VFRadarCoreReaderTask extends AsyncTask<URL, Integer, String> {
+public class VFRadarCoreReaderTask extends AsyncTask<URL, Integer, List<AircraftState>> {
 
     private AircraftDataListener listener;
+
 
     public VFRadarCoreReaderTask(AircraftDataListener listener){
         this.listener = listener;
     }
 
     @Override
-    protected String doInBackground(URL... params) {
+    protected List<AircraftState> doInBackground(URL... params) {
 
-        String resultString = null;
+        String jsonString = null;
+        List<AircraftState> retVal = null;
         StringBuilder result = new StringBuilder();
+        AircraftDataBuilder dataBuilder = new AircraftDataBuilder();
 
         try {
             URL url = params[0];
@@ -41,24 +44,22 @@ public class VFRadarCoreReaderTask extends AsyncTask<URL, Integer, String> {
                 result.append(line);
             }
 
-            resultString = result.toString();
+            jsonString = result.toString();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return resultString;
+        if(jsonString != null) {
+            retVal = dataBuilder.parseJson(jsonString);
+        }
+
+        return retVal;
 
     }
 
     @Override
-    protected void onPostExecute(String jSon) {
-
-        List<TrackedAircraft> ac = new ArrayList<>();
-        if(jSon != null){
-            System.out.println(jSon);
-        }
-        //Do something with the JSON string
+    protected void onPostExecute(List<AircraftState> ac) {
 
         listener.newAircraftDataReceived(ac);
 

@@ -7,5 +7,5 @@ import java.util.List;
  */
 
 public interface AircraftDataListener {
-    void newAircraftDataReceived(List<TrackedAircraft> ac);
+    void newAircraftDataReceived(List<AircraftState> ac);
 }

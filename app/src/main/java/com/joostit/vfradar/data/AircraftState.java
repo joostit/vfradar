@@ -1,12 +1,14 @@
 package com.joostit.vfradar.data;
 
+import com.joostit.vfradar.utilities.StringValue;
+
 /**
  * Created by Joost on 22-1-2018.
  */
 
 public class AircraftState {
 
-    public int Trackid;
+    public int trackId;
     public String flarmId;
     public String ognId;
     public String icao24;
@@ -40,35 +42,33 @@ public class AircraftState {
     }
 
     public boolean hasCn(){
-        return !isNullOrEmpty(cn);
+        return !StringValue.nullOrEmpty(cn);
     }
 
     public boolean hasRegistration(){
-        return !isNullOrEmpty(reg);
+        return !StringValue.nullOrEmpty(reg);
     }
 
     public boolean hasCallsign(){
-        return !isNullOrEmpty(callSign);
+        return !StringValue.nullOrEmpty(callSign);
     }
 
     public boolean hasModel(){
-        return !isNullOrEmpty(model);
+        return !StringValue.nullOrEmpty(model);
     }
 
     public boolean hasOgnId(){
-        return !isNullOrEmpty(ognId);
+        return !StringValue.nullOrEmpty(ognId);
     }
 
     public boolean hasIcao24Id(){
-        return !isNullOrEmpty(icao24);
+        return !StringValue.nullOrEmpty(icao24);
     }
 
     public boolean hasFlarmId(){
-        return !isNullOrEmpty(flarmId);
+        return !StringValue.nullOrEmpty(flarmId);
     }
 
-    private Boolean isNullOrEmpty(String input) {
-        return ((input == null) || (input.trim().equals("")));
-    }
+
 
 }

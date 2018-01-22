@@ -138,11 +138,11 @@ public class RadarView extends View {
         // ToDo: remove deleted aircraft
 
         for (TrackedAircraft track : tracks) {
-            AircraftPlot plot = findPlotByTrackid(track.Data.Trackid);
+            AircraftPlot plot = findPlotByTrackid(track.Data.trackId);
 
             if (plot == null) {
                 plot = new AircraftPlot();
-                plot.TrackId = track.Data.Trackid;
+                plot.TrackId = track.Data.trackId;
                 plots.add(plot);
             }
 

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.joostit.vfradar.data.AircraftDataListener;
+import com.joostit.vfradar.data.AircraftState;
+import com.joostit.vfradar.data.AircraftStateCollection;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
 import com.joostit.vfradar.data.VFRadarCoreReaderTask;
@@ -18,7 +20,8 @@ public class OperationalActivity extends AppCompatActivity
         AircraftDataListener {
 
 
-    private DebugAircraftDataGenerator debugGenerator = new DebugAircraftDataGenerator();
+    //private DebugAircraftDataGenerator debugGenerator = new DebugAircraftDataGenerator();
+    private AircraftStateCollection aircaft = new AircraftStateCollection();
 
     private VFRadarCore radarCoreConnection = new VFRadarCore(this);
 
@@ -37,7 +40,7 @@ public class OperationalActivity extends AppCompatActivity
 
         timerHandler.postDelayed(runnable, 500);
 
-        UpdateAircraft(debugGenerator.GetAircraft());
+        //UpdateAircraft(debugGenerator.GetAircraft());
     }
 
 
@@ -73,13 +76,6 @@ public class OperationalActivity extends AppCompatActivity
 
     }
 
-    public void UpdateAircraft(List<TrackedAircraft> ac) {
-        RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
-        rView.UpdateAircraft(ac);
-
-        AircraftListFragment acListFragment = (AircraftListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
-        acListFragment.UpdateAircraft(ac);
-    }
 
     @Override
     public void onAircraftSelectedFromList(Integer trackId) {
@@ -87,7 +83,16 @@ public class OperationalActivity extends AppCompatActivity
     }
 
     @Override
-    public void newAircraftDataReceived(List<TrackedAircraft> ac) {
+    public void newAircraftDataReceived(List<AircraftState> ac) {
+        List<TrackedAircraft> newState = aircaft.doUpdate(ac);
+        updateFragments(newState);
+    }
 
+    private void updateFragments(List<TrackedAircraft> ac){
+        RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
+        rView.UpdateAircraft(ac);
+
+        AircraftListFragment acListFragment = (AircraftListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
+        acListFragment.UpdateAircraft(ac);
     }
 }

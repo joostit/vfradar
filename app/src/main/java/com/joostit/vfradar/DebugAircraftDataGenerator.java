@@ -4,7 +4,6 @@ import android.os.Handler;
 
 import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.data.JSonTrackedAircraft;
 import com.joostit.vfradar.data.TrackedAircraft;
 
 import java.util.ArrayList;
@@ -110,7 +109,7 @@ public class DebugAircraftDataGenerator {
         ta.Data.alt = Integer.valueOf(alt);
         ta.Data.vRate = Double.valueOf(vRate);
         ta.Data.speed = Integer.valueOf(speed);
-        ta.Data.Trackid = list.size();
+        ta.Data.trackId = list.size();
 
         ta.isHighlighted = highlight;
         ta.isSelected = sel;
