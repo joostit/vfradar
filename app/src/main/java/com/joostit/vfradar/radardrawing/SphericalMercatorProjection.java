@@ -46,6 +46,11 @@ public class SphericalMercatorProjection {
     }
 
     @SuppressWarnings("deprecation")
+    public synchronized PointF toScreenPoint(final LatLon position) {
+        return toScreenPoint(position.Latitude, position.Longitude);
+    }
+
+    @SuppressWarnings("deprecation")
     public synchronized PointF toScreenPoint(final double lat, final double lon) {
         final double x = lon / 360 + .5;
         final double siny = Math.sin(Math.toRadians(lat));

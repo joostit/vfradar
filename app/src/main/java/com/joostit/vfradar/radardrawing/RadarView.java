@@ -3,7 +3,6 @@ package com.joostit.vfradar.radardrawing;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -12,6 +11,9 @@ import android.view.View;
 
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.site.ReportingPoint;
+import com.joostit.vfradar.site.RouteLine;
+import com.joostit.vfradar.site.SiteFeature;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ public class RadarView extends View {
 
     private OnRadarViewInteractionListener selectionListener;
 
+    private List<DrawableItem> siteFeatures = new ArrayList<>();
     private List<AircraftPlot> plots = new ArrayList<>();
     private Map<String, Button> buttons = new HashMap<>();
     private Crosshair crosshair;
@@ -74,18 +77,57 @@ public class RadarView extends View {
     }
 
     public synchronized void UpdateAircraft(List<TrackedAircraft> ac) {
-
         updateAircraftPlotData(ac);
         refreshDrawing();
     }
 
+    public synchronized void UpdateSiteFeatures(List<SiteFeature> site){
+        updateSiteFeaturePlotData(site);
+        refreshDrawing();
+    }
+
+    private void updateSiteFeaturePlotData(List<SiteFeature> site) {
+
+        siteFeatures.clear();
+        for(SiteFeature feature : site){
+
+            DrawableItem plot = null;
+            switch (feature.getType()){
+
+                case VRP:
+                    plot = new ReportingPointPlot((ReportingPoint) feature);
+                    break;
+
+                case RouteLine:
+                    plot = new RouteLinePlot((RouteLine) feature);
+                    break;
+
+                default:
+                    System.out.println("Unsupported Site Feature type");
+            }
+
+            if(plot != null) {
+                siteFeatures.add(plot);
+            }
+        }
+
+    }
+
+
     private synchronized void refreshDrawing() {
 
         projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, SysConfig.getCenterPosition());
+        RecalculateSite();
         RecalculateButtons();
         RecalculateAircraftPlots();
         calculateCrosshair();
         invalidate();
+    }
+
+    private void RecalculateSite() {
+        for(DrawableItem feature : siteFeatures){
+            feature.updateDrawing(projection);
+        }
     }
 
     private void RecalculateButtons() {
@@ -104,7 +146,7 @@ public class RadarView extends View {
         // Black background
         canvas.drawARGB(255, 0, 0, 0);
 
-        crosshair.Draw(canvas);
+        crosshair.draw(canvas);
         drawSite(canvas);
 
         drawAllAircraft(canvas);
@@ -129,7 +171,7 @@ public class RadarView extends View {
     private void drawButtons(Canvas canvas) {
 
         for (Button button : buttons.values()) {
-            button.Draw(canvas);
+            button.draw(canvas);
         }
 
     }
@@ -186,15 +228,11 @@ public class RadarView extends View {
 
 
     private void drawSite(Canvas canvas) {
-        float centerX = getWidth() / 2;
-        float centerY = getHeight() / 2;
 
-        // ToDo: Implement drawing site features
+        for(DrawableItem feature: siteFeatures){
+            feature.draw(canvas);
+        }
 
-//        Path runway = new Path();
-//        runway.moveTo(centerX + 30, centerY - 60);
-//        runway.lineTo(centerX - 276, centerY + 197);
-//        canvas.drawPath(runway, sitePaint);
     }
 
     private synchronized void drawAllAircraft(Canvas canvas) {
@@ -205,13 +243,13 @@ public class RadarView extends View {
             if (ac.isSelected) {
                 deferredPlot = ac;
             } else {
-                ac.Draw(canvas);
+                ac.draw(canvas);
             }
         }
 
         // Make sure to plot a selected aircraft always last, so on top of the Z-order
         if (deferredPlot != null) {
-            deferredPlot.Draw(canvas);
+            deferredPlot.draw(canvas);
         }
     }
 
@@ -245,10 +283,10 @@ public class RadarView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        if (buttons.get(ZOOM_IN).DoHitTest(x, y)) {
+        if (buttons.get(ZOOM_IN).doHitTest(x, y)) {
             zoomIn();
             isHandled = true;
-        } else if (buttons.get(ZOOM_OUT).DoHitTest(x, y)) {
+        } else if (buttons.get(ZOOM_OUT).doHitTest(x, y)) {
             zoomOut();
             isHandled = true;
         }

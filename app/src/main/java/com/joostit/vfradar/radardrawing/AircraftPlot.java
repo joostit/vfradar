@@ -106,7 +106,7 @@ public class AircraftPlot extends DrawableItem {
 
 
     @Override
-    public void Draw(Canvas canvas) {
+    public void draw(Canvas canvas) {
         float arrowAngle = 135;
         float longArrowLength = 11;
         float shortArrowLength = 9;
@@ -155,7 +155,6 @@ public class AircraftPlot extends DrawableItem {
         if (isHighlighted) {
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acHighlightBoxPaint);
         }
-
         if (isSelected) {
             boxSize += 5;
             canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acSelectedBoxPaint);

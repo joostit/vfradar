@@ -58,7 +58,7 @@ public class Button extends DrawableItem {
 
 
     @Override
-    public void Draw(Canvas canvas) {
+    public void draw(Canvas canvas) {
 
         canvas.drawRoundRect(buttonBounds, 10, 10, buttonBackPaint);
         canvas.drawRoundRect(buttonBounds, 10, 10, buttonForePaint);
@@ -70,7 +70,7 @@ public class Button extends DrawableItem {
     }
 
     @Override
-    public Boolean DoHitTest(float hitX, float hitY) {
+    public Boolean doHitTest(float hitX, float hitY) {
         return buttonBounds.contains(hitX, hitY);
     }
 }

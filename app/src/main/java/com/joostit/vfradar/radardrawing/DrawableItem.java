@@ -9,11 +9,13 @@ import android.graphics.Canvas;
 public abstract class DrawableItem {
 
 
-    public Boolean DoHitTest(float hitX, float hitY) {
+    public Boolean doHitTest(float hitX, float hitY) {
         return false;
     }
 
-    public abstract void Draw(Canvas canvas);
+    public abstract void draw(Canvas canvas);
+
+    public void updateDrawing(SphericalMercatorProjection projection){}
 
 
 }

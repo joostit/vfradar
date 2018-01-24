@@ -11,6 +11,7 @@ import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
 import com.joostit.vfradar.data.VFRadarCoreReaderTask;
 import com.joostit.vfradar.listing.AircraftListFragment;
+import com.joostit.vfradar.site.SiteData;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class OperationalActivity extends AppCompatActivity
     private AircraftStateCollection aircaft = new AircraftStateCollection();
 
     private VFRadarCore radarCoreConnection = new VFRadarCore(this);
+
+    private SiteData site = new SiteData();
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -73,6 +76,15 @@ public class OperationalActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
+        if(rView != null) {
+            rView.UpdateSiteFeatures(site.getSite());
+        }
+    }
 
     @Override
     public void onAircraftSelectedFromList(Integer trackId) {

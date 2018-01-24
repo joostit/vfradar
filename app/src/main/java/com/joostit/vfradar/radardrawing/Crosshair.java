@@ -73,7 +73,7 @@ public class Crosshair extends DrawableItem {
     }
 
     @Override
-    public void Draw(Canvas canvas) {
+    public void draw(Canvas canvas) {
 
         float centerY = height / 2;
         float centerX = width / 2;

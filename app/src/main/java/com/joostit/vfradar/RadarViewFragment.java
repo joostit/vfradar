@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.radardrawing.RadarView;
+import com.joostit.vfradar.site.SiteFeature;
 
 import java.util.List;
 
@@ -107,6 +108,11 @@ public class RadarViewFragment extends Fragment implements RadarView.OnRadarView
     @Override
     public void onUserSelectedAircraftChanged(Integer trackId) {
         mListener.onAircraftSelected(trackId);
+    }
+
+    public void UpdateSiteFeatures(List<SiteFeature> site) {
+        RadarView rView = getView().findViewById(R.id.radarView);
+        rView.UpdateSiteFeatures(site);
     }
 
     /**
