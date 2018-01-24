@@ -8,13 +8,11 @@ import com.joostit.vfradar.geo.LatLon;
 
 public class ReportingPoint extends SiteFeature {
 
-
-
     public LatLon position;
     public String name;
 
     public ReportingPoint() {
-        super(SiteFeatureTypes.VRP);
+        super(SiteFeatureTypes.ReportingPoint);
     }
 
     public ReportingPoint(String name, LatLon position) {

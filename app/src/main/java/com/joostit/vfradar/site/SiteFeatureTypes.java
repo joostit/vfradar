@@ -5,9 +5,7 @@ package com.joostit.vfradar.site;
  */
 
 public enum SiteFeatureTypes {
-    // Visual reporting point
-    VRP,
-
-    // A line connecting a route
+    ReportingPoint,
+    Runway,
     RouteLine
 }

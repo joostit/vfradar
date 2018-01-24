@@ -13,6 +13,7 @@ import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.site.ReportingPoint;
 import com.joostit.vfradar.site.RouteLine;
+import com.joostit.vfradar.site.Runway;
 import com.joostit.vfradar.site.SiteFeature;
 
 import java.util.ArrayList;
@@ -94,12 +95,16 @@ public class RadarView extends View {
             DrawableItem plot = null;
             switch (feature.getType()){
 
-                case VRP:
+                case ReportingPoint:
                     plot = new ReportingPointPlot((ReportingPoint) feature);
                     break;
 
                 case RouteLine:
                     plot = new RouteLinePlot((RouteLine) feature);
+                    break;
+
+                case Runway:
+                    plot = new RunwayPlot((Runway) feature);
                     break;
 
                 default:
