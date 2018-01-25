@@ -1,6 +1,7 @@
 package com.joostit.vfradar.site;
 
 import com.joostit.vfradar.geodata.GeoDataLoader;
+import com.joostit.vfradar.geodata.GeoDataPolygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class SiteDataLoader {
 
     private List<SiteFeature> features = new ArrayList<>();
-
+    private List<GeoDataPolygon> geoData = new ArrayList<>();
     private GeoDataLoader geoLoader = new GeoDataLoader();
 
     public SiteDataLoader(){
@@ -23,13 +24,16 @@ public class SiteDataLoader {
         SiteEHTW ehtw = new SiteEHTW();
         features.addAll(ehtw.getSite());
 
-        List items = geoLoader.Load("UrbanAreasNL_2017_12.kml");
-        System.out.print(items.size());
+        geoData = geoLoader.Load("UrbanAreasNL_2017_12.kml");
     }
 
 
     public List<SiteFeature> getSite(){
             return new ArrayList<SiteFeature>(features);
+    }
+
+    public List<GeoDataPolygon> getGeoData(){
+        return geoData;
     }
 
 

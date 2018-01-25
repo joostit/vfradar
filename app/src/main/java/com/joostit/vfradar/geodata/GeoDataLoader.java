@@ -32,7 +32,7 @@ public class GeoDataLoader {
     }
 
 
-    public List Load(String kmlFileName) {
+    public List<GeoDataPolygon> Load(String kmlFileName) {
 
         try {
             File extDir = Environment.getExternalStorageDirectory();
@@ -55,12 +55,12 @@ public class GeoDataLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = null;
+    private List<GeoDataPolygon> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<GeoDataPolygon> entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "kml");
 
@@ -79,7 +79,7 @@ public class GeoDataLoader {
         return entries;
     }
 
-    private List readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private List<GeoDataPolygon> readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "Document");
@@ -99,8 +99,8 @@ public class GeoDataLoader {
         return entries;
     }
 
-    private List readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = new ArrayList();
+    private List<GeoDataPolygon> readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<GeoDataPolygon> entries = new ArrayList<>();
 
         parser.require(XmlPullParser.START_TAG, ns, "Folder");
 
@@ -111,7 +111,7 @@ public class GeoDataLoader {
             String name = parser.getName();
 
             if (name.equals("Placemark")) {
-                KmlPlacemarkEntry newentry = readPlacemark(parser);
+                GeoDataPolygon newentry = readPlacemark(parser);
                 if (newentry != null) {
                     entries.add(newentry);
                 }
@@ -125,9 +125,9 @@ public class GeoDataLoader {
 
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
     // to their respective "read" methods for processing. Otherwise, skips the tag.
-    private KmlPlacemarkEntry readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private GeoDataPolygon readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        KmlPlacemarkEntry newEntry = new KmlPlacemarkEntry();
+        GeoDataPolygon newEntry = new GeoDataPolygon();
 
         parser.require(XmlPullParser.START_TAG, ns, "Placemark");
 
@@ -159,7 +159,7 @@ public class GeoDataLoader {
         return newEntry;
     }
 
-    private List<LatLon> readPolygonData(XmlPullParser parser, KmlPlacemarkEntry newEntry)  throws XmlPullParserException, IOException {
+    private List<LatLon> readPolygonData(XmlPullParser parser, GeoDataPolygon newEntry)  throws XmlPullParserException, IOException {
         List<LatLon> retVal = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "Polygon");
@@ -219,7 +219,7 @@ public class GeoDataLoader {
     }
 
 
-    private void readExtendedData(XmlPullParser parser, KmlPlacemarkEntry newEntry) throws XmlPullParserException, IOException {
+    private void readExtendedData(XmlPullParser parser, GeoDataPolygon newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "ExtendedData");
 
@@ -238,7 +238,7 @@ public class GeoDataLoader {
 
     }
 
-    private void readSchemaData(XmlPullParser parser, KmlPlacemarkEntry newEntry) throws XmlPullParserException, IOException {
+    private void readSchemaData(XmlPullParser parser, GeoDataPolygon newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "SchemaData");
 

@@ -1,8 +1,11 @@
 package com.joostit.vfradar.data;
 
+import android.os.AsyncTask;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * Created by Joost on 22-1-2018.
@@ -31,7 +34,7 @@ public class VFRadarCore implements AircraftDataListener {
         if (!isExecuting) {
             isExecuting = true;
             VFRadarCoreReaderTask task = new VFRadarCoreReaderTask(this);
-            task.execute(url);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
         }
     }
 

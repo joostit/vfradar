@@ -26,6 +26,8 @@ public class RouteLinePlot extends DrawableItem {
         
     }
 
+
+
     private void init() {
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setStyle(Paint.Style.STROKE);

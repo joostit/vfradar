@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Joost on 25-1-2018.
  */
 
-public class KmlPlacemarkEntry {
+public class GeoDataPolygon {
 
     public String name;
     public List<LatLon> points;

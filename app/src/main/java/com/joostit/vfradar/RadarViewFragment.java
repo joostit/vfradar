@@ -1,7 +1,6 @@
 package com.joostit.vfradar;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.geodata.GeoDataPolygon;
 import com.joostit.vfradar.radardrawing.RadarView;
 import com.joostit.vfradar.site.SiteFeature;
 
@@ -82,6 +82,8 @@ public class RadarViewFragment extends Fragment implements RadarView.OnRadarView
         rView.AttachSelectionListener(this);
     }
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -112,7 +114,12 @@ public class RadarViewFragment extends Fragment implements RadarView.OnRadarView
 
     public void UpdateSiteFeatures(List<SiteFeature> site) {
         RadarView rView = getView().findViewById(R.id.radarView);
-        rView.UpdateSiteFeatures(site);
+        rView.updateSiteFeatures(site);
+    }
+
+    public void updateGeoData(List<GeoDataPolygon> geoData) {
+        RadarView rView = getView().findViewById(R.id.radarView);
+        rView.updateGeoData(geoData);
     }
 
     /**

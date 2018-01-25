@@ -29,6 +29,8 @@ public class SphericalMercatorProjection {
     private double mWorldWidth;
     private double offsetX = 0;
     private double offsetY = 0;
+    private int screenHight = 0;
+    private int screenWidth = 0;
 
     private final double WORLD_CIRCUMFERENCE = 40075000;    // Circumference of the earth in meters
 
@@ -36,7 +38,10 @@ public class SphericalMercatorProjection {
         mWorldWidth = worldWidth;
     }
 
-    public synchronized void setScreen(double screenSize, double screenWidth, double screenHeight, double screenViewRadius, LatLon centerPosition) {
+    public synchronized void setScreen(int screenSize, int screenWidth, int screenHeight, double screenViewRadius, LatLon centerPosition) {
+        this.screenWidth = screenWidth;
+        this.screenHight = screenHeight;
+
         mWorldWidth = ((WORLD_CIRCUMFERENCE / 1.65) / (screenViewRadius * 2)) * screenSize;    // The word size in pixels
 
         PointF screenCenterpoint = toWorldPoint(centerPosition);
@@ -44,6 +49,16 @@ public class SphericalMercatorProjection {
         offsetX = screenCenterpoint.x - (0.5 * screenWidth);
         offsetY = screenCenterpoint.y - (0.5 * screenHeight);
     }
+
+    public int screenHight(){
+        return screenHight;
+    }
+
+    public int screenWidth(){
+        return screenWidth;
+    }
+
+
 
     @SuppressWarnings("deprecation")
     public synchronized PointF toScreenPoint(final LatLon position) {
@@ -73,13 +88,4 @@ public class SphericalMercatorProjection {
         return retVal;
     }
 
-//    public LatLng toLatLng(com.google.maps.android.geometry.Point point) {
-//        final double x = point.x / mWorldWidth - 0.5;
-//        final double lng = x * 360;
-//
-//        double y = .5 - (point.y / mWorldWidth);
-//        final double lat = 90 - Math.toDegrees(Math.atan(Math.exp(-y * 2 * Math.PI)) * 2);
-//
-//        return new LatLng(lat, lng);
-//    }
 }

@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.geodata.GeoDataPolygon;
 import com.joostit.vfradar.site.ReportingPoint;
 import com.joostit.vfradar.site.RouteLine;
 import com.joostit.vfradar.site.Runway;
@@ -40,6 +41,7 @@ public class RadarView extends View {
 
     private List<DrawableItem> siteFeatures = new ArrayList<>();
     private List<AircraftPlot> plots = new ArrayList<>();
+    private GeoPlotter geoPlot = new GeoPlotter();
     private Map<String, Button> buttons = new HashMap<>();
     private Crosshair crosshair;
 
@@ -48,11 +50,12 @@ public class RadarView extends View {
     private Paint sitePaint;
     private int siteColor = 0x50ff9900;
 
-
     private SphericalMercatorProjection projection;
 
     public RadarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
         init();
     }
 
@@ -72,6 +75,11 @@ public class RadarView extends View {
         crosshair = new Crosshair();
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        redrawGraphics();
+    }
 
     public void AttachSelectionListener(OnRadarViewInteractionListener radarViewFragment) {
         selectionListener = radarViewFragment;
@@ -79,12 +87,20 @@ public class RadarView extends View {
 
     public synchronized void UpdateAircraft(List<TrackedAircraft> ac) {
         updateAircraftPlotData(ac);
-        refreshDrawing();
+        RecalculateAircraftPlots();
+        invalidate();
     }
 
-    public synchronized void UpdateSiteFeatures(List<SiteFeature> site){
+    public synchronized void updateSiteFeatures(List<SiteFeature> site){
         updateSiteFeaturePlotData(site);
-        refreshDrawing();
+        RecalculateSite();
+        invalidate();
+    }
+
+    public synchronized void updateGeoData(List<GeoDataPolygon> geoData){
+        geoPlot.setData(geoData);
+        geoPlot.updateDrawing(projection);
+        invalidate();
     }
 
     private void updateSiteFeaturePlotData(List<SiteFeature> site) {
@@ -119,13 +135,14 @@ public class RadarView extends View {
     }
 
 
-    private synchronized void refreshDrawing() {
+    private synchronized void redrawGraphics() {
 
         projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, SysConfig.getCenterPosition());
+        geoPlot.updateDrawing(projection);
         RecalculateSite();
         RecalculateButtons();
-        RecalculateAircraftPlots();
         calculateCrosshair();
+        RecalculateAircraftPlots();
         invalidate();
     }
 
@@ -150,6 +167,9 @@ public class RadarView extends View {
 
         // Black background
         canvas.drawARGB(255, 0, 0, 0);
+
+        geoPlot.draw(canvas);
+
 
         crosshair.draw(canvas);
         drawSite(canvas);
@@ -301,12 +321,12 @@ public class RadarView extends View {
 
     private void zoomOut() {
         zoomLevels.zoomOut();
-        refreshDrawing();
+        redrawGraphics();
     }
 
     private void zoomIn() {
         zoomLevels.zoomIn();
-        refreshDrawing();
+        redrawGraphics();
     }
 
     private boolean processAircraftTouchEvent(MotionEvent event) {
@@ -337,7 +357,7 @@ public class RadarView extends View {
             deselectAllPlots();
         }
 
-        refreshDrawing();
+        redrawGraphics();
 
         if (nearestHit.isSelected) {
             dispatchSelectionChanged(nearestHit.TrackId);

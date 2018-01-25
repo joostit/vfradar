@@ -55,7 +55,6 @@ public class OperationalActivity extends AppCompatActivity
 
         PermissionHelper.verifyWriteStoragePermissions(this);
 
-
         startTimer();
     }
 
@@ -129,6 +128,7 @@ public class OperationalActivity extends AppCompatActivity
             RadarViewFragment rView = (RadarViewFragment) initiator.getFragmentManager().findFragmentByTag("radarViewFragTag");
             if(rView != null) {
                 rView.UpdateSiteFeatures(site.getSite());
+                rView.updateGeoData(site.getGeoData());
             }
         }
 
