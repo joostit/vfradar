@@ -1,5 +1,7 @@
 package com.joostit.vfradar.site;
 
+import com.joostit.vfradar.geodata.GeoDataLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,8 @@ public class SiteDataLoader {
         SiteEHTW ehtw = new SiteEHTW();
         features.addAll(ehtw.getSite());
 
-        geoLoader.Load("Top10NL-Plaats_kern");
+        List items = geoLoader.Load("UrbanAreasNL_2017_12.kml");
+        System.out.print(items.size());
     }
 
 
