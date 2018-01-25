@@ -1,5 +1,7 @@
 package com.joostit.vfradar;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,14 +22,12 @@ public class OperationalActivity extends AppCompatActivity
         AircraftDataListener {
 
     private AircraftStateCollection aircaft = new AircraftStateCollection();
-
     private VFRadarCore radarCoreConnection = new VFRadarCore(this);
-
     private SiteDataLoader site = new SiteDataLoader();
 
-    //runs without a timer by reposting this handler at the end of the runnable
-    Handler timerHandler = new Handler();
-    Runnable timerRunnable = new Runnable() {
+    private LoadSiteDataTask siteDataLoadertask;
+    private Handler timerHandler = new Handler();
+    private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
             doAircraftUpdate(this);
@@ -55,7 +55,6 @@ public class OperationalActivity extends AppCompatActivity
 
         PermissionHelper.verifyWriteStoragePermissions(this);
 
-        site.loadData();
 
         startTimer();
     }
@@ -83,12 +82,9 @@ public class OperationalActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
+        siteDataLoadertask = new LoadSiteDataTask(this);
+        siteDataLoadertask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-
-        RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
-        if(rView != null) {
-            rView.UpdateSiteFeatures(site.getSite());
-        }
     }
 
     @Override
@@ -112,5 +108,34 @@ public class OperationalActivity extends AppCompatActivity
         if(acListFragment != null) {
             acListFragment.UpdateAircraft(ac);
         }
+    }
+
+    private class LoadSiteDataTask extends AsyncTask<Object, Void, Object> {
+
+        private AppCompatActivity initiator;
+
+        LoadSiteDataTask(AppCompatActivity initiator){
+            this.initiator = initiator;
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            site.loadData();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Object na) {
+            RadarViewFragment rView = (RadarViewFragment) initiator.getFragmentManager().findFragmentByTag("radarViewFragTag");
+            if(rView != null) {
+                rView.UpdateSiteFeatures(site.getSite());
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
 }
