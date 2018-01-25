@@ -3,6 +3,8 @@ package com.joostit.vfradar.geodata;
 import android.os.Environment;
 import android.util.Xml;
 
+import com.joostit.vfradar.geo.LatLon;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -110,7 +112,7 @@ public class GeoDataLoader {
 
             if (name.equals("Placemark")) {
                 KmlPlacemarkEntry newentry = readPlacemark(parser);
-                if(newentry != null) {
+                if (newentry != null) {
                     entries.add(newentry);
                 }
             } else {
@@ -119,8 +121,6 @@ public class GeoDataLoader {
         }
         return entries;
     }
-
-
 
 
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
@@ -140,9 +140,15 @@ public class GeoDataLoader {
 
             if (name.equals("ExtendedData")) {
                 readExtendedData(parser, newEntry);
-
-                if(newEntry.population < minimumPopulation){
+                if (newEntry.population < minimumPopulation) {
                     newEntry = null;
+                }
+            }else if (name.equals("Polygon")) {
+                if (newEntry != null) {
+                    List<LatLon> polygon = readPolygonData(parser, newEntry);
+                    newEntry.points = polygon;
+                } else {
+                    skip(parser);
                 }
             } else {
                 skip(parser);
@@ -151,6 +157,65 @@ public class GeoDataLoader {
             System.out.println(name);
         }
         return newEntry;
+    }
+
+    private List<LatLon> readPolygonData(XmlPullParser parser, KmlPlacemarkEntry newEntry)  throws XmlPullParserException, IOException {
+        List<LatLon> retVal = null;
+
+        parser.require(XmlPullParser.START_TAG, ns, "Polygon");
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String inPolygonName = parser.getName();
+            if (inPolygonName.equals("outerBoundaryIs")) {
+                while (parser.next() != XmlPullParser.END_TAG) {
+                    if (parser.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    String inOuterBoundaryIsName = parser.getName();
+                    if (inOuterBoundaryIsName.equals("LinearRing")) {
+                        while (parser.next() != XmlPullParser.END_TAG) {
+                            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                                continue;
+                            }
+                            String inLinearRingName = parser.getName();
+                            if (inLinearRingName.equals("coordinates")) {
+                                retVal = readCoordinates(parser);
+                            } else {
+                                skip(parser);
+                            }
+                        }
+                    }
+                    else{
+                        skip(parser);
+                    }
+
+                }
+            }
+            else{
+                skip(parser);
+            }
+        }
+
+        return retVal;
+    }
+
+    private List<LatLon> readCoordinates(XmlPullParser parser)  throws XmlPullParserException, IOException {
+        List<LatLon> retVal = new ArrayList<>();
+
+        parser.require(XmlPullParser.START_TAG, ns, "coordinates");
+        String coordinateString = readText(parser);
+        String[] coordinates = coordinateString.trim().split("\\s+");
+
+        for(String latlon : coordinates){
+            String[] latLonSplit = latlon.trim().split(",");
+            Double lat = Double.parseDouble(latLonSplit[0]);
+            Double lon = Double.parseDouble(latLonSplit[1]);
+            retVal.add(new LatLon(lat, lon));
+        }
+
+        return retVal;
     }
 
 
@@ -181,16 +246,15 @@ public class GeoDataLoader {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String elementName = parser.getAttributeValue(null,"name");
-            if(elementName.equalsIgnoreCase("population")) {
+            String elementName = parser.getAttributeValue(null, "name");
+            if (elementName.equalsIgnoreCase("population")) {
                 String populationString = readSimpleDataText(parser);
                 newEntry.population = Integer.parseInt(populationString);
 
-            } else if(elementName.equalsIgnoreCase("name")) {
+            } else if (elementName.equalsIgnoreCase("name")) {
                 newEntry.name = readSimpleDataText(parser);
 
-            } else
-            {
+            } else {
                 skip(parser);
             }
         }
