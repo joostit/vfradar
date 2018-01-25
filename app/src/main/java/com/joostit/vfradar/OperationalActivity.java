@@ -9,9 +9,8 @@ import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.data.AircraftStateCollection;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
-import com.joostit.vfradar.data.VFRadarCoreReaderTask;
 import com.joostit.vfradar.listing.AircraftListFragment;
-import com.joostit.vfradar.site.SiteData;
+import com.joostit.vfradar.site.SiteDataLoader;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class OperationalActivity extends AppCompatActivity
 
     private VFRadarCore radarCoreConnection = new VFRadarCore(this);
 
-    private SiteData site = new SiteData();
+    private SiteDataLoader site = new SiteDataLoader();
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -54,6 +53,10 @@ public class OperationalActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operational);
 
+        PermissionHelper.verifyWriteStoragePermissions(this);
+
+        site.loadData();
+
         startTimer();
     }
 
@@ -79,6 +82,8 @@ public class OperationalActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
+
 
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
         if(rView != null) {
