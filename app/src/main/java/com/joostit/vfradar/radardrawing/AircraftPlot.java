@@ -2,6 +2,7 @@ package com.joostit.vfradar.radardrawing;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
@@ -16,25 +17,23 @@ import java.text.DecimalFormat;
 public class AircraftPlot extends DrawableItem {
 
     private static DecimalFormat df1 = new DecimalFormat("#.#");
-
     private final int txtBackMargin = 2;
 
-    public double lat;
-    public double lon;
+    private boolean doDraw = false;
 
+    private double lat;
+    private double lon;
+
+    public int TrackId;
     public float ScreenX;
     public float ScreenY;
-
-    public Integer Track;
-
     public Boolean isSelected = false;
     public Boolean isHighlighted = false;
     public Boolean isWarning = false;
 
-    public String DisplayName;
-    public String InfoLine;
-    public int TrackId;
-
+    private Integer Track;
+    private String DisplayName;
+    private String InfoLine;
 
     private int acForeColor = 0xFF00FF00;
     private int acBackColor = 0xFF008000;
@@ -107,6 +106,11 @@ public class AircraftPlot extends DrawableItem {
 
     @Override
     public void draw(Canvas canvas) {
+
+        if(!doDraw){
+            return;
+        }
+
         float arrowAngle = 135;
         float longArrowLength = 11;
         float shortArrowLength = 9;
@@ -247,6 +251,13 @@ public class AircraftPlot extends DrawableItem {
     }
 
 
+    @Override
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+        PointF screenPoint = projection.toScreenPoint(lat, lon);
+        ScreenX = screenPoint.x;
+        ScreenY = screenPoint.y;
 
-
+        doDraw = bounds.contains(ScreenX, ScreenY);
+        return doDraw;
+    }
 }

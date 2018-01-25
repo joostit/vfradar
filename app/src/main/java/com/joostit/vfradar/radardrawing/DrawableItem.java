@@ -1,6 +1,8 @@
 package com.joostit.vfradar.radardrawing;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 /**
  * Created by Joost on 18-1-2018.
@@ -15,7 +17,7 @@ public abstract class DrawableItem {
 
     public abstract void draw(Canvas canvas);
 
-    public void updateDrawing(SphericalMercatorProjection projection){}
+    public abstract boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds);
 
 
 }

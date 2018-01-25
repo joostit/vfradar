@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.joostit.vfradar.site.ReportingPoint;
 
@@ -22,7 +23,7 @@ public class ReportingPointPlot extends DrawableItem {
     private Paint symbolPaint;
     private Paint textPaint;
     private PointF screenPoint = null;
-
+    private boolean doDraw;
 
     public ReportingPointPlot(ReportingPoint source){
         this.source = source;
@@ -44,22 +45,30 @@ public class ReportingPointPlot extends DrawableItem {
     }
 
     @Override
-    public void updateDrawing(SphericalMercatorProjection projection) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
         screenPoint = projection.toScreenPoint(source.position);
 
-        symbolPath.rewind();
+        doDraw = bounds.contains(screenPoint.x, screenPoint.y);
 
-        symbolPath.moveTo(screenPoint.x - symbolSize, screenPoint.y + symbolSize);
-        symbolPath.lineTo(screenPoint.x + symbolSize, screenPoint.y + symbolSize);
-        symbolPath.lineTo(screenPoint.x, screenPoint.y - symbolSize);
-        symbolPath.close();
+        if(doDraw) {
+            Path newPath = new Path();
+
+            newPath.moveTo(screenPoint.x - symbolSize, screenPoint.y + symbolSize);
+            newPath.lineTo(screenPoint.x + symbolSize, screenPoint.y + symbolSize);
+            newPath.lineTo(screenPoint.x, screenPoint.y - symbolSize);
+            newPath.close();
+
+            symbolPath = newPath;
+        }
+
+        return doDraw;
     }
 
 
     @Override
     public void draw(Canvas canvas) {
 
-        if(screenPoint == null){
+        if(!doDraw){
             return;
         }
 

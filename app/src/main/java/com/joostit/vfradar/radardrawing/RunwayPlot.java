@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.site.RouteLine;
@@ -17,7 +19,7 @@ public class RunwayPlot extends DrawableItem{
 
 
     private Runway source;
-
+    private boolean doDraw;
     private Path screenPath = new Path();
 
     private int lineColor = 0xAA999900;
@@ -38,14 +40,15 @@ public class RunwayPlot extends DrawableItem{
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawPath(screenPath, linePaint);
+        if(doDraw) {
+            canvas.drawPath(screenPath, linePaint);
+        }
     }
 
     @Override
-    public void updateDrawing(SphericalMercatorProjection projection) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
 
-        screenPath.rewind();
-
+        boolean isInView = false;
         double bearing = source.pointA.BearingTo(source.pointB);
 
         LatLon p1 = source.pointA.Move(bearing - 45, source.widthM / 2);
@@ -53,19 +56,29 @@ public class RunwayPlot extends DrawableItem{
         LatLon p3 = source.pointB.Move(bearing + 45, source.widthM / 2);
         LatLon p4 = source.pointB.Move(bearing - 45, source.widthM / 2);
 
+        Path newPath = new Path();
+
         PointF point1 = projection.toScreenPoint(p1);
-        screenPath.moveTo(point1.x, point1.y);
+        newPath.moveTo(point1.x, point1.y);
 
         PointF point2 = projection.toScreenPoint(p2);
-        screenPath.lineTo(point2.x, point2.y);
+        newPath.lineTo(point2.x, point2.y);
 
         PointF point3 = projection.toScreenPoint(p3);
-        screenPath.lineTo(point3.x, point3.y);
+        newPath.lineTo(point3.x, point3.y);
 
         PointF point4 = projection.toScreenPoint(p4);
-        screenPath.lineTo(point4.x, point4.y);
+        newPath.lineTo(point4.x, point4.y);
 
-        screenPath.close();
+        newPath.close();
 
+        isInView = bounds.contains(point1.x, point2.y) ? true : isInView;
+        isInView = bounds.contains(point2.x, point2.y) ? true : isInView;
+        isInView = bounds.contains(point2.x, point2.y) ? true : isInView;
+        isInView = bounds.contains(point2.x, point2.y) ? true : isInView;
+
+        screenPath = newPath;
+        doDraw = isInView;
+        return doDraw;
     }
 }

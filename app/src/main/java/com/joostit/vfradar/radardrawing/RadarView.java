@@ -3,7 +3,7 @@ package com.joostit.vfradar.radardrawing;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PointF;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
-import com.joostit.vfradar.geodata.GeoDataPolygon;
+import com.joostit.vfradar.geodata.GeoShapeData;
 import com.joostit.vfradar.site.ReportingPoint;
 import com.joostit.vfradar.site.RouteLine;
 import com.joostit.vfradar.site.Runway;
@@ -91,25 +91,25 @@ public class RadarView extends View {
         invalidate();
     }
 
-    public synchronized void updateSiteFeatures(List<SiteFeature> site){
+    public synchronized void updateSiteFeatures(List<SiteFeature> site) {
         updateSiteFeaturePlotData(site);
         RecalculateSite();
         invalidate();
     }
 
-    public synchronized void updateGeoData(List<GeoDataPolygon> geoData){
+    public synchronized void updateGeoData(List<GeoShapeData> geoData) {
         geoPlot.setData(geoData);
-        geoPlot.updateDrawing(projection);
+        geoPlot.updateDrawing(projection, getViewBounds());
         invalidate();
     }
 
     private void updateSiteFeaturePlotData(List<SiteFeature> site) {
 
         siteFeatures.clear();
-        for(SiteFeature feature : site){
+        for (SiteFeature feature : site) {
 
             DrawableItem plot = null;
-            switch (feature.getType()){
+            switch (feature.getType()) {
 
                 case ReportingPoint:
                     plot = new ReportingPointPlot((ReportingPoint) feature);
@@ -127,7 +127,7 @@ public class RadarView extends View {
                     System.out.println("Unsupported Site Feature type");
             }
 
-            if(plot != null) {
+            if (plot != null) {
                 siteFeatures.add(plot);
             }
         }
@@ -138,7 +138,7 @@ public class RadarView extends View {
     private synchronized void redrawGraphics() {
 
         projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, SysConfig.getCenterPosition());
-        geoPlot.updateDrawing(projection);
+        geoPlot.updateDrawing(projection, getViewBounds());
         RecalculateSite();
         RecalculateButtons();
         calculateCrosshair();
@@ -146,9 +146,13 @@ public class RadarView extends View {
         invalidate();
     }
 
+    private RectF getViewBounds() {
+        return new RectF(0, 0, this.getWidth(), this.getHeight());
+    }
+
     private void RecalculateSite() {
-        for(DrawableItem feature : siteFeatures){
-            feature.updateDrawing(projection);
+        for (DrawableItem feature : siteFeatures) {
+            feature.updateDrawing(projection, getViewBounds());
         }
     }
 
@@ -158,7 +162,7 @@ public class RadarView extends View {
     }
 
     private void calculateCrosshair() {
-        crosshair.UpdateDrawing(projection, zoomLevels.getZoomLevelInfo(), SysConfig.getCenterPosition(), this.getWidth(), this.getHeight());
+        crosshair.updateDrawing(projection, zoomLevels.getZoomLevelInfo(), SysConfig.getCenterPosition(), this.getWidth(), this.getHeight());
     }
 
 
@@ -167,17 +171,11 @@ public class RadarView extends View {
 
         // Black background
         canvas.drawARGB(255, 0, 0, 0);
-
         geoPlot.draw(canvas);
-
-
         crosshair.draw(canvas);
         drawSite(canvas);
-
         drawAllAircraft(canvas);
-
         drawButtons(canvas);
-
     }
 
     private float getZoomOutButtonX() {
@@ -212,8 +210,7 @@ public class RadarView extends View {
                 plot = new AircraftPlot();
                 plot.TrackId = track.Data.trackId;
                 plots.add(plot);
-            }
-            else{
+            } else {
                 toRemove.remove(plot);
             }
 
@@ -221,12 +218,10 @@ public class RadarView extends View {
         }
 
 
-        for(AircraftPlot removeMe : toRemove){
+        for (AircraftPlot removeMe : toRemove) {
             plots.remove(removeMe);
         }
     }
-
-
 
 
     private synchronized AircraftPlot findPlotByTrackid(int trackId) {
@@ -245,16 +240,14 @@ public class RadarView extends View {
 
     private synchronized void RecalculateAircraftPlots() {
         for (AircraftPlot plot : plots) {
-            PointF screenPoint = projection.toScreenPoint(plot.lat, plot.lon);
-            plot.ScreenX = screenPoint.x;
-            plot.ScreenY = screenPoint.y;
+            plot.updateDrawing(projection, getViewBounds());
         }
     }
 
 
     private void drawSite(Canvas canvas) {
 
-        for(DrawableItem feature: siteFeatures){
+        for (DrawableItem feature : siteFeatures) {
             feature.draw(canvas);
         }
 

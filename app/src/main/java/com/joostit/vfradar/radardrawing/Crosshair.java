@@ -3,6 +3,7 @@ package com.joostit.vfradar.radardrawing;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
@@ -49,7 +50,7 @@ public class Crosshair extends DrawableItem {
     }
 
 
-    public void UpdateDrawing(SphericalMercatorProjection projection, ZoomLevelInfo zlInfo, LatLon centerPosition, float width, float height) {
+    public void updateDrawing(SphericalMercatorProjection projection, ZoomLevelInfo zlInfo, LatLon centerPosition, float width, float height) {
 
         this.width = width;
         this.height = height;
@@ -88,5 +89,11 @@ public class Crosshair extends DrawableItem {
         canvas.drawText(ring1Annot, centerX + 5, centerY - ring1Radius - 10, crosshairTextPaint);
         canvas.drawText(ring2Annot, centerX + 5, centerY - ring2Radius - 10, crosshairTextPaint);
         canvas.drawText(ring3Annot, centerX + 5, centerY - ring3Radius - 10, crosshairTextPaint);
+    }
+
+    @Override
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+        // No specific implementation. Use the other overload for this
+        return false;
     }
 }

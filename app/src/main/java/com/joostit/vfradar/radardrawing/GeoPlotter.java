@@ -5,11 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PointF;
+import android.graphics.RectF;
 
-import com.joostit.vfradar.geodata.GeoDataPolygon;
-import com.joostit.vfradar.site.RouteLine;
+import com.joostit.vfradar.geodata.GeoShapeData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,61 +19,64 @@ import java.util.List;
 public class GeoPlotter extends DrawableItem {
 
     Bitmap screenBuffer = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-
-    private Path screenPath = new Path();
-    private List<GeoDataPolygon> geoData = new ArrayList<>();
-    private int lineColor = 0xAAb3b300;
-    private Paint linePaint;
+    private boolean doDraw = false;
+    private List<GeoShapePlot> shapePlots = new ArrayList<>();
     private Paint bitmapPaint;
+
+
+    public GeoPlotter(){
+        init();
+    }
 
     @Override
     public void draw(Canvas canvas) {
-        if(screenBuffer != null){
-            //canvas.drawb
+
+        if (doDraw) {
+            for (GeoShapePlot plot: shapePlots){
+                plot.draw(canvas);
+            }
+
         }
     }
 
 
     private void init() {
-
+        bitmapPaint = new Paint();
         bitmapPaint.setAntiAlias(false);
         bitmapPaint.setStrokeWidth(1);
-        bitmapPaint.setColor(Color.BLUE);
+        bitmapPaint.setColor(Color.TRANSPARENT);
         bitmapPaint.setStyle(Paint.Style.STROKE);
         bitmapPaint.setDither(false);
-
-
-
-        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(2);
-        linePaint.setColor(lineColor);
     }
 
     @Override
-    public void updateDrawing(SphericalMercatorProjection projection) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
 
-        screenBuffer = null;
-        Bitmap drawBuffer = Bitmap.createBitmap(projection.screenWidth(), projection.screenHight(), Bitmap.Config.ARGB_8888);
+        doDraw = false;
+        boolean itemsToDraw = false;
 
-        screenPath.rewind();
-//
-//        if(source.points.size() ==0){
-//            return;
-//        }
-//
-//        PointF point = projection.toScreenPoint(source.points.get(0));
-//        screenPath.moveTo(point.x, point.y);
-//
-//        for(int i = 1; i < source.points.size(); i++){
-//            point = projection.toScreenPoint(source.points.get(i));
-//            screenPath.lineTo(point.x, point.y);
-//        }
+        for (GeoShapePlot plot: shapePlots) {
+            itemsToDraw = plot.updateDrawing(projection, bounds) ? true : itemsToDraw;
+        }
 
+        doDraw = itemsToDraw;
+        return doDraw;
     }
 
 
-    public void setData(List<GeoDataPolygon> data) {
-        this.geoData = data;
+    public void setData(List<GeoShapeData> data) {
+
+        shapePlots.clear();
+
+        for (GeoShapeData shape :
+                data) {
+            GeoShapePlot plot = new GeoShapePlot(shape);
+            shapePlots.add(plot);
+
+            if(shape.name.equalsIgnoreCase("Enschede")){
+                shape.toString();
+            }
+        }
+
     }
 }

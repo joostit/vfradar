@@ -32,7 +32,7 @@ public class GeoDataLoader {
     }
 
 
-    public List<GeoDataPolygon> Load(String kmlFileName) {
+    public List<GeoShapeData> Load(String kmlFileName) {
 
         try {
             File extDir = Environment.getExternalStorageDirectory();
@@ -59,8 +59,8 @@ public class GeoDataLoader {
     }
 
 
-    private List<GeoDataPolygon> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<GeoDataPolygon> entries = null;
+    private List<GeoShapeData> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<GeoShapeData> entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "kml");
 
@@ -79,7 +79,7 @@ public class GeoDataLoader {
         return entries;
     }
 
-    private List<GeoDataPolygon> readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private List<GeoShapeData> readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "Document");
@@ -99,8 +99,8 @@ public class GeoDataLoader {
         return entries;
     }
 
-    private List<GeoDataPolygon> readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<GeoDataPolygon> entries = new ArrayList<>();
+    private List<GeoShapeData> readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<GeoShapeData> entries = new ArrayList<>();
 
         parser.require(XmlPullParser.START_TAG, ns, "Folder");
 
@@ -111,9 +111,11 @@ public class GeoDataLoader {
             String name = parser.getName();
 
             if (name.equals("Placemark")) {
-                GeoDataPolygon newentry = readPlacemark(parser);
+                GeoShapeData newentry = readPlacemark(parser);
                 if (newentry != null) {
-                    entries.add(newentry);
+                    //if(newentry.population > minimumPopulation) {
+                        entries.add(newentry);
+                    //}
                 }
             } else {
                 skip(parser);
@@ -125,9 +127,9 @@ public class GeoDataLoader {
 
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
     // to their respective "read" methods for processing. Otherwise, skips the tag.
-    private GeoDataPolygon readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private GeoShapeData readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        GeoDataPolygon newEntry = new GeoDataPolygon();
+        GeoShapeData newEntry = new GeoShapeData();
 
         parser.require(XmlPullParser.START_TAG, ns, "Placemark");
 
@@ -140,27 +142,52 @@ public class GeoDataLoader {
 
             if (name.equals("ExtendedData")) {
                 readExtendedData(parser, newEntry);
-                if (newEntry.population < minimumPopulation) {
-                    newEntry = null;
-                }
             }else if (name.equals("Polygon")) {
-                if (newEntry != null) {
-                    List<LatLon> polygon = readPolygonData(parser, newEntry);
-                    newEntry.points = polygon;
-                } else {
-                    skip(parser);
-                }
-            } else {
+                readPolygonData(parser, newEntry);
+            }
+            else if (name.equals("MultiGeometry")) {
+                readMultiGeometryData(parser, newEntry);
+            }else {
                 skip(parser);
             }
 
-            System.out.println(name);
         }
+
+        if(newEntry != null) {
+
+            if(newEntry.name.equalsIgnoreCase("Enschede")){
+                newEntry.toString();
+            }
+
+            if ((newEntry.points == null)
+                    || (newEntry.points.size() == 0)) {
+                newEntry = null;
+            }
+        }
+
         return newEntry;
     }
 
-    private List<LatLon> readPolygonData(XmlPullParser parser, GeoDataPolygon newEntry)  throws XmlPullParserException, IOException {
-        List<LatLon> retVal = null;
+
+    private void readMultiGeometryData(XmlPullParser parser, GeoShapeData newEntry) throws XmlPullParserException, IOException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "MultiGeometry");
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+
+            if (name.equals("Polygon")) {
+                readPolygonData(parser, newEntry);
+            } else {
+                skip(parser);
+            }
+        }
+    }
+
+    private void readPolygonData(XmlPullParser parser, GeoShapeData newEntry)  throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "Polygon");
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -181,7 +208,8 @@ public class GeoDataLoader {
                             }
                             String inLinearRingName = parser.getName();
                             if (inLinearRingName.equals("coordinates")) {
-                                retVal = readCoordinates(parser);
+                                List<LatLon> points = readCoordinates(parser);
+                                newEntry.points = points;
                             } else {
                                 skip(parser);
                             }
@@ -197,8 +225,6 @@ public class GeoDataLoader {
                 skip(parser);
             }
         }
-
-        return retVal;
     }
 
     private List<LatLon> readCoordinates(XmlPullParser parser)  throws XmlPullParserException, IOException {
@@ -210,8 +236,8 @@ public class GeoDataLoader {
 
         for(String latlon : coordinates){
             String[] latLonSplit = latlon.trim().split(",");
-            Double lat = Double.parseDouble(latLonSplit[0]);
-            Double lon = Double.parseDouble(latLonSplit[1]);
+            Double lon = Double.parseDouble(latLonSplit[0]);
+            Double lat = Double.parseDouble(latLonSplit[1]);
             retVal.add(new LatLon(lat, lon));
         }
 
@@ -219,7 +245,7 @@ public class GeoDataLoader {
     }
 
 
-    private void readExtendedData(XmlPullParser parser, GeoDataPolygon newEntry) throws XmlPullParserException, IOException {
+    private void readExtendedData(XmlPullParser parser, GeoShapeData newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "ExtendedData");
 
@@ -238,7 +264,7 @@ public class GeoDataLoader {
 
     }
 
-    private void readSchemaData(XmlPullParser parser, GeoDataPolygon newEntry) throws XmlPullParserException, IOException {
+    private void readSchemaData(XmlPullParser parser, GeoShapeData newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "SchemaData");
 
@@ -253,6 +279,9 @@ public class GeoDataLoader {
 
             } else if (elementName.equalsIgnoreCase("name")) {
                 newEntry.name = readSimpleDataText(parser);
+                if(newEntry.name.equalsIgnoreCase("Hengelo")){
+                    newEntry.isUrban = true;
+                }
 
             } else {
                 skip(parser);

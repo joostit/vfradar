@@ -70,6 +70,12 @@ public class Button extends DrawableItem {
     }
 
     @Override
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+        // No specific implementation
+        return true;
+    }
+
+    @Override
     public Boolean doHitTest(float hitX, float hitY) {
         return buttonBounds.contains(hitX, hitY);
     }

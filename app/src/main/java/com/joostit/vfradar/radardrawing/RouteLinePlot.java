@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.joostit.vfradar.site.RouteLine;
 
@@ -14,7 +16,7 @@ import com.joostit.vfradar.site.RouteLine;
 public class RouteLinePlot extends DrawableItem {
 
     private RouteLine source;
-
+    private boolean doDraw;
     private Path screenPath = new Path();
 
     private int lineColor = 0xAAb3b300;
@@ -27,7 +29,6 @@ public class RouteLinePlot extends DrawableItem {
     }
 
 
-
     private void init() {
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setStyle(Paint.Style.STROKE);
@@ -37,25 +38,38 @@ public class RouteLinePlot extends DrawableItem {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawPath(screenPath, linePaint);
+        if (doDraw) {
+            canvas.drawPath(screenPath, linePaint);
+        }
     }
 
     @Override
-    public void updateDrawing(SphericalMercatorProjection projection) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
 
-        screenPath.rewind();
+        Path newPath = new Path();
+        boolean isInView = false;
 
         if(source.points.size() ==0){
-            return;
+            doDraw = false;
+            return doDraw;
         }
 
         PointF point = projection.toScreenPoint(source.points.get(0));
-        screenPath.moveTo(point.x, point.y);
+        newPath.moveTo(point.x, point.y);
+        if(bounds.contains(point.x, point.y)){
+            isInView = true;
+        }
 
         for(int i = 1; i < source.points.size(); i++){
             point = projection.toScreenPoint(source.points.get(i));
-            screenPath.lineTo(point.x, point.y);
+            if(bounds.contains(point.x, point.y)){
+                isInView = true;
+            }
+            newPath.lineTo(point.x, point.y);
         }
 
+        screenPath = newPath;
+        doDraw = isInView;
+        return doDraw;
     }
 }
