@@ -34,7 +34,7 @@ public class SiteEHTW {
         vfrInboundRoute.addPoint(oscar);
         site.add(vfrInboundRoute);
 
-        Runway runway = new Runway("EHTW", new LatLon(52.268293, 6.871564), new LatLon(52.283316, 6.906594), 45);
+        Runway runway = new Runway("EHTW", new LatLon(52.268293, 6.871564), new LatLon(52.283316, 6.906594), "23", "05", 45);
         site.add(runway);
 
         return site;

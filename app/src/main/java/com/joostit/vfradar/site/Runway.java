@@ -12,16 +12,20 @@ public class Runway extends SiteFeature {
     public LatLon pointA;
     public LatLon pointB;
     public double widthM;
+    public String nameA;
+    public String nameB;
 
     public Runway() {
         super(SiteFeatureTypes.Runway);
     }
 
-    public Runway(String name, LatLon from, LatLon to, double widthM){
+    public Runway(String name, LatLon pointA, LatLon pointB, String nameA, String nameB, double widthM){
         this();
         this.name = name;
-        this.pointA = from;
-        this.pointB = to;
+        this.pointA = pointA;
+        this.pointB = pointB;
         this.widthM = widthM;
+        this.nameA = nameA;
+        this.nameB = nameB;
     }
 }

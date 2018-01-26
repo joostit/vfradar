@@ -24,6 +24,8 @@ public class RunwayPlot extends DrawableItem{
 
     private int lineColor = 0xAA999900;
     private Paint linePaint;
+    private int textColor = 0xFFb3b300;
+    private Paint textPaint;
 
     public RunwayPlot(Runway source){
         this.source = source;
@@ -36,6 +38,11 @@ public class RunwayPlot extends DrawableItem{
         linePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         linePaint.setStrokeWidth(2);
         linePaint.setColor(lineColor);
+
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(textColor);
+        textPaint.setTextSize(20);
     }
 
     @Override
@@ -48,8 +55,10 @@ public class RunwayPlot extends DrawableItem{
     @Override
     public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
 
-        boolean isInView = false;
+        boolean isInView;
         double bearing = source.pointA.BearingTo(source.pointB);
+
+        // ToDo: Extend bearing and put runway numbers at the end of them
 
         float minX = Float.MAX_VALUE;
         float maxX = Float.MIN_VALUE;
