@@ -54,17 +54,28 @@ public class RouteLinePlot extends DrawableItem {
             return doDraw;
         }
 
+
+
         PointF point = projection.toScreenPoint(source.points.get(0));
         newPath.moveTo(point.x, point.y);
         if(bounds.contains(point.x, point.y)){
             isInView = true;
         }
 
+        float previousX = point.x;
+        float previousY = point.y;
+
         for(int i = 1; i < source.points.size(); i++){
             point = projection.toScreenPoint(source.points.get(i));
-            if(bounds.contains(point.x, point.y)){
+
+            RectF lineRect = new RectF(previousX, previousY, point.x, point.y);
+            previousX = point.x;
+            previousY = point.y;
+
+            if(RectF.intersects(lineRect, bounds)){
                 isInView = true;
             }
+
             newPath.lineTo(point.x, point.y);
         }
 
