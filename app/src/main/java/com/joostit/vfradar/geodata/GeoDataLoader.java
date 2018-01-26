@@ -21,7 +21,7 @@ import java.util.List;
 
 public class GeoDataLoader {
 
-    public static final int minimumPopulation = 10000;
+    public static final int minimumPopulation = 1000;
 
     public static final String geoDataPath = "/VFRadar/GeoData/";
 
@@ -32,7 +32,7 @@ public class GeoDataLoader {
     }
 
 
-    public List<GeoShapeData> Load(String kmlFileName) {
+    public List<GeoObject> Load(String kmlFileName) {
 
         try {
             File extDir = Environment.getExternalStorageDirectory();
@@ -59,8 +59,8 @@ public class GeoDataLoader {
     }
 
 
-    private List<GeoShapeData> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<GeoShapeData> entries = null;
+    private List<GeoObject> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<GeoObject> entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "kml");
 
@@ -69,7 +69,7 @@ public class GeoDataLoader {
                 continue;
             }
             String name = parser.getName();
-            // Starts by looking for the entry tag
+
             if (name.equals("Document")) {
                 entries = readDocument(parser);
             } else {
@@ -79,7 +79,7 @@ public class GeoDataLoader {
         return entries;
     }
 
-    private List<GeoShapeData> readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private List<GeoObject> readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "Document");
@@ -89,7 +89,7 @@ public class GeoDataLoader {
                 continue;
             }
             String name = parser.getName();
-            // Starts by looking for the entry tag
+
             if (name.equals("Folder")) {
                 entries = readFolder(parser);
             } else {
@@ -99,8 +99,8 @@ public class GeoDataLoader {
         return entries;
     }
 
-    private List<GeoShapeData> readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<GeoShapeData> entries = new ArrayList<>();
+    private List<GeoObject> readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<GeoObject> entries = new ArrayList<>();
 
         parser.require(XmlPullParser.START_TAG, ns, "Folder");
 
@@ -111,11 +111,11 @@ public class GeoDataLoader {
             String name = parser.getName();
 
             if (name.equals("Placemark")) {
-                GeoShapeData newentry = readPlacemark(parser);
-                if (newentry != null) {
-                    //if(newentry.population > minimumPopulation) {
-                        entries.add(newentry);
-                    //}
+                GeoObject newEntry = readPlacemark(parser);
+                if (newEntry != null) {
+                    if(newEntry.population > minimumPopulation) {
+                        entries.add(newEntry);
+                    }
                 }
             } else {
                 skip(parser);
@@ -127,9 +127,9 @@ public class GeoDataLoader {
 
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
     // to their respective "read" methods for processing. Otherwise, skips the tag.
-    private GeoShapeData readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private GeoObject readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        GeoShapeData newEntry = new GeoShapeData();
+        GeoObject newEntry = new GeoObject();
 
         parser.require(XmlPullParser.START_TAG, ns, "Placemark");
 
@@ -142,25 +142,19 @@ public class GeoDataLoader {
 
             if (name.equals("ExtendedData")) {
                 readExtendedData(parser, newEntry);
-            }else if (name.equals("Polygon")) {
+            } else if (name.equals("Polygon")) {
                 readPolygonData(parser, newEntry);
-            }
-            else if (name.equals("MultiGeometry")) {
+            } else if (name.equals("MultiGeometry")) {
                 readMultiGeometryData(parser, newEntry);
-            }else {
+            } else {
                 skip(parser);
             }
 
         }
 
-        if(newEntry != null) {
-
-            if(newEntry.name.equalsIgnoreCase("Enschede")){
-                newEntry.toString();
-            }
-
-            if ((newEntry.points == null)
-                    || (newEntry.points.size() == 0)) {
+        if (newEntry != null) {
+            if ((newEntry.shape == null)
+                    || (newEntry.shape.polygons.size() == 0)) {
                 newEntry = null;
             }
         }
@@ -169,7 +163,7 @@ public class GeoDataLoader {
     }
 
 
-    private void readMultiGeometryData(XmlPullParser parser, GeoShapeData newEntry) throws XmlPullParserException, IOException {
+    private void readMultiGeometryData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "MultiGeometry");
 
@@ -187,54 +181,88 @@ public class GeoDataLoader {
         }
     }
 
-    private void readPolygonData(XmlPullParser parser, GeoShapeData newEntry)  throws XmlPullParserException, IOException {
+    private void readPolygonData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "Polygon");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String inPolygonName = parser.getName();
-            if (inPolygonName.equals("outerBoundaryIs")) {
-                while (parser.next() != XmlPullParser.END_TAG) {
-                    if (parser.getEventType() != XmlPullParser.START_TAG) {
-                        continue;
-                    }
-                    String inOuterBoundaryIsName = parser.getName();
-                    if (inOuterBoundaryIsName.equals("LinearRing")) {
-                        while (parser.next() != XmlPullParser.END_TAG) {
-                            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                                continue;
-                            }
-                            String inLinearRingName = parser.getName();
-                            if (inLinearRingName.equals("coordinates")) {
-                                List<LatLon> points = readCoordinates(parser);
-                                newEntry.points = points;
-                            } else {
-                                skip(parser);
-                            }
-                        }
-                    }
-                    else{
-                        skip(parser);
-                    }
-
-                }
+            String elementName = parser.getName();
+            if (elementName.equals("outerBoundaryIs")) {
+                readOuterBoundaryIsData(parser, newEntry);
+            } else if (elementName.equals("innerBoundaryIs")) {
+                readInnerBoundaryIsData(parser, newEntry);
+            } else{
+                skip(parser);
             }
-            else{
+        }
+
+    }
+
+    private void readInnerBoundaryIsData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "innerBoundaryIs");
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String elementName = parser.getName();
+            if (elementName.equals("LinearRing")) {
+                addLinearRingData(parser, newEntry);
+            } else {
+                skip(parser);
+            }
+
+        }
+    }
+
+    private void readOuterBoundaryIsData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "outerBoundaryIs");
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String elementName = parser.getName();
+            if (elementName.equals("LinearRing")) {
+                addLinearRingData(parser, newEntry);
+            } else {
+                skip(parser);
+            }
+
+        }
+    }
+
+
+    private void addLinearRingData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "LinearRing");
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String inLinearRingName = parser.getName();
+            if (inLinearRingName.equals("coordinates")) {
+                GeoPolygon points = readCoordinates(parser);
+                newEntry.shape.polygons.add(points);
+            } else {
                 skip(parser);
             }
         }
     }
 
-    private List<LatLon> readCoordinates(XmlPullParser parser)  throws XmlPullParserException, IOException {
-        List<LatLon> retVal = new ArrayList<>();
+    private GeoPolygon readCoordinates(XmlPullParser parser) throws XmlPullParserException, IOException {
+        GeoPolygon retVal = new GeoPolygon();
 
         parser.require(XmlPullParser.START_TAG, ns, "coordinates");
         String coordinateString = readText(parser);
         String[] coordinates = coordinateString.trim().split("\\s+");
 
-        for(String latlon : coordinates){
+        for (String latlon : coordinates) {
             String[] latLonSplit = latlon.trim().split(",");
             Double lon = Double.parseDouble(latLonSplit[0]);
             Double lat = Double.parseDouble(latLonSplit[1]);
@@ -245,7 +273,7 @@ public class GeoDataLoader {
     }
 
 
-    private void readExtendedData(XmlPullParser parser, GeoShapeData newEntry) throws XmlPullParserException, IOException {
+    private void readExtendedData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "ExtendedData");
 
@@ -254,7 +282,7 @@ public class GeoDataLoader {
                 continue;
             }
             String name = parser.getName();
-            // Starts by looking for the entry tag
+
             if (name.equals("SchemaData")) {
                 readSchemaData(parser, newEntry);
             } else {
@@ -264,7 +292,7 @@ public class GeoDataLoader {
 
     }
 
-    private void readSchemaData(XmlPullParser parser, GeoShapeData newEntry) throws XmlPullParserException, IOException {
+    private void readSchemaData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "SchemaData");
 
@@ -279,10 +307,6 @@ public class GeoDataLoader {
 
             } else if (elementName.equalsIgnoreCase("name")) {
                 newEntry.name = readSimpleDataText(parser);
-                if(newEntry.name.equalsIgnoreCase("Hengelo")){
-                    newEntry.isUrban = true;
-                }
-
             } else {
                 skip(parser);
             }

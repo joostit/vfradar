@@ -7,7 +7,8 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geodata.GeoShapeData;
+import com.joostit.vfradar.geodata.GeoObject;
+import com.joostit.vfradar.geodata.GeoPolygon;
 
 /**
  * Created by Joost on 25-1-2018.
@@ -15,10 +16,10 @@ import com.joostit.vfradar.geodata.GeoShapeData;
 
 public class GeoShapePlot extends DrawableItem {
 
-    public GeoShapeData source;
+    public GeoObject source;
 
     private boolean doDraw = false;
-    private Path polygon = new Path();
+    private Path screenPath = new Path();
 
     private int lineColor = 0xAAb3b300;
     private Paint linePaint;
@@ -27,7 +28,7 @@ public class GeoShapePlot extends DrawableItem {
     private PointF textPoint = new PointF(0,0);
 
 
-    public GeoShapePlot(GeoShapeData source){
+    public GeoShapePlot(GeoObject source){
         this.source = source;
         init();
     }
@@ -50,8 +51,8 @@ public class GeoShapePlot extends DrawableItem {
     @Override
     public void draw(Canvas canvas) {
         if(doDraw){
-            if(polygon != null){
-                canvas.drawPath(polygon, linePaint);
+            if(screenPath != null){
+                canvas.drawPath(screenPath, linePaint);
                 canvas.drawText(source.name, 0, source.name.length(), textPoint.x, textPoint.y, textPaint);
             }
         }
@@ -64,48 +65,53 @@ public class GeoShapePlot extends DrawableItem {
 
         double sumX = 0;
         double sumY = 0;
+        int pointCount = 0;
 
-        if(source.points.size() < 2){
-            doDraw = false;
-            return doDraw;
-        }
 
-        if(source.name.equalsIgnoreCase("Enschede")){
+        if (source.name.equalsIgnoreCase("Losser")) {
             source.toString();
         }
 
-        LatLon startlatLon = source.points.get(0);
-        PointF startPoint = projection.toScreenPoint(startlatLon);
-        if(bounds.contains(startPoint.x, startPoint.y)){
-            isInView = true;
-        }
-        newPath.moveTo(startPoint.x, startPoint.y);
-        sumX += startPoint.x;
-        sumY += startPoint.y;
+        for (GeoPolygon polygon : source.shape.polygons) {
 
-        for(int i = 1; i < source.points.size(); i++){
-            LatLon pos = source.points.get(i);
-            PointF screenPoint = projection.toScreenPoint(pos);
-
-            if(bounds.contains(screenPoint.x, screenPoint.y)){
-                isInView = true;
+            if (polygon.size() < 2) {
+                continue;
             }
 
-            newPath.lineTo(screenPoint.x, screenPoint.y);
+            LatLon startlatLon = polygon.get(0);
+            PointF startPoint = projection.toScreenPoint(startlatLon);
+            if (bounds.contains(startPoint.x, startPoint.y)) {
+                isInView = true;
+            }
+            newPath.moveTo(startPoint.x, startPoint.y);
+            sumX += startPoint.x;
+            sumY += startPoint.y;
 
-            sumX += screenPoint.x;
-            sumY += screenPoint.y;
+            for (int i = 1; i < polygon.size(); i++) {
+                LatLon pos = polygon.get(i);
+                PointF screenPoint = projection.toScreenPoint(pos);
+
+                if (bounds.contains(screenPoint.x, screenPoint.y)) {
+                    isInView = true;
+                }
+
+                newPath.lineTo(screenPoint.x, screenPoint.y);
+
+                sumX += screenPoint.x;
+                sumY += screenPoint.y;
+                pointCount++;
+            }
+
+            newPath.close();
         }
 
-        textPoint.x = (float) (sumX / source.points.size());
-        textPoint.y = (float) (sumY / source.points.size());
+        if (isInView){
+            textPoint.x = (float) (sumX / pointCount);
+            textPoint.y = (float) (sumY / pointCount);
+        }
 
-        newPath.close();
-
-        polygon = newPath;
+        screenPath = newPath;
         doDraw = isInView;
-
-
 
         return doDraw;
     }

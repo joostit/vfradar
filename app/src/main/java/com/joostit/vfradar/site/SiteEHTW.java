@@ -20,13 +20,13 @@ public class SiteEHTW {
         ReportingPoint yankee;
         ReportingPoint oscar;
 
-        // Reporting points
+        // Reporting shape
         site.add(tango = new ReportingPoint("Tango", new LatLon(52.2929031, 6.6399750)));
         site.add(xRay = new ReportingPoint("X-Ray", new LatLon(52.323495, 6.724956)));
         site.add(yankee = new ReportingPoint("Yankee", new LatLon(52.312747, 6.851478)));
         site.add(oscar = new ReportingPoint("Oscar", new LatLon(52.292427, 6.871874)));
 
-        // reporting points route
+        // reporting shape route
         RouteLine vfrInboundRoute = new RouteLine();
         vfrInboundRoute.addPoint(tango);
         vfrInboundRoute.addPoint(xRay);

@@ -1,7 +1,7 @@
 package com.joostit.vfradar.site;
 
 import com.joostit.vfradar.geodata.GeoDataLoader;
-import com.joostit.vfradar.geodata.GeoShapeData;
+import com.joostit.vfradar.geodata.GeoObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public class SiteDataLoader {
 
     private List<SiteFeature> features = new ArrayList<>();
-    private List<GeoShapeData> geoData = new ArrayList<>();
+    private List<GeoObject> geoData = new ArrayList<>();
     private GeoDataLoader geoLoader = new GeoDataLoader();
 
     public SiteDataLoader(){
@@ -32,7 +32,7 @@ public class SiteDataLoader {
             return new ArrayList<SiteFeature>(features);
     }
 
-    public List<GeoShapeData> getGeoData(){
+    public List<GeoObject> getGeoData(){
         return geoData;
     }
 

@@ -7,7 +7,7 @@ package com.joostit.vfradar.geo;
 public class GeoUtils {
 
     /**
-     * Calculate distance between two points in latitude and longitude.
+     * Calculate distance between two shape in latitude and longitude.
      * Uses Haversine method as its base.
      * <p>
      * lat1, lon1 Start point lat2, lon2 End point
@@ -19,7 +19,7 @@ public class GeoUtils {
     }
 
     /**
-     * Calculate distance between two points in latitude and longitude taking
+     * Calculate distance between two shape in latitude and longitude taking
      * into account height difference. If you are not interested in height
      * difference pass 0.0. Uses Haversine method as its base.
      * <p>

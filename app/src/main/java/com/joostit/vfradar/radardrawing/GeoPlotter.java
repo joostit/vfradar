@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import com.joostit.vfradar.geodata.GeoShapeData;
+import com.joostit.vfradar.geodata.GeoObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,18 +64,14 @@ public class GeoPlotter extends DrawableItem {
     }
 
 
-    public void setData(List<GeoShapeData> data) {
+    public void setData(List<GeoObject> data) {
 
         shapePlots.clear();
 
-        for (GeoShapeData shape :
+        for (GeoObject shape :
                 data) {
             GeoShapePlot plot = new GeoShapePlot(shape);
             shapePlots.add(plot);
-
-            if(shape.name.equalsIgnoreCase("Enschede")){
-                shape.toString();
-            }
         }
 
     }

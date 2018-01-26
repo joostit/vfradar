@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
-import com.joostit.vfradar.geodata.GeoShapeData;
+import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.site.ReportingPoint;
 import com.joostit.vfradar.site.RouteLine;
 import com.joostit.vfradar.site.Runway;
@@ -97,7 +97,7 @@ public class RadarView extends View {
         invalidate();
     }
 
-    public synchronized void updateGeoData(List<GeoShapeData> geoData) {
+    public synchronized void updateGeoData(List<GeoObject> geoData) {
         geoPlot.setData(geoData);
         geoPlot.updateDrawing(projection, getViewBounds());
         invalidate();

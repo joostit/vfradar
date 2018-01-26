@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.joostit.vfradar.data.TrackedAircraft;
-import com.joostit.vfradar.geodata.GeoShapeData;
+import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.radardrawing.RadarView;
 import com.joostit.vfradar.site.SiteFeature;
 
@@ -117,7 +117,7 @@ public class RadarViewFragment extends Fragment implements RadarView.OnRadarView
         rView.updateSiteFeatures(site);
     }
 
-    public void updateGeoData(List<GeoShapeData> geoData) {
+    public void updateGeoData(List<GeoObject> geoData) {
         RadarView rView = getView().findViewById(R.id.radarView);
         rView.updateGeoData(geoData);
     }
