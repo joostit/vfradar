@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.joostit.vfradar.geo.LatLon;
@@ -21,39 +22,41 @@ public class GeoShapePlot extends DrawableItem {
     private boolean doDraw = false;
     private Path screenPath = new Path();
 
-    private int lineColor = 0xAAb3b300;
-    private Paint linePaint;
+    private int pathColor = 0xFF1a1a1a;
+    private Paint pathPaint;
     private Paint textPaint;
-    private int textColor = 0xFFb3b300;
-    private PointF textPoint = new PointF(0,0);
+    private int textColor = 0xFF4d4d4d;
+    private PointF textPoint = new PointF(0, 0);
 
 
-    public GeoShapePlot(GeoObject source){
+    public GeoShapePlot(GeoObject source) {
         this.source = source;
         init();
     }
 
 
-    private void init(){
-        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(2);
-        linePaint.setColor(lineColor);
+    private void init() {
+        pathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pathPaint.setStyle(Paint.Style.FILL);
+        pathPaint.setStrokeWidth(2);
+        pathPaint.setColor(pathColor);
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(textColor);
-        textPaint.setTextSize(20);
+        textPaint.setTextSize(25);
 
     }
 
 
     @Override
     public void draw(Canvas canvas) {
-        if(doDraw){
-            if(screenPath != null){
-                canvas.drawPath(screenPath, linePaint);
-                canvas.drawText(source.name, 0, source.name.length(), textPoint.x, textPoint.y, textPaint);
+        if (doDraw) {
+            if (screenPath != null) {
+                canvas.drawPath(screenPath, pathPaint);
+                if (textPoint != null) {
+                    canvas.drawText(source.name, 0, source.name.length(), textPoint.x, textPoint.y, textPaint);
+                }
             }
         }
     }
@@ -61,10 +64,15 @@ public class GeoShapePlot extends DrawableItem {
     @Override
     public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
         Path newPath = new Path();
+        newPath.setFillType(Path.FillType.EVEN_ODD);
         boolean isInView = false;
-
+        PointF newTextPoint = null;
         double sumX = 0;
         double sumY = 0;
+        float minX = Float.MAX_VALUE;
+        float maxX = Float.MIN_VALUE;
+        float minY = Float.MAX_VALUE;
+        float maxY = Float.MIN_VALUE;
         int pointCount = 0;
 
 
@@ -97,6 +105,11 @@ public class GeoShapePlot extends DrawableItem {
 
                 newPath.lineTo(screenPoint.x, screenPoint.y);
 
+                if(screenPoint.x > maxX) { maxX = screenPoint.x; }
+                if(screenPoint.x < minX) { minX = screenPoint.x; }
+                if(screenPoint.y > maxY) { maxY = screenPoint.y; }
+                if(screenPoint.y < minY) { minY = screenPoint.y; }
+
                 sumX += screenPoint.x;
                 sumY += screenPoint.y;
                 pointCount++;
@@ -105,11 +118,33 @@ public class GeoShapePlot extends DrawableItem {
             newPath.close();
         }
 
-        if (isInView){
-            textPoint.x = (float) (sumX / pointCount);
-            textPoint.y = (float) (sumY / pointCount);
+        if (isInView) {
+
+            float centerX = (float) (sumX / pointCount);
+            float centerY = (float) (sumY / pointCount);
+            float polyStretchX = maxX - minX;
+            float polyStretchY = maxY - minY;
+
+            Rect textBounds = new Rect();
+            textPaint.getTextBounds(source.name, 0, source.name.length(), textBounds);
+
+            int textStretchX = textBounds.right;
+            int textStretchY = textBounds.bottom - textBounds.top;  // text is drawn both on top and below the Y position
+
+            if ((polyStretchX > textStretchX) && (polyStretchY > textStretchY)) {
+                newTextPoint = new PointF();
+                newTextPoint.x = centerX - (textStretchX / 2);
+                newTextPoint.y = centerY + (textStretchY / 2);
+            } else {
+                newTextPoint = null;
+            }
+
+
+        } else {
+            newTextPoint = null;
         }
 
+        textPoint = newTextPoint;
         screenPath = newPath;
         doDraw = isInView;
 

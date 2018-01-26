@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.joostit.vfradar.OperationalActivity"
-    android:background="#FF000000">
+    android:background="#FF000000"
+    android:keepScreenOn="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fragment_container"
