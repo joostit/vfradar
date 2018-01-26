@@ -21,8 +21,6 @@ import java.util.List;
 
 public class GeoDataLoader {
 
-    public static final int minimumPopulation = 1000;
-
     public static final String geoDataPath = "/VFRadar/GeoData/";
 
     private static final String ns = null;
@@ -113,9 +111,7 @@ public class GeoDataLoader {
             if (name.equals("Placemark")) {
                 GeoObject newEntry = readPlacemark(parser);
                 if (newEntry != null) {
-                    if(newEntry.population > minimumPopulation) {
-                        entries.add(newEntry);
-                    }
+                    entries.add(newEntry);
                 }
             } else {
                 skip(parser);
@@ -193,7 +189,7 @@ public class GeoDataLoader {
                 readOuterBoundaryIsData(parser, newEntry);
             } else if (elementName.equals("innerBoundaryIs")) {
                 readInnerBoundaryIsData(parser, newEntry);
-            } else{
+            } else {
                 skip(parser);
             }
         }
@@ -301,11 +297,7 @@ public class GeoDataLoader {
                 continue;
             }
             String elementName = parser.getAttributeValue(null, "name");
-            if (elementName.equalsIgnoreCase("population")) {
-                String populationString = readSimpleDataText(parser);
-                newEntry.population = Integer.parseInt(populationString);
-
-            } else if (elementName.equalsIgnoreCase("name")) {
+            if (elementName.equalsIgnoreCase("name")) {
                 newEntry.name = readSimpleDataText(parser);
             } else {
                 skip(parser);

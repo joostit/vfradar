@@ -10,10 +10,8 @@ import java.util.List;
 
 public class GeoObject {
 
-    public String name;
+    public String name = "";
     public GeoShape shape = new GeoShape();
-    public int population;
-    public boolean isUrban;
 
     public GeoObject(){
 

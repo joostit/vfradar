@@ -94,6 +94,7 @@ public class GeoShapePlot extends DrawableItem {
             newPath.moveTo(startPoint.x, startPoint.y);
             sumX += startPoint.x;
             sumY += startPoint.y;
+            pointCount++;
 
             for (int i = 1; i < polygon.size(); i++) {
                 LatLon pos = polygon.get(i);
@@ -116,6 +117,10 @@ public class GeoShapePlot extends DrawableItem {
             }
 
             newPath.close();
+        }
+
+        if(source.name.equalsIgnoreCase("Lonneker")){
+            source.toString();
         }
 
         if (isInView) {
