@@ -18,8 +18,8 @@ public class ReportingPointPlot extends DrawableItem {
     private final float symbolSize = 6;
     private Path symbolPath = new Path();
     private ReportingPoint source;
-    private int symbolColor = 0xFFb3b300;
-    private int textColor = 0xFFb3b300;
+    private int symbolColor = 0xFF666600;
+    private int textColor = 0xFF666600;
     private Paint symbolPaint;
     private Paint textPaint;
     private PointF screenPoint = null;

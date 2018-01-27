@@ -26,7 +26,7 @@ public class Crosshair extends DrawableItem {
     private Paint crosshairTextPaint;
 
     private int crosshairColor = 0xFF003300;
-    private int crosshairTextColor = 0xAA008000;
+    private int crosshairTextColor = 0xFF008000;
 
     private float width;
     private float height;

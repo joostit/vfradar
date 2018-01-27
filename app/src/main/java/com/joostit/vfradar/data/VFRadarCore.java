@@ -2,6 +2,8 @@ package com.joostit.vfradar.data;
 
 import android.os.AsyncTask;
 
+import com.joostit.vfradar.SysConfig;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -16,13 +18,12 @@ public class VFRadarCore implements AircraftDataListener {
     private AircraftDataListener listener;
     private URL url;
     private boolean isExecuting = false;
-    private String serverUrl = "http://192.168.178.101:60002/live/all";
 
     public VFRadarCore(AircraftDataListener listener){
         this.listener = listener;
 
         try {
-            url = new URL(serverUrl);
+            url = new URL(SysConfig.getVFRadarCoreDataAddress());
         }
         catch (MalformedURLException e){
             e.printStackTrace();

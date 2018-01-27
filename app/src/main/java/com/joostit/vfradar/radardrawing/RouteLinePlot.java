@@ -19,7 +19,7 @@ public class RouteLinePlot extends DrawableItem {
     private boolean doDraw;
     private Path screenPath = new Path();
 
-    private int lineColor = 0xAAb3b300;
+    private int lineColor = 0xFF4d4d00;
     private Paint linePaint;
 
     public RouteLinePlot(RouteLine source){
@@ -32,7 +32,7 @@ public class RouteLinePlot extends DrawableItem {
     private void init() {
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(2);
+        linePaint.setStrokeWidth(3);
         linePaint.setColor(lineColor);
     }
 
