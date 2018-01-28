@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 /**
  * Created by Joost on 28-1-2018.
@@ -14,8 +15,10 @@ import android.view.ViewGroup;
 
 public class ListItemView extends View {
 
-    private final int width = 570;
-    private final int height = 150;
+    private final int defaultWidth = 570;
+    private final int defaultHeight = 150;
+    private final int selectedHeight = 200;
+
     private final float maxMovementWhilePressing = 20;
 
     private float touchDownX = -1;
@@ -31,6 +34,7 @@ public class ListItemView extends View {
     private final int statusTrueForeColor = 0xFF000000;
     private final int statusFalseForeColor = 0xFF000000;
 
+    private int selectedBackColor = 0xFF003300;
     private int boundingRectColor = 0xFF00FF00;
     private int brightTextColor = 0xFF00FF00;
     private int darkTextColor = 0xFF00CC00;
@@ -45,7 +49,9 @@ public class ListItemView extends View {
     private int dataTextSize = 22;
     private int statusTextSize = 16;
 
-    private Paint fillRectPaint;
+    private Paint selectedBackPaint;
+    private Paint backPaint;
+    private Paint selectedBoundingRectPaint;
     private Paint boundingRectPaint;
     private Paint nameTypePaint;
     private Paint cnPaint;
@@ -65,7 +71,7 @@ public class ListItemView extends View {
         super(context);
 
         init();
-        setLayoutParams(new ViewGroup.LayoutParams(width, height));
+        setLayoutParams(new ViewGroup.LayoutParams(defaultWidth, selectedHeight));
     }
 
     public ListItemView(Context context, ListItemViewEventHandler eventHandler) {
@@ -76,14 +82,24 @@ public class ListItemView extends View {
 
     private void init() {
 
+
+        selectedBoundingRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectedBoundingRectPaint.setStyle(Paint.Style.STROKE);
+        selectedBoundingRectPaint.setColor(boundingRectColor);
+        selectedBoundingRectPaint.setStrokeWidth(4);
+
         boundingRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         boundingRectPaint.setStyle(Paint.Style.STROKE);
         boundingRectPaint.setColor(boundingRectColor);
         boundingRectPaint.setStrokeWidth(2);
 
-        fillRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        fillRectPaint.setStyle(Paint.Style.FILL);
-        fillRectPaint.setColor(backColor);
+        selectedBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectedBackPaint.setStyle(Paint.Style.FILL);
+        selectedBackPaint.setColor(selectedBackColor);
+
+        backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        backPaint.setStyle(Paint.Style.FILL);
+        backPaint.setColor(backColor);
 
         nameTypePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         nameTypePaint.setStyle(Paint.Style.FILL);
@@ -139,10 +155,10 @@ public class ListItemView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        RectF boundingRect = new RectF(4, 4, this.width - 4, this.height - 4);
+        RectF boundingRect = new RectF(4, 4, this.getWidth() - 4, this.getHeight() - 4);
 
-        canvas.drawRoundRect(boundingRect, 3, 3, fillRectPaint);
-        canvas.drawRoundRect(boundingRect, 3, 3, boundingRectPaint);
+        canvas.drawRoundRect(boundingRect, 3, 3, getBackPaint(currentState.isSelected));
+        canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(currentState.isSelected));
 
         int columnRuler1 = 15;
         canvas.drawText(currentState.nameType, columnRuler1, 33, nameTypePaint);
@@ -225,9 +241,27 @@ public class ListItemView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(width, height);
 
-        setMeasuredDimension(width, height);
+        int w = defaultWidth;
+        int h;
+        if(currentState.isSelected){
+            h = selectedHeight;
+        }
+        else{
+            h = defaultHeight;
+        }
+
+        super.onMeasure(w, h);
+        setMeasuredDimension(w, h);
+    }
+
+    private void updateHight(){
+        if(currentState.isSelected){
+            setLayoutParams(new LinearLayout.LayoutParams(defaultWidth, selectedHeight));
+        }else {
+            setLayoutParams(new LinearLayout.LayoutParams(defaultWidth, defaultHeight));
+        }
+        requestLayout();
     }
 
     public void updateAircraftInfo(InfoListItemData update) {
@@ -312,6 +346,25 @@ public class ListItemView extends View {
         }
     }
 
+    private Paint getBackPaint(boolean isSelected){
+        if(isSelected){
+            return selectedBackPaint;
+        }
+        else{
+            return backPaint;
+        }
+    }
+
+
+    private Paint getBoundingRectPaint(boolean isSelected){
+        if(isSelected){
+            return selectedBoundingRectPaint;
+        }
+        else{
+            return boundingRectPaint;
+        }
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -350,5 +403,11 @@ public class ListItemView extends View {
         } else {
             eventHandler.onPressed(currentState.trackId);
         }
+    }
+
+    public void setSelected(boolean selected){
+        currentState.isSelected = selected;
+        updateHight();
+        this.invalidate();
     }
 }

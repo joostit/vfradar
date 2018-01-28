@@ -3,12 +3,14 @@ package com.joostit.vfradar.infolisting;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.data.TrackedAircraft;
@@ -24,6 +26,7 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
     private final Map<Integer, ListItemView> itemViews = new HashMap<>();
     private OnListFragmentInteractionListener mListener;
     private View rootView;
+    private ScrollView scrollView;
     private LinearLayout listView;
 
     public InfoListFragment() {
@@ -42,7 +45,7 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_info_list, container, false);
-
+        scrollView = (ScrollView) rootView.findViewById(R.id.scrollLayout).findViewById(R.id.scrollLayout);
         listView = (LinearLayout) rootView.findViewById(R.id.scrollLayout).findViewById(R.id.listLayout);
 
         return rootView;
@@ -70,6 +73,33 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
         mListener = null;
     }
 
+
+    public void selectAircraft(Integer trackId){
+        for (ListItemView vw: itemViews.values()) {
+            vw.setSelected(false);
+        }
+
+        if(trackId != null){
+
+            ListItemView selectedView = itemViews.get(trackId);
+            selectedView.setSelected(true);
+            scrollToView(selectedView);
+        }
+    }
+
+
+    private void scrollToView(ListItemView vw){
+        Rect viewBounds = new Rect();
+        vw.getHitRect(viewBounds);
+
+        Rect scrollBounds = new Rect();
+        scrollView.getDrawingRect(scrollBounds);
+
+        if(!Rect.intersects(scrollBounds, viewBounds))
+        {
+            scrollView.scrollTo(0, (int) vw.getY());
+        }
+    }
 
     public void UpdateAircraft(List<TrackedAircraft> ac) {
         InfoListUpdateResults results = list.updateItems(ac, getContext());

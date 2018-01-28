@@ -78,7 +78,8 @@ public class OperationalActivity extends AppCompatActivity
 
     @Override
     public void onAircraftSelected(Integer trackId) {
-
+        InfoListFragment acListFragment = (InfoListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
+        acListFragment.selectAircraft(trackId);
     }
 
     @Override
@@ -94,6 +95,9 @@ public class OperationalActivity extends AppCompatActivity
     public void onAircraftSelectedFromList(Integer trackId) {
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
         rView.selectAircraft(trackId);
+
+        InfoListFragment acListFragment = (InfoListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
+        acListFragment.selectAircraft(trackId);
     }
 
     @Override
@@ -112,6 +116,7 @@ public class OperationalActivity extends AppCompatActivity
         if(acListFragment != null) {
             acListFragment.UpdateAircraft(ac);
         }
+
     }
 
 
