@@ -1,6 +1,5 @@
 package com.joostit.vfradar;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,8 @@ import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.data.AircraftStateCollection;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
+import com.joostit.vfradar.infolisting.InfoListFragment;
+import com.joostit.vfradar.infolisting.InfoListItem;
 import com.joostit.vfradar.listing.AircraftListFragment;
 import com.joostit.vfradar.site.SiteDataLoader;
 
@@ -20,6 +21,8 @@ import java.util.List;
 public class OperationalActivity extends AppCompatActivity
         implements RadarViewFragment.OnRadarViewInteractionListener,
         AircraftListFragment.OnListFragmentInteractionListener,
+        InfoListFragment.OnListFragmentInteractionListener,
+        InfoListItem.OnInfoListItemInteractionListener,
         AircraftDataListener {
 
     private AircraftStateCollection aircaft = new AircraftStateCollection();
@@ -108,10 +111,15 @@ public class OperationalActivity extends AppCompatActivity
             rView.UpdateAircraft(ac);
         }
 
-        AircraftListFragment acListFragment = (AircraftListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
+        InfoListFragment acListFragment = (InfoListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
         if(acListFragment != null) {
             acListFragment.UpdateAircraft(ac);
         }
+    }
+
+    @Override
+    public void onInfoListItemSelected(Integer trackId) {
+
     }
 
     private class LoadSiteDataTask extends AsyncTask<Object, Void, Object> {

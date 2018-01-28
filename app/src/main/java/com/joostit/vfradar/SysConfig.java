@@ -12,8 +12,8 @@ public class SysConfig {
 
     private static final int maxValidRxAge = 15;
 
-    private static final String vfrdarCoreDataAddress = "http://192.168.8.210:60002/live/all";
-    //private static final String vfrdarCoreDataAddress = "http://192.168.178.101:60002/live/all";
+    //private static final String vfrdarCoreDataAddress = "http://192.168.8.210:60002/live/all";
+    private static final String vfrdarCoreDataAddress = "http://192.168.178.101:60002/live/all";
 
     public static LatLon getCenterPosition() {
         return centerPosition;

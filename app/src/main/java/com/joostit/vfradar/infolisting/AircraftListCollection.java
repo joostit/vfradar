@@ -1,4 +1,4 @@
-package com.joostit.vfradar.listing;
+package com.joostit.vfradar.infolisting;
 
 import android.content.Context;
 
@@ -17,42 +17,50 @@ import java.util.Map;
 
 public class AircraftListCollection {
 
-    public final List<AircraftListItem> items = new ArrayList<>();
-    public final Map<Integer, AircraftListItem> itemMap = new HashMap<>();
+    public final List<InfoListItemData> items = new ArrayList<>();
+    private final Map<Integer, InfoListItemData> itemMap = new HashMap<>();
 
 
     public AircraftListCollection() {
 
     }
 
+    public synchronized List<InfoListItemData> getListItems(){
+        return new ArrayList<>(items);
+    }
 
-    public synchronized void UpdateItems(List<TrackedAircraft> aircraftUpdate, Context context) {
+    public synchronized InfoListUpdateResults updateItems(List<TrackedAircraft> aircraftUpdate, Context context) {
 
+        InfoListUpdateResults retVal = new InfoListUpdateResults();
 
-        List<AircraftListItem> itemsToRemove = new ArrayList<>(items);
+        List<InfoListItemData> itemsToRemove = new ArrayList<>(items);
 
         for (TrackedAircraft tracked : aircraftUpdate) {
-            AircraftListItem acItem;
+            InfoListItemData acItem;
             if (hasItem(tracked.Data.trackId)) {
                 acItem = getItem(tracked.Data.trackId);
                 itemsToRemove.remove(acItem);
             } else {
-                acItem = new AircraftListItem();
+                acItem = new InfoListItemData();
                 acItem.trackId = tracked.Data.trackId;
                 addItem(acItem);
+                retVal.added.add(acItem);
             }
 
             updateListItemData(acItem, tracked, context);
         }
 
         // Remove aircraft
-        for (AircraftListItem acToRemove : itemsToRemove) {
+        for (InfoListItemData acToRemove : itemsToRemove) {
+            retVal.removed.add(acToRemove);
             removeItem(acToRemove.trackId);
         }
+
+        return retVal;
     }
 
 
-    private void updateListItemData(AircraftListItem acItem, TrackedAircraft tracked, Context context) {
+    private void updateListItemData(InfoListItemData acItem, TrackedAircraft tracked, Context context) {
 
         if (tracked.Data.vRate != null) {
             double val = Numbers.round(tracked.Data.vRate, 1);
@@ -189,7 +197,7 @@ public class AircraftListCollection {
 
 
 
-    private void updateRelativePosition(AircraftListItem listItem, TrackedAircraft tracked) {
+    private void updateRelativePosition(InfoListItemData listItem, TrackedAircraft tracked) {
 
         LatLon acPos = new LatLon(tracked.Data.lat, tracked.Data.lon);
         LatLon here = SysConfig.getCenterPosition();
@@ -205,17 +213,17 @@ public class AircraftListCollection {
         return itemMap.containsKey(trackId);
     }
 
-    private synchronized AircraftListItem getItem(int trackId) {
+    private synchronized InfoListItemData getItem(int trackId) {
         return itemMap.get(trackId);
     }
 
-    private synchronized void addItem(AircraftListItem item) {
+    private synchronized void addItem(InfoListItemData item) {
         items.add(item);
         itemMap.put(item.trackId, item);
     }
 
     private synchronized void removeItem(int trackId) {
-        AircraftListItem toRemove = itemMap.get(trackId);
+        InfoListItemData toRemove = itemMap.get(trackId);
         items.remove(toRemove);
         itemMap.remove(toRemove.trackId);
     }

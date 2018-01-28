@@ -1,0 +1,204 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    android:layout_marginLeft="5dp"
+
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="2dp"
+    android:background="@drawable/aircraftlistitemback"
+    android:orientation="horizontal"
+    android:padding="3dp"
+    tools:context="com.joostit.vfradar.infolisting.InfoListItem">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/nameTypeView"
+                    android:layout_width="80dp"
+                    android:layout_height="14dp"
+                    android:layout_column="0"
+                    android:layout_margin="2dp"
+                    android:background="#FF000000"
+                    android:paddingRight="2dp"
+                    android:text="CallSign:"
+                    android:textColor="#FF00DD00"
+                    android:textSize="9dp" />
+
+                <TextView
+                    android:id="@+id/filler"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_margin="2dp"
+                    android:background="#FF000000"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text=""
+                    android:textColor="#FF00FF00"
+                    android:textSize="9dp" />
+
+                <TextView
+                    android:id="@+id/hasAdsb"
+                    android:layout_width="30dp"
+                    android:layout_height="11dp"
+                    android:layout_margin="2dp"
+                    android:background="#FF00FF00"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="ADS-B"
+                    android:textColor="#FF000000"
+                    android:textSize="9dp" />
+
+                <TextView
+                    android:id="@+id/hasOgn"
+                    android:layout_width="30dp"
+                    android:layout_height="11dp"
+                    android:layout_margin="2dp"
+                    android:background="#FF00FF00"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="Flarm"
+                    android:textColor="#FF000000"
+                    android:textSize="9dp" />
+
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/nameView"
+                        android:layout_width="140dp"
+                        android:layout_height="26dp"
+                        android:layout_gravity="top"
+                        android:layout_margin="0dp"
+                        android:textColor="#FF00FF00"
+                        android:textSize="25dp" />
+
+                </TableRow>
+
+                <TableRow android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/competitionNumberView"
+                        android:layout_width="160dp"
+                        android:layout_height="15dp"
+                        android:layout_column="0"
+                        android:layout_margin="0dp"
+                        android:background="#FF000000"
+                        android:textColor="#FF00FF00"
+                        android:textSize="14dp" />
+
+                </TableRow>
+
+            </TableLayout>
+
+
+            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:shrinkColumns="*"
+                android:stretchColumns="*"
+
+                android:weightSum="3">
+
+                <TableRow
+                    android:layout_height="0px"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/modelView"
+                        android:layout_width="200dp"
+                        android:layout_height="13dp"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="1dp"
+                        android:layout_span="2"
+                        android:background="#FF000000"
+                        android:textColor="#FF00FF00"
+                        android:textSize="12dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="0px"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/altitudeView"
+                        android:layout_width="100dp"
+                        android:layout_height="13dp"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="0dp"
+                        android:background="#FF000000"
+                        android:textColor="#FF00CC00"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/vRateView"
+                        android:layout_width="100dp"
+                        android:layout_height="13dp"
+                        android:layout_column="1"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="0dp"
+                        android:background="#FF000000"
+                        android:textColor="#FF00CC00"
+                        android:textSize="12dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="0px"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/relativeDistanceView"
+                        android:layout_width="100dp"
+                        android:layout_height="13dp"
+                        android:layout_column="0"
+                        android:layout_margin="0dp"
+                        android:background="#FF000000"
+                        android:textColor="#FF00CC00"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/relativeBearingView"
+                        android:layout_width="50dp"
+                        android:layout_height="13dp"
+                        android:layout_column="0"
+                        android:layout_margin="0dp"
+                        android:background="#FF000000"
+                        android:textColor="#FF00CC00"
+                        android:textSize="12dp" />
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

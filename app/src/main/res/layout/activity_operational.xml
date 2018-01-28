@@ -34,7 +34,7 @@
         <fragment
             android:id="@+id/aircraftListFrag"
             android:tag="aircraftListFragTag"
-            android:name="com.joostit.vfradar.listing.AircraftListFragment"
+            android:name="com.joostit.vfradar.infolisting.InfoListFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="9"/>

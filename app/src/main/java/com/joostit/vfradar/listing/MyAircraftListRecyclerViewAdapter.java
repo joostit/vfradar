@@ -7,23 +7,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.joostit.vfradar.R;
-import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.infolisting.InfoListItemData;
 import com.joostit.vfradar.listing.AircraftListFragment.OnListFragmentInteractionListener;
-import com.joostit.vfradar.utilities.Numbers;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link AircraftListItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link InfoListItemData} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAircraftListRecyclerViewAdapter.ViewHolder> {
 
-    private final List<AircraftListItem> mValues;
+    private final List<InfoListItemData> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyAircraftListRecyclerViewAdapter(List<AircraftListItem> items, OnListFragmentInteractionListener listener) {
+    public MyAircraftListRecyclerViewAdapter(List<InfoListItemData> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -44,7 +43,7 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
 
-        AircraftListItem item = mValues.get(position);
+        InfoListItemData item = mValues.get(position);
 
         holder.mItem = item;
         holder.mNameView.setText(item.name);
@@ -98,7 +97,7 @@ public class MyAircraftListRecyclerViewAdapter extends RecyclerView.Adapter<MyAi
         private final TextView hasOgnView;
         private final TextView hasAdsbView;
 
-        public AircraftListItem mItem;
+        public InfoListItemData mItem;
 
         public ViewHolder(View view) {
             super(view);

@@ -1,10 +1,10 @@
-package com.joostit.vfradar.listing;
+package com.joostit.vfradar.infolisting;
 
 /**
  * Created by Joost on 19-1-2018.
  */
 
-public class AircraftListItem {
+public class InfoListItemData {
 
     public int trackId;
     public String name = "";

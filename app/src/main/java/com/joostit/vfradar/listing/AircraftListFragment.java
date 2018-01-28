@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.infolisting.AircraftListCollection;
 
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class AircraftListFragment extends Fragment {
     }
 
     public void UpdateAircraft(List<TrackedAircraft> ac) {
-        aircraftCollection.UpdateItems(ac, getContext());
+        aircraftCollection.updateItems(ac, getContext());
         listAdapter.notifyDataSetChanged();
     }
 
