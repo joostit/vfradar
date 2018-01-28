@@ -8,7 +8,8 @@ import com.joostit.vfradar.geo.LatLon;
 
 public class SysConfig {
 
-    private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
+    private static final LatLon centerPosition = new LatLon(47.540957, 19.325991);
+    //private static final LatLon centerPosition = new LatLon(52.278758, 6.899437);
 
     private static final int maxValidRxAge = 15;
 

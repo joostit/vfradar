@@ -3,14 +3,10 @@ package com.joostit.vfradar.infolisting;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.joostit.vfradar.data.TrackedAircraft;
-
-import java.util.List;
 
 /**
  * Created by Joost on 28-1-2018.
@@ -20,7 +16,14 @@ public class ListItemView extends View {
 
     private final int width = 570;
     private final int height = 150;
+    private final float maxMovementWhilePressing = 20;
 
+    private float touchDownX = -1;
+    private float touchDownY = -1;
+    private boolean isPressing;
+
+
+    private ListItemViewEventHandler eventHandler;
 
     private final int statusTrueBackColor = 0xFF00FF00;
     private final int statusFalseBackColor = 0xFF005500;
@@ -63,6 +66,12 @@ public class ListItemView extends View {
 
         init();
         setLayoutParams(new ViewGroup.LayoutParams(width, height));
+    }
+
+    public ListItemView(Context context, ListItemViewEventHandler eventHandler) {
+        this(context);
+
+        this.eventHandler = eventHandler;
     }
 
     private void init() {
@@ -170,7 +179,7 @@ public class ListItemView extends View {
         canvas.drawText("Flarm", statusColumn + 8, statusRow2 + StatusTextHeight, getStatusForePaint(currentState.hasOgn));
     }
 
-    private void drawRelativeBearingArrow(Canvas canvas, float x, float y, int bearing){
+    private void drawRelativeBearingArrow(Canvas canvas, float x, float y, int bearing) {
         int arrowLength = 12;
         int arrowArmLength = 6;
         float arrowAngle = 135;
@@ -200,7 +209,7 @@ public class ListItemView extends View {
         lineStartX += xMove;
         lineStartY += yMove;
 
-        lineEndX +=xMove;
+        lineEndX += xMove;
         lineEndY += yMove;
 
         arrRightX += xMove;
@@ -300,6 +309,46 @@ public class ListItemView extends View {
             return statusTrueForePaint;
         } else {
             return statusFalseForePaint;
+        }
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touchDownX = event.getX();
+                touchDownY = event.getY();
+                isPressing = true;
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (isPressing) {
+                    float xMovement = Math.abs(event.getX() - touchDownX);
+                    float yMovement = Math.abs(event.getY() - touchDownY);
+                    if ((xMovement > maxMovementWhilePressing) || (yMovement > maxMovementWhilePressing)) {
+                        isPressing = false;
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (isPressing) {
+                    isPressing = false;
+                    processPressed();
+                }
+                break;
+        }
+
+        return true;
+    }
+
+    private void processPressed() {
+        if (currentState.isSelected) {
+            eventHandler.onPressed(null);
+        } else {
+            eventHandler.onPressed(currentState.trackId);
         }
     }
 }

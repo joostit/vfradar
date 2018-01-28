@@ -22,4 +22,6 @@ public class InfoListItemData {
 
     public int relativeDegrees = 0;
 
+    public boolean isSelected = false;
+
 }

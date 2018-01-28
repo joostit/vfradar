@@ -92,7 +92,8 @@ public class OperationalActivity extends AppCompatActivity
 
     @Override
     public void onAircraftSelectedFromList(Integer trackId) {
-
+        RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
+        rView.selectAircraft(trackId);
     }
 
     @Override

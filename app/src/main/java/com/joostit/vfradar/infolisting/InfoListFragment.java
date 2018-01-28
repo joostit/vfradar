@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class InfoListFragment extends Fragment {
+public class InfoListFragment extends Fragment implements ListItemViewEventHandler {
 
     private final AircraftListCollection list = new AircraftListCollection();
     private final Map<Integer, ListItemView> itemViews = new HashMap<>();
@@ -62,12 +62,6 @@ public class InfoListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        for(int i = 0; i < 20; i++) {
-//
-//            ListItemView vw = new ListItemView(getContext());
-//            listView.addView(vw);
-//        }
-
     }
 
     @Override
@@ -88,7 +82,7 @@ public class InfoListFragment extends Fragment {
             }
 
             for (InfoListItemData toAdd : results.added) {
-                ListItemView newItem = new ListItemView(getContext());
+                ListItemView newItem = new ListItemView(getContext(), this);
                 listView.addView(newItem);
                 itemViews.put(toAdd.trackId, newItem);
             }
@@ -100,14 +94,13 @@ public class InfoListFragment extends Fragment {
 
     }
 
-
-    private String getListItemTag(int trackId){
-        return "trackId_" + trackId;
+    @Override
+    public void onPressed(Integer trackId) {
+        mListener.onAircraftSelectedFromList(trackId);
     }
 
 
     public interface OnListFragmentInteractionListener {
-
         void onAircraftSelectedFromList(Integer trackId);
     }
 }

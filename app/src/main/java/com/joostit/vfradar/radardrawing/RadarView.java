@@ -28,6 +28,11 @@ import java.util.Map;
 
 public class RadarView extends View {
 
+    private final float maxMovementWhilePressing = 20;
+
+    private float touchDownX = -1;
+    private float touchDownY = -1;
+    private boolean isPressing;
 
     private float TOUCH_ACCURACY = 50;
 
@@ -35,7 +40,7 @@ public class RadarView extends View {
     private float zoomButtonSpacing = 70;
 
     private final String ZOOM_IN = "ZoomIn";
-    private final String ZOOM_OUT = "ZoomOUT";
+    private final String ZOOM_OUT = "ZoomOut";
 
     private OnRadarViewInteractionListener selectionListener;
 
@@ -87,7 +92,7 @@ public class RadarView extends View {
 
     public synchronized void UpdateAircraft(List<TrackedAircraft> ac) {
         updateAircraftPlotData(ac);
-        RecalculateAircraftPlots();
+        redrawAircraftPlots();
         invalidate();
     }
 
@@ -142,7 +147,7 @@ public class RadarView extends View {
         RecalculateSite();
         RecalculateButtons();
         calculateCrosshair();
-        RecalculateAircraftPlots();
+        redrawAircraftPlots();
         invalidate();
     }
 
@@ -238,7 +243,7 @@ public class RadarView extends View {
     }
 
 
-    private synchronized void RecalculateAircraftPlots() {
+    private synchronized void redrawAircraftPlots() {
         for (AircraftPlot plot : plots) {
             plot.updateDrawing(projection, getViewBounds());
         }
@@ -277,14 +282,33 @@ public class RadarView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                processTouchDown(event);
+                touchDownX = event.getX();
+                touchDownY = event.getY();
+                isPressing = true;
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (isPressing) {
+                    float xMovement = Math.abs(event.getX() - touchDownX);
+                    float yMovement = Math.abs(event.getY() - touchDownY);
+                    if ((xMovement > maxMovementWhilePressing) || (yMovement > maxMovementWhilePressing)) {
+                        isPressing = false;
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (isPressing) {
+                    isPressing = false;
+                    processTouchPressed(event);
+                }
                 break;
         }
 
         return true;
     }
 
-    private synchronized void processTouchDown(MotionEvent event) {
+    private synchronized void processTouchPressed(MotionEvent event) {
 
         if (processButtonTouchEvent(event)) {
             return;
@@ -350,7 +374,8 @@ public class RadarView extends View {
             deselectAllPlots();
         }
 
-        redrawGraphics();
+        redrawAircraftPlots();
+        invalidate();
 
         if (nearestHit.isSelected) {
             dispatchSelectionChanged(nearestHit.TrackId);
@@ -361,9 +386,14 @@ public class RadarView extends View {
         return isHandled;
     }
 
-    private void dispatchSelectionChanged(Integer trackId) {
-        selectionListener.onUserSelectedAircraftChanged(trackId);
+    private void selectPlot(int trackId){
+        for (AircraftPlot ac : plots) {
+            if(ac.TrackId == trackId){
+                ac.isSelected = true;
+            }
+        }
     }
+
 
     private void deselectAllPlots() {
         for (AircraftPlot ac : plots) {
@@ -372,9 +402,24 @@ public class RadarView extends View {
     }
 
 
+    private void dispatchSelectionChanged(Integer trackId) {
+        selectionListener.onUserSelectedAircraftChanged(trackId);
+    }
+
     private double getScreenDistance(float x1, float y1, float x2, float y2) {
         double dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         return dist;
+    }
+
+    public void selectAircraft(Integer trackId) {
+
+        deselectAllPlots();
+
+        if(trackId != null){
+            selectPlot(trackId);
+        }
+        redrawAircraftPlots();
+        invalidate();
     }
 
 
