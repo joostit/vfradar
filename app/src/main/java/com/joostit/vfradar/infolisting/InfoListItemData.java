@@ -20,4 +20,6 @@ public class InfoListItemData {
     public boolean hasAdsb;
     public boolean hasOgn;
 
+    public int relativeDegrees = 0;
+
 }

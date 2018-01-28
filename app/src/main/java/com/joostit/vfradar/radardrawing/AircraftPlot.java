@@ -131,9 +131,9 @@ public class AircraftPlot extends DrawableItem {
         double arrRightBearing = track + arrowAngle;
         double arrLeftBearing = track - arrowAngle;
 
-        double trackRad = track * Math.PI / 180.0;
-        double arrRightRad = arrRightBearing * Math.PI / 180.0;
-        double arrLeftRad = arrLeftBearing * Math.PI / 180.0;
+        double trackRad = Math.toRadians(track);
+        double arrRightRad = Math.toRadians(arrRightBearing);
+        double arrLeftRad = Math.toRadians(arrLeftBearing);
 
         float shortEndX = x + (float) (shortLineLength * Math.sin(trackRad));
         float shortEndY = y - (float) (shortLineLength * Math.cos(trackRad));

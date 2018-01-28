@@ -206,7 +206,8 @@ public class AircraftListCollection {
         int bearing = (int) Math.round(here.BearingTo(acPos));
 
         listItem.relativeDistance = DistanceString.getString(distance);
-        listItem.relativeBearing = getBearingIndicator(bearing) + " " + bearing + "°";
+        listItem.relativeDegrees = bearing;
+        listItem.relativeBearing = bearing + "°";
     }
 
     private synchronized boolean hasItem(int trackId) {
@@ -227,24 +228,4 @@ public class AircraftListCollection {
         items.remove(toRemove);
         itemMap.remove(toRemove.trackId);
     }
-
-
-    private String getBearingIndicator(int bearing) {
-        int b = bearing % 360;
-
-        if (b < 45) {
-            return "↑";
-        } else if (b < 135) {
-            return "→";
-        } else if (b < 225) {
-            return "↓";
-        } else if (b < 315) {
-            return "←";
-        } else if (b <= 360) {
-            return "↑";
-        } else {
-            return " ";
-        }
-    }
-
 }

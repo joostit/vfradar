@@ -34,6 +34,7 @@ public class ListItemView extends View {
     private int backColor = 0xFF000000;
     private int modelTextColor = 0xFF00EE00;
     private int dataTextColor = 0xFF00DD00;
+    private int relativeBearingArrowColor = 0xFF00DD00;
 
     private int nameTextSize = 60;
     private int nameTypeTextSize = 18;
@@ -52,6 +53,7 @@ public class ListItemView extends View {
     private Paint statusFalseForePaint;
     private Paint statusTrueBackPaint;
     private Paint statusFalseBackPaint;
+    private Paint relativeBearingArrowPaint;
 
     private Paint namePaint;
     private InfoListItemData currentState = new InfoListItemData();
@@ -68,6 +70,7 @@ public class ListItemView extends View {
         boundingRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         boundingRectPaint.setStyle(Paint.Style.STROKE);
         boundingRectPaint.setColor(boundingRectColor);
+        boundingRectPaint.setStrokeWidth(2);
 
         fillRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         fillRectPaint.setStyle(Paint.Style.FILL);
@@ -116,6 +119,10 @@ public class ListItemView extends View {
         statusFalseForePaint.setColor(statusFalseForeColor);
         statusFalseForePaint.setTextSize(statusTextSize);
 
+        relativeBearingArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        relativeBearingArrowPaint.setStyle(Paint.Style.STROKE);
+        relativeBearingArrowPaint.setColor(relativeBearingArrowColor);
+        relativeBearingArrowPaint.setStrokeWidth(1.5f);
     }
 
 
@@ -133,8 +140,8 @@ public class ListItemView extends View {
         canvas.drawText(currentState.name, columnRuler1, 95, namePaint);
         canvas.drawText(currentState.cn, columnRuler1, 130, cnPaint);
 
-        int columnRuler2 = 260;
-        int columnRuler3 = 360;
+        int columnRuler2 = 270;
+        int columnRuler3 = 370;
         int row1 = 65;
         int row2 = 95;
         int row3 = 130;
@@ -142,7 +149,9 @@ public class ListItemView extends View {
         canvas.drawText(currentState.altitude, columnRuler2, row2, dataTextPaint);
         canvas.drawText(currentState.vRate, columnRuler3, row2, dataTextPaint);
         canvas.drawText(currentState.relativeDistance, columnRuler2, row3, dataTextPaint);
-        canvas.drawText(currentState.relativeBearing, columnRuler3, row3, dataTextPaint);
+        canvas.drawText(currentState.relativeBearing, columnRuler3 + 25, row3, dataTextPaint);
+
+        drawRelativeBearingArrow(canvas, columnRuler3 + 8, row3 - 5, currentState.relativeDegrees);
 
         int statusColumn = 500;
         int statusWidth = 60;
@@ -159,6 +168,50 @@ public class ListItemView extends View {
         statusBack = new RectF(statusColumn, statusRow2, statusColumn + statusWidth, statusRow2 + statusHeight);
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(currentState.hasOgn));
         canvas.drawText("Flarm", statusColumn + 8, statusRow2 + StatusTextHeight, getStatusForePaint(currentState.hasOgn));
+    }
+
+    private void drawRelativeBearingArrow(Canvas canvas, float x, float y, int bearing){
+        int arrowLength = 12;
+        int arrowArmLength = 6;
+        float arrowAngle = 135;
+
+        float lineStartX = x;
+        float lineStartY = y;
+
+        double arrRightBearing = bearing + arrowAngle;
+        double arrLeftBearing = bearing - arrowAngle;
+
+        double bearingRad = Math.toRadians(bearing);
+        double arrRightRad = Math.toRadians(arrRightBearing);
+        double arrLeftRad = Math.toRadians(arrLeftBearing);
+
+        float lineEndX = lineStartX + (float) (arrowLength * Math.sin(bearingRad));
+        float lineEndY = lineStartY - (float) (arrowLength * Math.cos(bearingRad));
+
+        float arrRightX = lineEndX + (float) (arrowArmLength * Math.sin(arrRightRad));
+        float arrRightY = lineEndY - (float) (arrowArmLength * Math.cos(arrRightRad));
+
+        float arrLeftX = lineEndX + (float) (arrowArmLength * Math.sin(arrLeftRad));
+        float arrLeftY = lineEndY - (float) (arrowArmLength * Math.cos(arrLeftRad));
+
+        float xMove = lineStartX - lineEndX;
+        float yMove = lineStartY - lineEndY;
+
+        lineStartX += xMove;
+        lineStartY += yMove;
+
+        lineEndX +=xMove;
+        lineEndY += yMove;
+
+        arrRightX += xMove;
+        arrRightY += yMove;
+
+        arrLeftX += xMove;
+        arrLeftY += yMove;
+
+        canvas.drawLine(lineEndX, lineEndY, arrLeftX, arrLeftY, relativeBearingArrowPaint);
+        canvas.drawLine(lineEndX, lineEndY, arrRightX, arrRightY, relativeBearingArrowPaint);
+        canvas.drawLine(lineStartX, lineStartY, lineEndX, lineEndY, relativeBearingArrowPaint);
     }
 
     @Override
@@ -208,6 +261,7 @@ public class ListItemView extends View {
 
         if (update.relativeBearing != currentState.relativeBearing) {
             currentState.relativeBearing = update.relativeBearing;
+            currentState.relativeDegrees = update.relativeDegrees;
             hasChanged = true;
         }
 
