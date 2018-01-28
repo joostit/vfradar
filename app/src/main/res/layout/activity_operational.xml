@@ -21,7 +21,7 @@
             android:name="com.joostit.vfradar.RadarViewFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="23" />
+            android:layout_weight="32" />
 
         <View
             android:id="@+id/separator1"
@@ -35,9 +35,8 @@
             android:id="@+id/aircraftListFrag"
             android:tag="aircraftListFragTag"
             android:name="com.joostit.vfradar.infolisting.InfoListFragment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="9"/>
+            android:layout_width="575px"
+            android:layout_height="match_parent"/>
 
 
     </LinearLayout>
