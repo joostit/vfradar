@@ -40,7 +40,8 @@ public class AircraftPlot extends DrawableItem {
     private int acNameTextColor = 0xFF00FF00;
     private int acInfoTextColor = 0xFF00AA00;
     private int acWarningBoxColor = 0xFFFF0000;
-    private int acSelectedBoxColor = 0xFFFFFFFF;
+    private int acSelectedBoxColor = 0xFF4d4d4d;
+    private int acSelectedoutlineColor = 0xFF009900;
     private int acHighlightBoxColor = 0xFFFFFF00;
     private int acTextGuideLineColor = 0xAA008000;
     private int acTextBackColor = 0xBB000000;
@@ -53,6 +54,7 @@ public class AircraftPlot extends DrawableItem {
     private Paint acWarningBoxPaint;
     private Paint acHighlightBoxPaint;
     private Paint acSelectedBoxPaint;
+    private Paint acSelectedOutlinePaint;
     private Paint acTextBackPaint;
 
     public AircraftPlot() {
@@ -63,12 +65,12 @@ public class AircraftPlot extends DrawableItem {
 
         aircraftForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         aircraftForePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        aircraftForePaint.setStrokeWidth(3);
+        aircraftForePaint.setStrokeWidth(2);
         aircraftForePaint.setColor(acForeColor);
 
         aircraftBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         aircraftBackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        aircraftBackPaint.setStrokeWidth(8);
+        aircraftBackPaint.setStrokeWidth(6);
         aircraftBackPaint.setColor(acBackColor);
 
         acNamePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -98,6 +100,11 @@ public class AircraftPlot extends DrawableItem {
         acSelectedBoxPaint.setStyle(Paint.Style.FILL);
         acSelectedBoxPaint.setColor(acSelectedBoxColor);
 
+        acSelectedOutlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        acSelectedOutlinePaint.setStyle(Paint.Style.STROKE);
+        acSelectedOutlinePaint.setStrokeWidth(3);
+        acSelectedOutlinePaint.setColor(acSelectedoutlineColor);
+
         acTextBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acTextBackPaint.setStyle(Paint.Style.FILL);
         acTextBackPaint.setColor(acTextBackColor);
@@ -112,7 +119,7 @@ public class AircraftPlot extends DrawableItem {
         }
 
         float arrowAngle = 135;
-        float longArrowLength = 11;
+        float longArrowLength = 10;
         float shortArrowLength = 9;
 
         int boxSize = 25;
@@ -153,15 +160,18 @@ public class AircraftPlot extends DrawableItem {
         float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
         float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
 
+        RectF boxRect = new RectF(x - boxSize, y - boxSize, x + boxSize, y + boxSize);
+
         if (isWarning) {
-            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acWarningBoxPaint);
+            canvas.drawRoundRect(boxRect, boxRound, boxRound, acWarningBoxPaint);
         }
         if (isHighlighted) {
-            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acHighlightBoxPaint);
+            canvas.drawRoundRect(boxRect, boxRound, boxRound, acHighlightBoxPaint);
         }
         if (isSelected) {
-            boxSize += 5;
-            canvas.drawRoundRect(x - boxSize, y - boxSize, x + boxSize, y + boxSize, boxRound, boxRound, acSelectedBoxPaint);
+            RectF selectBoxRect = new RectF(x - (boxSize + 5), y - (boxSize + 5), x + (boxSize + 5), y + (boxSize + 5));
+            canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedBoxPaint);
+            canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedOutlinePaint);
         }
 
 

@@ -17,7 +17,7 @@ public class ListItemView extends View {
 
     private final int defaultWidth = 570;
     private final int defaultHeight = 150;
-    private final int selectedHeight = 200;
+    private final int selectedHeight = 150;
 
     private final float maxMovementWhilePressing = 20;
 
@@ -29,12 +29,12 @@ public class ListItemView extends View {
     private ListItemViewEventHandler eventHandler;
 
     private final int statusTrueBackColor = 0xFF00FF00;
-    private final int statusFalseBackColor = 0xFF005500;
+    private final int statusFalseBackColor = 0xFF004400;
 
-    private final int statusTrueForeColor = 0xFF000000;
-    private final int statusFalseForeColor = 0xFF000000;
+    private final int statusTrueForeColor = 0xFF002200;
+    private final int statusFalseForeColor = 0xFF002200;
 
-    private int selectedBackColor = 0xFF003300;
+    private int selectedBackColor = 0xFF333333;
     private int boundingRectColor = 0xFF00FF00;
     private int brightTextColor = 0xFF00FF00;
     private int darkTextColor = 0xFF00CC00;
@@ -42,12 +42,13 @@ public class ListItemView extends View {
     private int modelTextColor = 0xFF00EE00;
     private int dataTextColor = 0xFF00DD00;
     private int relativeBearingArrowColor = 0xFF00DD00;
+    private int statusRectForeColor = 0xFF009900;
 
     private int nameTextSize = 60;
     private int nameTypeTextSize = 18;
     private int cnTextSize = 30;
     private int dataTextSize = 22;
-    private int statusTextSize = 16;
+    private int statusTextSize = 18;
 
     private Paint selectedBackPaint;
     private Paint backPaint;
@@ -63,6 +64,7 @@ public class ListItemView extends View {
     private Paint statusTrueBackPaint;
     private Paint statusFalseBackPaint;
     private Paint relativeBearingArrowPaint;
+    private Paint statusRectForePaint;
 
     private Paint namePaint;
     private InfoListItemData currentState = new InfoListItemData();
@@ -86,7 +88,7 @@ public class ListItemView extends View {
         selectedBoundingRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         selectedBoundingRectPaint.setStyle(Paint.Style.STROKE);
         selectedBoundingRectPaint.setColor(boundingRectColor);
-        selectedBoundingRectPaint.setStrokeWidth(4);
+        selectedBoundingRectPaint.setStrokeWidth(6);
 
         boundingRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         boundingRectPaint.setStyle(Paint.Style.STROKE);
@@ -125,6 +127,11 @@ public class ListItemView extends View {
         dataTextPaint.setStyle(Paint.Style.FILL);
         dataTextPaint.setColor(dataTextColor);
         dataTextPaint.setTextSize(dataTextSize);
+
+        statusRectForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        statusRectForePaint.setStyle(Paint.Style.STROKE);
+        statusRectForePaint.setColor(statusRectForeColor);
+        statusRectForePaint.setStrokeWidth(1.5f);
 
         statusTrueBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         statusTrueBackPaint.setStyle(Paint.Style.FILL);
@@ -176,23 +183,25 @@ public class ListItemView extends View {
         canvas.drawText(currentState.relativeDistance, columnRuler2, row3, dataTextPaint);
         canvas.drawText(currentState.relativeBearing, columnRuler3 + 25, row3, dataTextPaint);
 
-        drawRelativeBearingArrow(canvas, columnRuler3 + 8, row3 - 5, currentState.relativeDegrees);
+        drawRelativeBearingArrow(canvas, columnRuler3 + 8, row3 - 7, currentState.relativeDegrees);
 
-        int statusColumn = 500;
-        int statusWidth = 60;
+        int statusColumn = 488;
+        int statusWidth = 70;
         int statusHeight = 25;
         int statusRounding = 3;
         int statusRow1 = 75;
         int statusRow2 = 110;
-        int StatusTextHeight = 18;
+        int StatusTextHeight = 19;
 
         RectF statusBack = new RectF(statusColumn, statusRow1, statusColumn + statusWidth, statusRow1 + statusHeight);
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(currentState.hasAdsb));
-        canvas.drawText("ADS/B", statusColumn + 5, statusRow1 + StatusTextHeight, getStatusForePaint(currentState.hasAdsb));
+        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectForePaint);
+        canvas.drawText("ADS/B", statusColumn + 8, statusRow1 + StatusTextHeight, getStatusForePaint(currentState.hasAdsb));
 
         statusBack = new RectF(statusColumn, statusRow2, statusColumn + statusWidth, statusRow2 + statusHeight);
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(currentState.hasOgn));
-        canvas.drawText("Flarm", statusColumn + 8, statusRow2 + StatusTextHeight, getStatusForePaint(currentState.hasOgn));
+        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectForePaint);
+        canvas.drawText("Flarm", statusColumn + 12, statusRow2 + StatusTextHeight, getStatusForePaint(currentState.hasOgn));
     }
 
     private void drawRelativeBearingArrow(Canvas canvas, float x, float y, int bearing) {
