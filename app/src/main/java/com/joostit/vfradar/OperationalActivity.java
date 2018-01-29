@@ -19,6 +19,7 @@ import java.util.List;
 public class OperationalActivity extends AppCompatActivity
         implements RadarViewFragment.OnRadarViewInteractionListener,
         InfoListFragment.OnListFragmentInteractionListener,
+        MenuBarFragment.OnMenuBarFragmentInteractionListener,
         AircraftDataListener {
 
     private AircraftStateCollection aircaft = new AircraftStateCollection();
@@ -116,6 +117,11 @@ public class OperationalActivity extends AppCompatActivity
         if(acListFragment != null) {
             acListFragment.UpdateAircraft(ac);
         }
+
+    }
+
+    @Override
+    public void onPreferencesPressed() {
 
     }
 

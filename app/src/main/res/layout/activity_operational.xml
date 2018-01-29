@@ -31,12 +31,31 @@
             android:layout_marginTop="5dp"
             android:background="#FF00AA00" />
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rightScreen_container"
+        android:layout_width="575px"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+
+
+        <fragment
+            android:id="@+id/menuBarFrag"
+            android:tag="menuBarFragTag"
+            android:name="com.joostit.vfradar.MenuBarFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <fragment
             android:id="@+id/aircraftListFrag"
             android:tag="aircraftListFragTag"
             android:name="com.joostit.vfradar.infolisting.InfoListFragment"
-            android:layout_width="575px"
-            android:layout_height="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+
+    </LinearLayout>
 
 
     </LinearLayout>
