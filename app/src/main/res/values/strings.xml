@@ -96,6 +96,9 @@
     <string name="pref_title_use_gps">Use GPS</string>
     <string name="pref_summary_use_gps">Use device GPS to determine the center position</string>
 
+    <string name="pref_title_pick_location">Pick location</string>
+    <string name="pref_summary_pick_location">Use a map to pick the center position (requires an active internet connection)</string>
+
     <string name="pref_title_center_location">Center location</string>
     <string name="pref_default_center_location">0.00000, 0.00000</string>
 

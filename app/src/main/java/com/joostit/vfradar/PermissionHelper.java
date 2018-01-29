@@ -13,7 +13,7 @@ public class PermissionHelper {
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
+    private static String[] REQUIRED_STORAGE_PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -33,7 +33,7 @@ public class PermissionHelper {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
                     activity,
-                    PERMISSIONS_STORAGE,
+                    REQUIRED_STORAGE_PERMISSIONS,
                     REQUEST_EXTERNAL_STORAGE
             );
         }

@@ -6,6 +6,12 @@
         android:summary="@string/pref_summary_use_gps"
         android:title="@string/pref_title_use_gps" />
 
+    <Preference
+        android:title="@string/pref_title_pick_location"
+        android:summary="@string/pref_summary_pick_location"
+        android:key="@string/key_site_pick_location"
+        />
+
     <EditTextPreference
         android:capitalize="none"
         android:defaultValue="@string/pref_default_center_location"

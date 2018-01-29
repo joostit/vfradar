@@ -15,7 +15,12 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.joostit.vfradar.geo.LatLon;
 
 import java.net.MalformedURLException;
@@ -197,11 +202,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             Preference radarCoreUrlPref = findPreference(getString(R.string.key_vfradarcore_url));
             radarCoreUrlPref.setOnPreferenceChangeListener(this);
-
             updatePreferenceSummary(radarCoreUrlPref, null);
 
             bindPreferenceSummaryToValue(findPreference(getString(R.string.key_update_interval)));
-            //bindPreferenceSummaryToValue(findPreference(getString(R.string.key_vfradarcore_url)));
         }
 
         @Override
@@ -274,7 +277,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class SitePreferenceFragment extends PreferenceFragment
-            implements Preference.OnPreferenceChangeListener{
+            implements Preference.OnPreferenceChangeListener,
+            Preference.OnPreferenceClickListener{
+
+        int PLACE_PICKER_REQUEST = 1;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -283,6 +290,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             Preference centerPref = findPreference(getString(R.string.key_site_center_location));
             centerPref.setOnPreferenceChangeListener(this);
+
+            Preference filePickPref = findPreference(getString(R.string.key_site_pick_location));
+            filePickPref.setOnPreferenceClickListener(this);
 
             updatePreferenceSummary(centerPref, null);
         }
@@ -343,5 +353,46 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return isOk;
         }
 
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            Boolean isOk = true;
+            if(preference.getKey().equals(getContext().getResources().getString(R.string.key_site_pick_location))){
+
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    startActivityForResult(builder.build(this.getActivity()), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                    showPlayServiceError();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                    showPlayServiceError();
+                }
+
+            }
+            return isOk;
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == PLACE_PICKER_REQUEST) {
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(data, this.getContext());
+                    String toastMsg = String.format("Place: %s", place.getName());
+                    Toast.makeText(this.getContext(), toastMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+
+        private void showPlayServiceError(){
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Error");
+            builder.setMessage("Google Play services is unavailable.");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.show();
+        }
     }
 }
