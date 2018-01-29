@@ -172,8 +172,8 @@ public class ListItemView extends View {
         canvas.drawText(currentState.name, columnRuler1, 95, namePaint);
         canvas.drawText(currentState.cn, columnRuler1, 130, cnPaint);
 
-        int columnRuler2 = 270;
-        int columnRuler3 = 370;
+        int columnRuler2 = 290;
+        int columnRuler3 = 380;
         int row1 = 65;
         int row2 = 95;
         int row3 = 130;
