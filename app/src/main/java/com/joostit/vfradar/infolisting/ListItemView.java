@@ -44,7 +44,7 @@ public class ListItemView extends View {
     private int relativeBearingArrowColor = 0xFF00DD00;
     private int statusRectForeColor = 0xFF009900;
 
-    private int nameTextSize = 60;
+    private int nameTextSize = 55;
     private int nameTypeTextSize = 18;
     private int cnTextSize = 30;
     private int dataTextSize = 22;
@@ -196,7 +196,7 @@ public class ListItemView extends View {
         RectF statusBack = new RectF(statusColumn, statusRow1, statusColumn + statusWidth, statusRow1 + statusHeight);
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(currentState.hasAdsb));
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectForePaint);
-        canvas.drawText("ADS/B", statusColumn + 8, statusRow1 + StatusTextHeight, getStatusForePaint(currentState.hasAdsb));
+        canvas.drawText("ADS-B", statusColumn + 8, statusRow1 + StatusTextHeight, getStatusForePaint(currentState.hasAdsb));
 
         statusBack = new RectF(statusColumn, statusRow2, statusColumn + statusWidth, statusRow2 + statusHeight);
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(currentState.hasOgn));

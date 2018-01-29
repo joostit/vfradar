@@ -3,8 +3,10 @@ package com.joostit.vfradar.radardrawing;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 
 import com.joostit.vfradar.data.TrackedAircraft;
 
@@ -18,6 +20,8 @@ public class AircraftPlot extends DrawableItem {
 
     private static DecimalFormat df1 = new DecimalFormat("#.#");
     private final int txtBackMargin = 2;
+    private int selectedBoxRadius = 30;
+
 
     private boolean doDraw = false;
 
@@ -35,16 +39,21 @@ public class AircraftPlot extends DrawableItem {
     private String DisplayName;
     private String InfoLine;
 
+    private int selectedBackCenterColor = 0xFF000000;
+    private int selectedBackEndColor = 0xFF737373;
     private int acForeColor = 0xFF00FF00;
     private int acBackColor = 0xFF008000;
     private int acNameTextColor = 0xFF00FF00;
     private int acInfoTextColor = 0xFF00AA00;
     private int acWarningBoxColor = 0xFFFF0000;
-    private int acSelectedBoxColor = 0xFF4d4d4d;
     private int acSelectedoutlineColor = 0xFF009900;
     private int acHighlightBoxColor = 0xFFFFFF00;
     private int acTextGuideLineColor = 0xAA008000;
     private int acTextBackColor = 0xBB000000;
+
+
+    private float[] selectedGradientstops = new float[]{0, 1};
+    private int[] selectedGradientColors = new int[]{selectedBackCenterColor, selectedBackEndColor};
 
     private Paint acNamePaint;
     private Paint acInfoPaint;
@@ -98,7 +107,7 @@ public class AircraftPlot extends DrawableItem {
 
         acSelectedBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acSelectedBoxPaint.setStyle(Paint.Style.FILL);
-        acSelectedBoxPaint.setColor(acSelectedBoxColor);
+        acSelectedBoxPaint.setColor(selectedBackEndColor);
 
         acSelectedOutlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acSelectedOutlinePaint.setStyle(Paint.Style.STROKE);
@@ -114,7 +123,7 @@ public class AircraftPlot extends DrawableItem {
     @Override
     public void draw(Canvas canvas) {
 
-        if(!doDraw){
+        if (!doDraw) {
             return;
         }
 
@@ -169,7 +178,12 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawRoundRect(boxRect, boxRound, boxRound, acHighlightBoxPaint);
         }
         if (isSelected) {
-            RectF selectBoxRect = new RectF(x - (boxSize + 5), y - (boxSize + 5), x + (boxSize + 5), y + (boxSize + 5));
+
+            RadialGradient radialGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
+
+            acSelectedBoxPaint.setShader(radialGradient);
+
+            RectF selectBoxRect = new RectF(x - selectedBoxRadius, y - selectedBoxRadius, x + selectedBoxRadius, y + selectedBoxRadius);
             canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedBoxPaint);
             canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedOutlinePaint);
         }
