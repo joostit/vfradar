@@ -62,8 +62,6 @@ public class OperationalActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         setContentView(R.layout.activity_operational);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -72,6 +70,8 @@ public class OperationalActivity extends AppCompatActivity
 
         PermissionHelper.verifyWriteStoragePermissions(this);
 
+
+        SysConfig.loadSettings(getApplicationContext());
         startTimer();
     }
 

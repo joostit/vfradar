@@ -55,8 +55,8 @@
     <string name="pref_title_coresystem_address">VFRadar-Core URL</string>
     <string name="pref_default_coresystem_address">http://10.10.10.10:60002/live/all</string>
 
-    <string name="pref_title_conn_frequency">Sync frequency</string>
-    <string-array name="pref_conn_frequency_titles">
+    <string name="pref_title_update_interval">Update interval</string>
+    <string-array name="pref_update_interval_titles">
         <item>250 ms</item>
         <item>500 ms</item>
         <item>1 s</item>
@@ -66,7 +66,7 @@
         <item>30 s</item>
         <item>60 s</item>
     </string-array>
-    <string-array name="pref_conn_frequency_values">
+    <string-array name="pref_update_interval_values">
         <item>250</item>
         <item>500</item>
         <item>1000</item>

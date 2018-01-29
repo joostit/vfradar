@@ -4,7 +4,7 @@
         android:capitalize="none"
         android:defaultValue="@string/pref_default_coresystem_address"
         android:inputType="textWebEmailAddress"
-        android:key="coresystem_url"
+        android:key="@string/key_vfradarcore_url"
         android:maxLines="1"
         android:selectAllOnFocus="false"
         android:singleLine="true"
@@ -12,11 +12,11 @@
 
     <ListPreference
         android:defaultValue="180"
-        android:entries="@array/pref_conn_frequency_titles"
-        android:entryValues="@array/pref_conn_frequency_values"
-        android:key="sync_frequency"
+        android:entries="@array/pref_update_interval_titles"
+        android:entryValues="@array/pref_update_interval_values"
+        android:key="@string/key_update_interval"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_conn_frequency" />
+        android:title="@string/pref_title_update_interval" />
 
 </PreferenceScreen>

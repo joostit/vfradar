@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="key_vfradarcore_url">VFRadarCoreUrl</string>
+    <string name="key_update_interval">SyncInterval</string>
+
+    <string name="key_plot_filter_enabled">PlotFilterEnabled</string>
+    <string name="key_plot_filter_maxAlt">PlotFilterMaxAlt</string>
+</resources>

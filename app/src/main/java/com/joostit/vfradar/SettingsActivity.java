@@ -179,8 +179,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-            bindPreferenceSummaryToValue(findPreference("coresystem_url"));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_update_interval)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_vfradarcore_url)));
         }
 
         @Override
@@ -206,7 +206,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("filter_max_alt"));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_plot_filter_maxAlt)));
         }
 
         @Override

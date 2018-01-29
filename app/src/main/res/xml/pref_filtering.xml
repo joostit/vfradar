@@ -2,7 +2,7 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="filter_enabled"
+        android:key="@string/key_plot_filter_enabled"
         android:summary="@string/pref_title_filter_summary"
         android:title="@string/pref_title_filter_enabled" />
 
@@ -10,7 +10,7 @@
         android:capitalize="none"
         android:defaultValue="40000"
         android:inputType="number"
-        android:key="filter_max_alt"
+        android:key="@string/key_plot_filter_maxAlt"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
