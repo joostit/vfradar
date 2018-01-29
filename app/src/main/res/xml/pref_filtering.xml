@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="filter_enabled"
+        android:summary="@string/pref_title_filter_summary"
+        android:title="@string/pref_title_filter_enabled" />
+
+    <EditTextPreference
+        android:capitalize="none"
+        android:defaultValue="40000"
+        android:inputType="number"
+        android:key="filter_max_alt"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_max_altitude"/>
+
+
+</PreferenceScreen>

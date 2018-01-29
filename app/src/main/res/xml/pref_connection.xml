@@ -1,0 +1,22 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:capitalize="none"
+        android:defaultValue="@string/pref_default_coresystem_address"
+        android:inputType="textWebEmailAddress"
+        android:key="coresystem_url"
+        android:maxLines="1"
+        android:selectAllOnFocus="false"
+        android:singleLine="true"
+        android:title="@string/pref_title_coresystem_address"/>
+
+    <ListPreference
+        android:defaultValue="180"
+        android:entries="@array/pref_conn_frequency_titles"
+        android:entryValues="@array/pref_conn_frequency_values"
+        android:key="sync_frequency"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_conn_frequency" />
+
+</PreferenceScreen>

@@ -1,7 +1,12 @@
 package com.joostit.vfradar;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -14,6 +19,7 @@ import com.joostit.vfradar.data.VFRadarCore;
 import com.joostit.vfradar.infolisting.InfoListFragment;
 import com.joostit.vfradar.site.SiteDataLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OperationalActivity extends AppCompatActivity
@@ -21,6 +27,9 @@ public class OperationalActivity extends AppCompatActivity
         InfoListFragment.OnListFragmentInteractionListener,
         MenuBarFragment.OnMenuBarFragmentInteractionListener,
         AircraftDataListener {
+
+
+    private final int CONFIG_INTENT_REQUEST_CODE = 1;
 
     private AircraftStateCollection aircaft = new AircraftStateCollection();
     private VFRadarCore radarCoreConnection = new VFRadarCore(this);
@@ -52,6 +61,9 @@ public class OperationalActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_operational);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -67,6 +79,10 @@ public class OperationalActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
+        stopTimer();
+    }
+
+    private void stopTimer(){
         timerHandler.removeCallbacks(timerRunnable);
     }
 
@@ -86,6 +102,9 @@ public class OperationalActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
+        List<TrackedAircraft> newState = new ArrayList<>();
+        updateFragments(newState);
 
         siteDataLoadertask = new LoadSiteDataTask(this);
         siteDataLoadertask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -120,11 +139,29 @@ public class OperationalActivity extends AppCompatActivity
 
     }
 
+
     @Override
     public void onPreferencesPressed() {
-
+        stopTimer();
+        Intent myIntent = new Intent(OperationalActivity.this, SettingsActivity.class);
+        OperationalActivity.this.startActivityForResult(myIntent, CONFIG_INTENT_REQUEST_CODE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+            case CONFIG_INTENT_REQUEST_CODE:
+                this.recreate();
+                break;
+
+            default:
+                break;
+        }
+
+
+    }
 
     private class LoadSiteDataTask extends AsyncTask<Object, Void, Object> {
 

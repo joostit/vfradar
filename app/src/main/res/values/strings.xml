@@ -22,8 +22,71 @@
     <string name="ognTypesUav">UAV</string>
     <string name="ognTypesStaticObject">Static</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General preferences</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_connection">Connection preferences</string>
+
+    <string name="pref_title_coresystem_address">VFRadar-Core URL</string>
+    <string name="pref_default_coresystem_address">http://10.10.10.10:60002/live/all</string>
+
+    <string name="pref_title_conn_frequency">Sync frequency</string>
+    <string-array name="pref_conn_frequency_titles">
+        <item>250 ms</item>
+        <item>500 ms</item>
+        <item>1 s</item>
+        <item>2 s</item>
+        <item>5 s</item>
+        <item>10 s</item>
+        <item>30 s</item>
+        <item>60 s</item>
+    </string-array>
+    <string-array name="pref_conn_frequency_values">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>5000</item>
+        <item>10000</item>
+        <item>30000</item>
+        <item>60000</item>
+    </string-array>
+
+    <string name="pref_title_system_conn_settings">Connection settings</string>
+
+    <!-- Filtering prferences -->
+
+    <string name="pref_header_filtering">Filtering preferences</string>
+
+    <string name="pref_title_filter_enabled">Filter enabled</string>
+    <string name="pref_title_filter_summary">Enabled the filter to limit the number of shown plots</string>
+
+    <string name="pref_title_max_altitude">Maximum Altitude</string>
+    <string name="pref_default_max_altitude">40000</string>
+
 </resources>
