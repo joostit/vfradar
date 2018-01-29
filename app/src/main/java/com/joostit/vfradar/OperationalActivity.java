@@ -48,13 +48,14 @@ public class OperationalActivity extends AppCompatActivity
 
         radarCoreConnection.triggerGetAircraftDataAsync();
 
-        timerHandler.postDelayed(runnable, 500);
+        timerHandler.postDelayed(runnable, SysConfig.getConnectionUpdateInterval());
 
     }
 
 
     private void startTimer() {
-        timerHandler.postDelayed(timerRunnable, 1000);
+        int initialDelay = 100;
+        timerHandler.postDelayed(timerRunnable, initialDelay);
     }
 
 
