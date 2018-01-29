@@ -31,9 +31,9 @@ public class OperationalActivity extends AppCompatActivity
 
     private final int CONFIG_INTENT_REQUEST_CODE = 1;
 
-    private AircraftStateCollection aircaft = new AircraftStateCollection();
-    private VFRadarCore radarCoreConnection = new VFRadarCore(this);
-    private SiteDataLoader site = new SiteDataLoader();
+    private AircraftStateCollection aircaft;
+    private VFRadarCore radarCoreConnection;
+    private SiteDataLoader site;
 
     private LoadSiteDataTask siteDataLoadertask;
     private Handler timerHandler = new Handler();
@@ -45,11 +45,8 @@ public class OperationalActivity extends AppCompatActivity
     };
 
     private void doAircraftUpdate(Runnable runnable) {
-
         radarCoreConnection.triggerGetAircraftDataAsync();
-
         timerHandler.postDelayed(runnable, SysConfig.getConnectionUpdateInterval());
-
     }
 
 
@@ -68,12 +65,16 @@ public class OperationalActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
         PermissionHelper.verifyWriteStoragePermissions(this);
-
-
         SysConfig.loadSettings(getApplicationContext());
+        createComponentObjects();
         startTimer();
+    }
+
+    private void createComponentObjects() {
+        aircaft = new AircraftStateCollection();
+        radarCoreConnection = new VFRadarCore(this);
+        site = new SiteDataLoader();
     }
 
 
@@ -83,7 +84,7 @@ public class OperationalActivity extends AppCompatActivity
         stopTimer();
     }
 
-    private void stopTimer(){
+    private void stopTimer() {
         timerHandler.removeCallbacks(timerRunnable);
     }
 
@@ -127,14 +128,14 @@ public class OperationalActivity extends AppCompatActivity
         updateFragments(newState);
     }
 
-    private void updateFragments(List<TrackedAircraft> ac){
+    private void updateFragments(List<TrackedAircraft> ac) {
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
-        if(rView != null) {
+        if (rView != null) {
             rView.UpdateAircraft(ac);
         }
 
         InfoListFragment acListFragment = (InfoListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
-        if(acListFragment != null) {
+        if (acListFragment != null) {
             acListFragment.UpdateAircraft(ac);
         }
 
@@ -152,7 +153,7 @@ public class OperationalActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
+        switch (requestCode) {
             case CONFIG_INTENT_REQUEST_CODE:
                 this.recreate();
                 break;
@@ -168,7 +169,7 @@ public class OperationalActivity extends AppCompatActivity
 
         private AppCompatActivity initiator;
 
-        LoadSiteDataTask(AppCompatActivity initiator){
+        LoadSiteDataTask(AppCompatActivity initiator) {
             this.initiator = initiator;
         }
 
@@ -181,16 +182,18 @@ public class OperationalActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Object na) {
             RadarViewFragment rView = (RadarViewFragment) initiator.getFragmentManager().findFragmentByTag("radarViewFragTag");
-            if(rView != null) {
+            if (rView != null) {
                 rView.UpdateSiteFeatures(site.getSite());
                 rView.updateGeoData(site.getGeoData());
             }
         }
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+        }
 
         @Override
-        protected void onProgressUpdate(Void... values) {}
+        protected void onProgressUpdate(Void... values) {
+        }
     }
 }

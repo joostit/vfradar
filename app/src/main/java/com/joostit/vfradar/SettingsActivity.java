@@ -18,6 +18,8 @@ import android.view.MenuItem;
 
 import com.joostit.vfradar.geo.LatLon;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -185,19 +187,56 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class ConnectionPreferenceFragment extends PreferenceFragment {
+    public static class ConnectionPreferenceFragment extends PreferenceFragment
+            implements Preference.OnPreferenceChangeListener{
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_connection);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
+            Preference radarCoreUrlPref = findPreference(getString(R.string.key_vfradarcore_url));
+            radarCoreUrlPref.setOnPreferenceChangeListener(this);
+
+            updatePreferenceSummary(radarCoreUrlPref, null);
+
             bindPreferenceSummaryToValue(findPreference(getString(R.string.key_update_interval)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_vfradarcore_url)));
+            //bindPreferenceSummaryToValue(findPreference(getString(R.string.key_vfradarcore_url)));
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object o) {
+            Boolean isOk = true;
+            if(preference.getKey().equals(getContext().getResources().getString(R.string.key_vfradarcore_url))){
+                String newValue = (String) o;
+                if (!isRadarCoreUrlValid((String) newValue)) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Error");
+                    builder.setMessage("Invalid URL value.\nDefault: http://10.10.10.10:60002/live/all");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.show();
+                    isOk = false;
+                }
+            }
+
+            if(isOk){
+                updatePreferenceSummary(preference, o);
+            }
+
+            return isOk;
+        }
+
+        private boolean isRadarCoreUrlValid(String string){
+            boolean isOk = true;
+            try {
+                URL url = new URL(string);
+                url.toString(); // To prevent compiler optimization deleting the unused URL object
+            }
+            catch (MalformedURLException e){
+                e.printStackTrace();
+                isOk = false;
+            }
+            return isOk;
         }
 
         @Override
@@ -243,11 +282,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
 
             Preference centerPref = findPreference(getString(R.string.key_site_center_location));
-            centerPref.setEnabled(true);
             centerPref.setOnPreferenceChangeListener(this);
 
             updatePreferenceSummary(centerPref, null);
-            //bindPreferenceSummaryToValue(centerPref);
         }
 
 
