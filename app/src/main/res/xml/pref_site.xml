@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/key_site_use_gps"
+        android:summary="@string/pref_summary_use_gps"
+        android:title="@string/pref_title_use_gps" />
+
+    <EditTextPreference
+        android:capitalize="none"
+        android:defaultValue="@string/pref_default_center_location"
+        android:inputType="text"
+        android:key="@string/key_site_center_location"
+        android:maxLines="1"
+        android:selectAllOnFocus="false"
+        android:singleLine="true"
+        android:title="@string/pref_title_center_location"/>
+
+
+</PreferenceScreen>

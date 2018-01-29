@@ -43,7 +43,7 @@ public class SysConfig {
 
         vfradarCoreDataAddress = getString(context, R.string.key_vfradarcore_url, vfradarCoreDataAddress);
         connectionUpdateInterval = getInt(context, R.string.key_update_interval, connectionUpdateInterval);
-
+        centerPosition = getLatLon(context, R.string.key_site_center_location, centerPosition);
     }
 
     private static void setDefaults() {
@@ -64,6 +64,12 @@ public class SysConfig {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String preferenceKey = context.getResources().getString(resouceKeyId);
         return preferences.getString(preferenceKey, defaultValue);
+    }
+
+    private static LatLon getLatLon(Context context, int resouceKeyId, LatLon defaultValue) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String preferenceKey = context.getResources().getString(resouceKeyId);
+        return LatLon.parseLatLon(preferences.getString(preferenceKey, defaultValue.toString()));
     }
 
 }

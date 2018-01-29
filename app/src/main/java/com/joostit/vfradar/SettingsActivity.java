@@ -1,8 +1,10 @@
 package com.joostit.vfradar;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+
+import com.joostit.vfradar.geo.LatLon;
 
 import java.util.List;
 
@@ -89,6 +93,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
+    private static void updatePreferenceSummary(Preference preference, Object value){
+        if(value != null) {
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, value);
+        }
+        else{
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +147,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || ConnectionPreferenceFragment.class.getName().equals(fragmentName)
-                || FilteringPreferenceFragment.class.getName().equals(fragmentName);
+                || FilteringPreferenceFragment.class.getName().equals(fragmentName)
+                || SitePreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -202,10 +219,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_filtering);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.key_plot_filter_maxAlt)));
         }
 
@@ -218,5 +231,80 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SitePreferenceFragment extends PreferenceFragment
+            implements Preference.OnPreferenceChangeListener{
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_site);
+            setHasOptionsMenu(true);
+
+            Preference centerPref = findPreference(getString(R.string.key_site_center_location));
+            centerPref.setEnabled(true);
+            centerPref.setOnPreferenceChangeListener(this);
+
+            updatePreferenceSummary(centerPref, null);
+            //bindPreferenceSummaryToValue(centerPref);
+        }
+
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object o) {
+            Boolean isOk = true;
+            if(preference.getKey().equals(getContext().getResources().getString(R.string.key_site_center_location))){
+                String newValue = (String) o;
+                if (!isLatLonStringIsValid((String) newValue)) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Error");
+                    builder.setMessage("Invalid Latitude/Longitude value.\nUse the '000.00000, 000.00000' format.");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.show();
+                    isOk = false;
+                }
+            }
+
+            if(isOk){
+                updatePreferenceSummary(preference, o);
+            }
+
+            return isOk;
+        }
+
+
+        private boolean isLatLonStringIsValid(String input){
+
+            Boolean isOk = true;
+            LatLon test = null;
+            try {
+                test = LatLon.parseLatLon(input);
+            } catch (NumberFormatException e){
+                isOk = false;
+            }
+
+            if(isOk){
+                if((test.Latitude < -90) || (test.Latitude > 90)){
+                    isOk = false;
+                }
+                if((test.Longitude < -180) || (test.Longitude > 180)){
+                    isOk = false;
+                }
+            }
+
+            return isOk;
+        }
+
     }
 }

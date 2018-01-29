@@ -6,4 +6,7 @@
 
     <string name="key_plot_filter_enabled">PlotFilterEnabled</string>
     <string name="key_plot_filter_maxAlt">PlotFilterMaxAlt</string>
+
+    <string name="key_site_center_location">SiteLocation</string>
+    <string name="key_site_use_gps">SiteUserGps</string>
 </resources>
