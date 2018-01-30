@@ -18,10 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.joostit.vfradar.OperationalActivity;
+import com.joostit.vfradar.PermissionHelper;
 import com.joostit.vfradar.R;
+import com.joostit.vfradar.SysConfig;
 
 public class StartupActivity extends AppCompatActivity
         implements OnStartupFragmentInteractionListener{
@@ -40,11 +43,17 @@ public class StartupActivity extends AppCompatActivity
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private SwitchableViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SysConfig.loadSettings(this);
+
+        PermissionHelper.verifyWriteStoragePermissions(this);
+        PermissionHelper.verifLocationAndGpsPermissions(this);
+
         setContentView(R.layout.activity_startup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,13 +63,32 @@ public class StartupActivity extends AppCompatActivity
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (SwitchableViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         tabLayout = (TabLayout) findViewById(R.id.startupTabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        disableTabs();
+    }
+
+    private void disableTabs(){
+        LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+        tabStrip.setEnabled(false);
+        for(int i = 0; i < tabStrip.getChildCount(); i++) {
+            tabStrip.getChildAt(i).setClickable(false);
+        }
+        mViewPager.setEnableSwipe(false);
+    }
+
+    private void enableTabs(){
+        LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+        tabStrip.setEnabled(true);
+        for(int i = 0; i < tabStrip.getChildCount(); i++) {
+            tabStrip.getChildAt(i).setClickable(true);
+        }
+        mViewPager.setEnableSwipe(true);
     }
 
 
@@ -94,7 +122,6 @@ public class StartupActivity extends AppCompatActivity
             TabLayout.Tab newTab = tabLayout.getTabAt(currentIndex+1);
             newTab.select();
         }
-
     }
 
     public void userFinishesSetup(){
@@ -103,6 +130,13 @@ public class StartupActivity extends AppCompatActivity
         startActivity(myIntent);
     }
 
+    public void allowPageSwitching(boolean allowed){
+       if(allowed) {
+          enableTabs();
+       }else{
+           disableTabs();
+       }
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

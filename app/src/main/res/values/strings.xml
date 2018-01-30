@@ -109,5 +109,9 @@
     <string name="btn_next_page">Next</string>
     <string name="btn_start">Start</string>
 
+    <string name="startup_location_center">Center location</string>
+    <string name="startup_location_useGps">Use GPS</string>
+    <string name="startup_location_useLatLon">Set Latitude and Longitude</string>
+    <string name="startup_location_usePicker">Pick a location</string>
 
 </resources>
