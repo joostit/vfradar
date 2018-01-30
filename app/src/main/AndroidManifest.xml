@@ -24,16 +24,23 @@
             android:value="@string/map_api_key"/>
 
 
-        <activity android:name=".OperationalActivity">
+        <activity
+            android:name=".OperationalActivity"
+            android:label="@string/title_activity_operational"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation">
+
+        </activity>
 
 
     </application>

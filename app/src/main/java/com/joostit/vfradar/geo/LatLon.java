@@ -28,7 +28,7 @@ public class LatLon {
 
     @Override
     public String toString() {
-        return  String.format(Locale.ROOT, "%f", Latitude) + "," + String.format(Locale.ROOT, "%f", Longitude);
+        return  String.format(Locale.ROOT, "%f", Latitude) + ", " + String.format(Locale.ROOT, "%f", Longitude);
     }
 
 
