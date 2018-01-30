@@ -2,6 +2,7 @@ package com.joostit.vfradar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 import com.joostit.vfradar.geo.LatLon;
@@ -24,6 +25,12 @@ public class SysConfig {
     public static LatLon getCenterPosition() {
         return centerPosition;
     }
+
+    public static void setCenterPosition(Context context, LatLon value){
+        centerPosition = value;
+        setLatLon(context, R.string.key_site_center_location, value);
+    }
+
 
     public static int getMaxValidRxAge(){
         return maxValidRxAge;
@@ -70,6 +77,14 @@ public class SysConfig {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String preferenceKey = context.getResources().getString(resouceKeyId);
         return LatLon.parseLatLon(preferences.getString(preferenceKey, defaultValue.toString()));
+    }
+
+
+    private static void setLatLon(Context context, int resourceKeyId, LatLon value) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(context.getString(resourceKeyId), value.toString());
+        editor.commit();
     }
 
 }

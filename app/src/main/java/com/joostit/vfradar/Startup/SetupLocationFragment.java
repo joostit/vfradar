@@ -1,7 +1,13 @@
 package com.joostit.vfradar.Startup;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,9 +16,15 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.geo.LatLon;
@@ -31,6 +43,11 @@ public class SetupLocationFragment extends Fragment {
     private Button nextButton;
     private EditText latLonTextBox;
     private int selectedLocationOption = -1;
+    private RadioGroup radioGroup;
+    private boolean locationMethodApplied = false;
+    private View rootView;
+
+    private int PLACE_PICKER_REQUEST = 12;
 
     public SetupLocationFragment() {
         // Required empty public constructor
@@ -50,16 +67,16 @@ public class SetupLocationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_setup_location, container, false);
+        rootView = inflater.inflate(R.layout.fragment_setup_location, container, false);
 
-        nextButton = view.findViewById(R.id.nextPageButton);
+        nextButton = rootView.findViewById(R.id.nextPageButton);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 nextButtonClicked();
             }
         });
 
-        RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.centerLocationRadioButtonsGroup);
+        radioGroup = (RadioGroup) rootView.findViewById(R.id.centerLocationRadioButtonsGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -68,7 +85,7 @@ public class SetupLocationFragment extends Fragment {
         });
 
 
-        latLonTextBox = (EditText) view.findViewById(R.id.latLonBox);
+        latLonTextBox = (EditText) rootView.findViewById(R.id.latLonBox);
         latLonTextBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -88,7 +105,7 @@ public class SetupLocationFragment extends Fragment {
         latLonTextBox.setEnabled(false);
         nextButton.setEnabled(false);
         this.latLonTextBox.setText(SysConfig.getCenterPosition().toString());
-        return view;
+        return rootView;
     }
 
     private void LatLonBoxTextChanged(CharSequence s, int start, int before, int count) {
@@ -133,12 +150,93 @@ public class SetupLocationFragment extends Fragment {
         }
 
         nextButton.setEnabled(validIinput);
-        mListener.allowPageSwitching(validIinput);
     }
 
 
     private void nextButtonClicked() {
+        boolean moveToNextPage;
+        if(!locationMethodApplied) {
+            moveToNextPage = applyLocationOption();
+        }
+        else{
+            moveToNextPage = true;
+        }
+
+        if(moveToNextPage) {
+            moveToNextPage();
+        }
+    }
+
+    private void moveToNextPage(){
+        mListener.allowPageSwitching(true);
         mListener.userSelectedNextTab();
+    }
+
+    private boolean applyLocationOption(){
+        boolean proceed = false;
+        switch (radioGroup.getCheckedRadioButtonId()) {
+            case R.id.useGpsRadioButton:
+
+                break;
+            case R.id.useLocationPickerRadioButton:
+                getLocationFromLocationPicker();
+                break;
+            case R.id.useLatLonRadioButton:
+                LatLon newLatLon = LatLon.parseLatLon(latLonTextBox.getText().toString());
+                SysConfig.setCenterPosition(this.getContext(), newLatLon);
+                proceed = true;
+                break;
+        }
+
+        if(proceed) {
+            setLocationMethodApplied(true);
+        }
+        return proceed;
+    }
+
+    private void setLocationMethodApplied(boolean success){
+        locationMethodApplied = success;
+        if(success){
+            latLonTextBox.setText(SysConfig.getCenterPosition().toString());
+        }
+        setAllowChanges(!locationMethodApplied);
+    }
+
+    private void getLocationFromLocationPicker() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+        try {
+            startActivityForResult(builder.build(this.getActivity()), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+            showPlayServiceError();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+            showPlayServiceError();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                Place place = PlacePicker.getPlace(this.getContext(), data);
+                LatLng selected = place.getLatLng();
+                LatLon coordinates = new LatLon(selected.latitude, selected.longitude);
+                SysConfig.setCenterPosition(getContext(), coordinates);
+                setLocationMethodApplied(true);
+                moveToNextPage();
+            }
+        }
+    }
+
+    private void showPlayServiceError(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Error");
+        builder.setMessage("Google Play services is unavailable.");
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.show();
     }
 
     private void newRadioButtonSelected(RadioGroup group, int checkedId) {
@@ -153,7 +251,7 @@ public class SetupLocationFragment extends Fragment {
                 selectedLocationOption = R.id.useLocationPickerRadioButton;
                 break;
             case R.id.useLatLonRadioButton:
-                latLonTextBox.setEnabled(true);
+                latLonTextBox.setEnabled(!locationMethodApplied);
                 selectedLocationOption = R.id.useLatLonRadioButton;
 
                 break;
@@ -182,4 +280,10 @@ public class SetupLocationFragment extends Fragment {
         mListener = null;
     }
 
+    public void setAllowChanges(boolean allowChanges) {
+        ((RadioButton) rootView.findViewById(R.id.useGpsRadioButton)).setEnabled(allowChanges);
+        ((RadioButton) rootView.findViewById(R.id.useLocationPickerRadioButton)).setEnabled(allowChanges);
+        ((RadioButton) rootView.findViewById(R.id.useLatLonRadioButton)).setEnabled(allowChanges);
+        latLonTextBox.setEnabled(allowChanges);
+    }
 }

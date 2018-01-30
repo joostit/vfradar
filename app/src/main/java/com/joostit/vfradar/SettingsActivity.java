@@ -385,10 +385,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     LatLng selected = place.getLatLng();
                     LatLon coordinates = new LatLon(selected.latitude, selected.longitude);
                     Preference centerPref = findPreference(getString(R.string.key_site_center_location));
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(getString(R.string.key_site_center_location), coordinates.toString());
-                    editor.commit();
+                    SysConfig.setCenterPosition(getContext(), coordinates);
                     updatePreferenceSummary(centerPref, null);
                 }
             }
