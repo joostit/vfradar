@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
+import android.widget.Button;
 
 
 import com.joostit.vfradar.R;
@@ -34,14 +35,22 @@ public class SetupLocationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setup_location, container, false);
+        View view = inflater.inflate(R.layout.fragment_setup_location, container, false);
+
+        Button button = view.findViewById(R.id.nextPageButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mListener.userSelectedNextTab();
+            }
+        });
+
+        return view;
     }
 
     @Override

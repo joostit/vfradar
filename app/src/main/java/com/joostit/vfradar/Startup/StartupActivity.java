@@ -33,6 +33,7 @@ public class StartupActivity extends AppCompatActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private TabLayout tabLayout;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -54,8 +55,7 @@ public class StartupActivity extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
+        tabLayout = (TabLayout) findViewById(R.id.startupTabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -86,6 +86,12 @@ public class StartupActivity extends AppCompatActivity
 
     @Override
     public void userSelectedNextTab() {
+        int currentIndex = tabLayout.getSelectedTabPosition();
+
+        if(currentIndex < mSectionsPagerAdapter.getCount() -1){
+            TabLayout.Tab newTab = tabLayout.getTabAt(currentIndex+1);
+            newTab.select();
+        }
 
     }
 
@@ -144,11 +150,10 @@ public class StartupActivity extends AppCompatActivity
                     return SetupSiteFragment.newInstance();
                 case 2:
                     return SetupSummaryFragment.newInstance();
+                default:
+                    return null;
             }
 
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
