@@ -45,6 +45,20 @@ public class PermissionHelper {
         }
     }
 
+    public static void verifLocationAndGpsPermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    REQUIRED_LOCATION_PERMISSIONS,
+                    REQUEST_LOCATION
+            );
+        }
+    }
+
 
 
 }
