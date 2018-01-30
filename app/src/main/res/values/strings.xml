@@ -1,4 +1,5 @@
 <resources>
+    <string name="title_activity_operational">VFRadar</string>
     <string name="app_name">VFRadar</string>
     <string name="idTypeIcao24">ICAO24</string>
     <string name="idTypeOgnId">OGN ID</string>
