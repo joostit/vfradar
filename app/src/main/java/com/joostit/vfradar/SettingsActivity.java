@@ -21,6 +21,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.joostit.vfradar.geo.LatLon;
 
 import java.net.MalformedURLException;
@@ -380,9 +381,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             if (requestCode == PLACE_PICKER_REQUEST) {
                 if (resultCode == RESULT_OK) {
-                    Place place = PlacePicker.getPlace(data, this.getContext());
-                    String toastMsg = String.format("Place: %s", place.getName());
-                    Toast.makeText(this.getContext(), toastMsg, Toast.LENGTH_LONG).show();
+                    Place place = PlacePicker.getPlace(this.getContext(), data);
+                    LatLng selected = place.getLatLng();
+                    LatLon coordinates = new LatLon(selected.latitude, selected.longitude);
+                    Preference centerPref = findPreference(getString(R.string.key_site_center_location));
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(getString(R.string.key_site_center_location), coordinates.toString());
+                    editor.commit();
+                    updatePreferenceSummary(centerPref, null);
                 }
             }
         }

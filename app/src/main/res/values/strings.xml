@@ -50,7 +50,7 @@
     </string-array>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_connection">Connection preferences</string>
+    <string name="pref_header_data_connection">Connection</string>
 
     <string name="pref_title_coresystem_address">VFRadar-Core URL</string>
     <string name="pref_default_coresystem_address">http://10.10.10.10:60002/live/all</string>
@@ -77,11 +77,10 @@
         <item>60000</item>
     </string-array>
 
-    <string name="pref_title_system_conn_settings">Connection settings</string>
 
-    <!-- Filtering prferences -->
+    <!-- Filtering preferences -->
 
-    <string name="pref_header_filtering">Filtering preferences</string>
+    <string name="pref_header_filtering">Filtering</string>
 
     <string name="pref_title_filter_enabled">Filter enabled</string>
     <string name="pref_title_filter_summary">Enabled the filter to limit the number of shown plots</string>
@@ -91,7 +90,7 @@
 
 
     <!-- Site preferences -->
-    <string name="pref_header_site">Site preferences</string>
+    <string name="pref_header_site">Site</string>
 
     <string name="pref_title_use_gps">Use GPS</string>
     <string name="pref_summary_use_gps">Use device GPS to determine the center position</string>
