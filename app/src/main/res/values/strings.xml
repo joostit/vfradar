@@ -111,7 +111,8 @@
 
     <string name="startup_location_center">Center location</string>
     <string name="startup_location_useGps">Use GPS</string>
-    <string name="startup_location_useLatLon">Set Latitude and Longitude</string>
+    <string name="startup_location_useLatLon">Set latitude/longitude manually</string>
     <string name="startup_location_usePicker">Pick a location</string>
+    <string name="cancelButton">Cancel</string>
 
 </resources>

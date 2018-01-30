@@ -2,22 +2,25 @@ package com.joostit.vfradar.Startup;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -37,17 +40,34 @@ import com.joostit.vfradar.geo.LatLon;
  * Use the {@link SetupLocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SetupLocationFragment extends Fragment {
+public class SetupLocationFragment extends Fragment implements LocationHelper.LocationUpdateHandler, DialogInterface.OnCancelListener {
+
+    private final int minimumGpsAccuracy = 20;
+    private final int minimumAccurateFixes = 5;
+    private final int maxAccurateGpsSearchTimeMs = 30000;
 
     private OnStartupFragmentInteractionListener mListener;
     private Button nextButton;
+    private Button cancelButton;
     private EditText latLonTextBox;
     private int selectedLocationOption = -1;
     private RadioGroup radioGroup;
     private boolean locationMethodApplied = false;
     private View rootView;
-
+    private LocationHelper locationHelper;
+    private TextView accuracyView;
+    private ProgressDialog gpsProgressDialog;
+    private int accurateGpsFixesCount = 0;
     private int PLACE_PICKER_REQUEST = 12;
+    private LatLon lastGpsFix;
+    private boolean gpsCancelledOnPurpose = false;
+    private Handler timerHandler = new Handler();
+    private Runnable timerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            onGpsSearchTimeExpired();
+        }
+    };
 
     public SetupLocationFragment() {
         // Required empty public constructor
@@ -75,6 +95,15 @@ public class SetupLocationFragment extends Fragment {
                 nextButtonClicked();
             }
         });
+
+        cancelButton = rootView.findViewById(R.id.cancelGPSButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                cancelButtonClicked();
+            }
+        });
+
+        accuracyView = (TextView) rootView.findViewById(R.id.accuracyBox);
 
         radioGroup = (RadioGroup) rootView.findViewById(R.id.centerLocationRadioButtonsGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -104,9 +133,12 @@ public class SetupLocationFragment extends Fragment {
 
         latLonTextBox.setEnabled(false);
         nextButton.setEnabled(false);
+        accuracyView.setVisibility(View.INVISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
         this.latLonTextBox.setText(SysConfig.getCenterPosition().toString());
         return rootView;
     }
+
 
     private void LatLonBoxTextChanged(CharSequence s, int start, int before, int count) {
         determineValidInputState();
@@ -122,10 +154,9 @@ public class SetupLocationFragment extends Fragment {
             latLonValid = false;
         }
 
-        if(latLonValid) {
+        if (latLonValid) {
             latLonTextBox.setBackgroundColor(0x00000000);
-        }
-        else{
+        } else {
             latLonTextBox.setBackgroundColor(0xFF4d0000);
         }
 
@@ -137,7 +168,7 @@ public class SetupLocationFragment extends Fragment {
 
         boolean validIinput = false;
 
-        switch (selectedLocationOption){
+        switch (selectedLocationOption) {
             case R.id.useGpsRadioButton:
                 validIinput = true;
                 break;
@@ -155,32 +186,33 @@ public class SetupLocationFragment extends Fragment {
 
     private void nextButtonClicked() {
         boolean moveToNextPage;
-        if(!locationMethodApplied) {
+        if (!locationMethodApplied) {
             moveToNextPage = applyLocationOption();
-        }
-        else{
+        } else {
             moveToNextPage = true;
         }
 
-        if(moveToNextPage) {
+        if (moveToNextPage) {
             moveToNextPage();
         }
     }
 
-    private void moveToNextPage(){
+    private void moveToNextPage() {
         mListener.allowPageSwitching(true);
         mListener.userSelectedNextTab();
     }
 
-    private boolean applyLocationOption(){
+    private boolean applyLocationOption() {
         boolean proceed = false;
         switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.useGpsRadioButton:
-
+                startGpsUpdates();
                 break;
+
             case R.id.useLocationPickerRadioButton:
                 getLocationFromLocationPicker();
                 break;
+
             case R.id.useLatLonRadioButton:
                 LatLon newLatLon = LatLon.parseLatLon(latLonTextBox.getText().toString());
                 SysConfig.setCenterPosition(this.getContext(), newLatLon);
@@ -188,15 +220,33 @@ public class SetupLocationFragment extends Fragment {
                 break;
         }
 
-        if(proceed) {
+        if (proceed) {
             setLocationMethodApplied(true);
         }
         return proceed;
     }
 
-    private void setLocationMethodApplied(boolean success){
+    private void startGpsUpdates() {
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        gpsCancelledOnPurpose = false;
+        accurateGpsFixesCount = 0;
+        locationHelper = new LocationHelper();
+        locationHelper.startLocationUpdates(this.getActivity(), this);
+        cancelButton.setVisibility(View.VISIBLE);
+        setAllowChanges(false);
+
+        String message = "Waiting for GPS fix...";
+        gpsProgressDialog = ProgressDialog.show(getContext(), "GPS", message, false, true, this);
+        gpsProgressDialog.setMax(minimumAccurateFixes);
+        gpsProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+        startGpsTimer();
+    }
+
+    private void setLocationMethodApplied(boolean success) {
         locationMethodApplied = success;
-        if(success){
+        if (success) {
             latLonTextBox.setText(SysConfig.getCenterPosition().toString());
         }
         setAllowChanges(!locationMethodApplied);
@@ -231,7 +281,7 @@ public class SetupLocationFragment extends Fragment {
         }
     }
 
-    private void showPlayServiceError(){
+    private void showPlayServiceError() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Error");
         builder.setMessage("Google Play services is unavailable.");
@@ -258,7 +308,6 @@ public class SetupLocationFragment extends Fragment {
         }
 
         determineValidInputState();
-
     }
 
 
@@ -286,4 +335,94 @@ public class SetupLocationFragment extends Fragment {
         ((RadioButton) rootView.findViewById(R.id.useLatLonRadioButton)).setEnabled(allowChanges);
         latLonTextBox.setEnabled(allowChanges);
     }
+
+    @Override
+    public void onLocationChanged(Location loc) {
+        double lat = loc.getLatitude();
+        double lon = loc.getLongitude();
+        double acc = loc.getAccuracy();
+
+        lastGpsFix = new LatLon(lat, lon);
+        latLonTextBox.setText(lastGpsFix.toString());
+
+        accuracyView.setText(String.valueOf(Math.round(acc)));
+        accuracyView.setVisibility(View.VISIBLE);
+        gpsProgressDialog.setProgress(accurateGpsFixesCount);
+
+        if (acc <= minimumGpsAccuracy) {
+            accurateGpsFixesCount++;
+        } else {
+            accurateGpsFixesCount = 0;
+        }
+
+        if (hasAccurateGpsFix()) {
+            gpsCancelledOnPurpose = true;
+            stopGps();
+            applyLastGpsFix();
+        }
+    }
+
+    private void applyLastGpsFix() {
+        SysConfig.setCenterPosition(getContext(), lastGpsFix);
+        setLocationMethodApplied(true);
+        latLonTextBox.setText(lastGpsFix.toString());
+        moveToNextPage();
+    }
+
+    private void stopGps() {
+
+        stopGpsTimer();
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        locationHelper.stopLocationUpdates();
+
+        if (gpsProgressDialog != null) {
+            gpsProgressDialog.cancel();
+        }
+
+        accuracyView.setVisibility(View.INVISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void cancelGps() {
+        stopGps();
+        latLonTextBox.setText(SysConfig.getCenterPosition().toString());
+        setAllowChanges(true);
+    }
+
+    private void cancelButtonClicked() {
+        cancelGps();
+    }
+
+    private boolean hasAccurateGpsFix() {
+        return accurateGpsFixesCount >= minimumAccurateFixes;
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialogInterface) {
+        if (!gpsCancelledOnPurpose) {
+            cancelGps();
+        }
+    }
+
+    private void startGpsTimer() {
+
+        timerHandler.postDelayed(timerRunnable, maxAccurateGpsSearchTimeMs);
+    }
+
+    private void stopGpsTimer() {
+        timerHandler.removeCallbacks(timerRunnable);
+    }
+
+
+    private void onGpsSearchTimeExpired() {
+
+        gpsCancelledOnPurpose = true;
+        cancelGps();
+
+        // Assume that we have a fix in this case
+        if (accurateGpsFixesCount > 0) {
+            applyLastGpsFix();
+        }
+    }
+
 }

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.joostit.vfradar.Startup.SetupLocationFragment">
+    tools:context="com.joostit.vfradar.Startup.SetupLocationFragment"
+    android:theme="@style/AppTheme.StartupContainerStyle">
 
 
     <TableLayout
@@ -56,6 +57,21 @@
 
         </TableRow>
 
+        <TableRow>
+
+            <TextView />
+
+            <TextView
+                android:id="@+id/accuracyBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:ems="10"
+                android:text="123m"
+                android:textColor="#4d4d4d"
+                />
+        </TableRow>
+
     </TableLayout>
 
 
@@ -68,5 +84,15 @@
         android:text="@string/btn_next_page"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/cancelGPSButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/cancelButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/nextPageButton" />
 
 </android.support.constraint.ConstraintLayout>

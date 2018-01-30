@@ -21,19 +21,20 @@ public class LocationHelper implements LocationListener {
 
     private LocationManager locationManager;
     private Activity activity;
-    private LocationListener locationListener;
+    private LocationUpdateHandler handler;
 
-    public void StartGps(Activity activity){
+
+    public void startLocationUpdates(Activity activity, LocationUpdateHandler handler){
+        this.handler = handler;
         this.activity = activity;
-        locationManager = (LocationManager)
-        activity.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 
-        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                 buildAlertMessageNoGps();
             }
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
         }
     }
 
@@ -55,12 +56,14 @@ public class LocationHelper implements LocationListener {
         alert.show();
     }
 
+    public void stopLocationUpdates(){
+        locationManager.removeUpdates(this);
+        locationManager = null;
+    }
+
     @Override
     public void onLocationChanged(Location loc) {
-
-        String longitude = "Longitude: " + loc.getLongitude();
-        String latitude = "Latitude: " + loc.getLatitude();
-
+        handler.onLocationChanged(loc);
     }
 
     @Override
@@ -73,4 +76,7 @@ public class LocationHelper implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {}
 
 
+    public interface LocationUpdateHandler {
+        void onLocationChanged(Location loc);
+    }
 }
