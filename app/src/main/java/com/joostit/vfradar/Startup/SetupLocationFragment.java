@@ -68,6 +68,7 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
             onGpsSearchTimeExpired();
         }
     };
+    private boolean gpsRunning = false;
 
     public SetupLocationFragment() {
         // Required empty public constructor
@@ -230,6 +231,7 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         gpsCancelledOnPurpose = false;
+        gpsRunning = true;
         accurateGpsFixesCount = 0;
         locationHelper = new LocationHelper();
         locationHelper.startLocationUpdates(this.getActivity(), this);
@@ -333,7 +335,7 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
         ((RadioButton) rootView.findViewById(R.id.useGpsRadioButton)).setEnabled(allowChanges);
         ((RadioButton) rootView.findViewById(R.id.useLocationPickerRadioButton)).setEnabled(allowChanges);
         ((RadioButton) rootView.findViewById(R.id.useLatLonRadioButton)).setEnabled(allowChanges);
-        latLonTextBox.setEnabled(allowChanges);
+        latLonTextBox.setEnabled(allowChanges &&(selectedLocationOption == R.id.useLatLonRadioButton));
     }
 
     @Override
@@ -370,7 +372,7 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
     }
 
     private void stopGps() {
-
+        gpsRunning = false;
         stopGpsTimer();
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         locationHelper.stopLocationUpdates();
@@ -425,4 +427,12 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(gpsRunning) {
+            gpsCancelledOnPurpose = true;
+            stopGps();
+        }
+    }
 }

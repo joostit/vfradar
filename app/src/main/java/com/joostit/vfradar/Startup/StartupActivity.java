@@ -1,6 +1,7 @@
 package com.joostit.vfradar.Startup;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,27 +19,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joostit.vfradar.OperationalActivity;
 import com.joostit.vfradar.PermissionHelper;
 import com.joostit.vfradar.R;
+import com.joostit.vfradar.SettingsActivity;
 import com.joostit.vfradar.SysConfig;
 
 public class StartupActivity extends AppCompatActivity
         implements OnStartupFragmentInteractionListener{
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+
+    private final int CONFIG_INTENT_REQUEST_CODE = 1;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private TabLayout tabLayout;
+    private ImageButton imageButton;
+    boolean doubleBackToExitPressedOnce = false;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -70,7 +70,37 @@ public class StartupActivity extends AppCompatActivity
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        imageButton = (ImageButton) findViewById(R.id.preferencesButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                onPreferencesPressed();
+            }
+
+        });
+
         disableTabs();
+    }
+
+
+    public void onPreferencesPressed() {
+        Intent myIntent = new Intent(StartupActivity.this, SettingsActivity.class);
+        StartupActivity.this.startActivityForResult(myIntent, CONFIG_INTENT_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case CONFIG_INTENT_REQUEST_CODE:
+                this.recreate();
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void disableTabs(){
@@ -136,7 +166,29 @@ public class StartupActivity extends AppCompatActivity
        }else{
            disableTabs();
        }
+
     }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
