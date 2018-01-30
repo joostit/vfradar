@@ -18,6 +18,12 @@ public class PermissionHelper {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    private static final int REQUEST_LOCATION = 2;
+    private static String[] REQUIRED_LOCATION_PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+
     /**
      * Checks if the app has permission to write to device storage
      *
