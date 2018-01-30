@@ -1,5 +1,6 @@
 package com.joostit.vfradar.Startup;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.joostit.vfradar.OperationalActivity;
 import com.joostit.vfradar.R;
 
 public class StartupActivity extends AppCompatActivity
@@ -95,6 +97,12 @@ public class StartupActivity extends AppCompatActivity
 
     }
 
+    public void userFinishesSetup(){
+        Intent myIntent = new Intent(this, OperationalActivity.class);
+        finish();
+        startActivity(myIntent);
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -127,5 +135,7 @@ public class StartupActivity extends AppCompatActivity
             // Show 3 total pages.
             return 3;
         }
+
+
     }
 }

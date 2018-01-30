@@ -6,4 +6,5 @@ package com.joostit.vfradar.Startup;
 
 public interface OnStartupFragmentInteractionListener {
     void userSelectedNextTab();
+    void userFinishesSetup();
 }

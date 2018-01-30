@@ -106,8 +106,8 @@
     <string name="startup_tab_site">Site</string>
     <string name="startup_tab_summary">Summary</string>
     <string name="action_settings">Preferences ToDo!</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="btn_next_page">Next</string>
+    <string name="btn_start">Start</string>
 
 
 </resources>
