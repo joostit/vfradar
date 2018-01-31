@@ -17,4 +17,14 @@ public class SiteDataFile {
     public List<ReportingPoint> reportingPoints = new ArrayList<>();
     public List<Runway> runways = new ArrayList<>();
     public List<RouteLine> routes = new ArrayList<>();
+
+
+    public List<SiteFeature> getAllFeatures(){
+        List<SiteFeature> retVal = new ArrayList<>();
+
+        retVal.addAll(runways);
+        retVal.addAll(routes);
+        retVal.addAll(reportingPoints);
+        return retVal;
+    }
 }
