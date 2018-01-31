@@ -271,7 +271,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
             }
         }
 
-        // Make sure to plot a selected aircraft always last, so on top of the Z-order
+        // Make sure to plot a selected aircraft always last, so on topLon of the Z-order
         if (deferredPlot != null) {
             deferredPlot.draw(canvas);
         }

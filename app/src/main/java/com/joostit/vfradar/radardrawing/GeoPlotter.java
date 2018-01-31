@@ -108,7 +108,7 @@ public class GeoPlotter extends DrawableItem {
 
         @Override
         protected Object doInBackground(Object... params) {
-
+            Bitmap bmp = null;
             boolean itemsToDraw = false;
 
             for (GeoShapePlot plot : shapePlots) {
@@ -119,7 +119,7 @@ public class GeoPlotter extends DrawableItem {
                 itemsToDraw = plot.updateDrawing(projection, bounds, newZoomLevel) ? true : itemsToDraw;
             }
 
-            Bitmap bmp = Bitmap.createBitmap((int) bounds.width(), (int) bounds.height(), Bitmap.Config.ARGB_8888);
+            bmp = Bitmap.createBitmap((int) bounds.width(), (int) bounds.height(), Bitmap.Config.ARGB_8888);
             Canvas drawCanvas = new Canvas(bmp);
 
             if(itemsToDraw){

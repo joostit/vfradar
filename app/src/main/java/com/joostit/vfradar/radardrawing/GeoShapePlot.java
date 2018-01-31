@@ -10,6 +10,7 @@ import android.graphics.RectF;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.geodata.GeoPolygon;
+import com.joostit.vfradar.geodata.LatLonRect;
 
 /**
  * Created by Joost on 25-1-2018.
@@ -76,9 +77,25 @@ public class GeoShapePlot extends DrawableItem {
         int pointCount = 0;
 
 
-        if (source.name.equalsIgnoreCase("Losser")) {
-            source.toString();
+        LatLonRect geoBounds = source.getBoundingRect();
+
+        LatLon topLeft = new LatLon(geoBounds.leftLat, geoBounds.topLon);
+        LatLon bottomRight = new LatLon(geoBounds.rightLat, geoBounds.bottomLon);
+
+
+        PointF topLeftScreen = projection.toScreenPoint(topLeft);
+        PointF bottomRightScreen = projection.toScreenPoint(bottomRight);
+        RectF geoScreenBounds = new RectF(topLeftScreen.x, bottomRightScreen.y, bottomRightScreen.x, topLeftScreen.y);
+
+        if(RectF.intersects(geoScreenBounds, bounds)){
+            isInView = true;
         }
+        else{
+            doDraw =false;
+            return false;
+        }
+
+
 
         for (GeoPolygon polygon : source.shape.polygons) {
 
@@ -88,9 +105,9 @@ public class GeoShapePlot extends DrawableItem {
 
             LatLon startlatLon = polygon.get(0);
             PointF startPoint = projection.toScreenPoint(startlatLon);
-            if (bounds.contains(startPoint.x, startPoint.y)) {
-                isInView = true;
-            }
+//            if (bounds.contains(startPoint.x, startPoint.y)) {
+//                isInView = true;
+//            }
             newPath.moveTo(startPoint.x, startPoint.y);
             sumX += startPoint.x;
             sumY += startPoint.y;
@@ -100,9 +117,9 @@ public class GeoShapePlot extends DrawableItem {
                 LatLon pos = polygon.get(i);
                 PointF screenPoint = projection.toScreenPoint(pos);
 
-                if (bounds.contains(screenPoint.x, screenPoint.y)) {
-                    isInView = true;
-                }
+//                if (bounds.contains(screenPoint.x, screenPoint.y)) {
+//                    isInView = true;
+//                }
 
                 newPath.lineTo(screenPoint.x, screenPoint.y);
 
@@ -127,12 +144,7 @@ public class GeoShapePlot extends DrawableItem {
             newPath.close();
         }
 
-        if (source.name.equalsIgnoreCase("Lonneker")) {
-            source.toString();
-        }
-
         if (isInView) {
-
             float centerX = (float) (sumX / pointCount);
             float centerY = (float) (sumY / pointCount);
             float polyStretchX = maxX - minX;
@@ -142,7 +154,7 @@ public class GeoShapePlot extends DrawableItem {
             textPaint.getTextBounds(source.name, 0, source.name.length(), textBounds);
 
             int textStretchX = textBounds.right;
-            int textStretchY = textBounds.bottom - textBounds.top;  // text is drawn both on top and below the Y position
+            int textStretchY = textBounds.bottom - textBounds.top;  // text is drawn both on topLon and below the Y position
 
             if ((polyStretchX > textStretchX) && (polyStretchY > textStretchY)) {
                 newTextPoint = new PointF();
