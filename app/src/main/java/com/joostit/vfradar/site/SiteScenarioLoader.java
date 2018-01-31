@@ -24,7 +24,7 @@ public class SiteScenarioLoader {
         SiteEHTW ehtw = new SiteEHTW();
         features.addAll(ehtw.getSite());
 
-        geoData = geoLoader.loadFile("UrbanAreasNL_2017_12.kml");
+        geoData = geoLoader.loadAllFilesInFolder();
     }
 
 

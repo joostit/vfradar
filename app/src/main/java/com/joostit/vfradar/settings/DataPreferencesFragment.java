@@ -3,14 +3,17 @@ package com.joostit.vfradar.settings;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.provider.DocumentsContract;
 import android.view.MenuItem;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.utilities.ASFUriUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DataPreferencesFragment extends PreferenceFragment
@@ -62,8 +65,13 @@ public class DataPreferencesFragment extends PreferenceFragment
 
         if (requestCode == FOLDER_PICKER_REQUEST) {
             if (resultCode == SettingsActivity.RESULT_OK) {
-                String selectedFolder = data.getData().getPath();
-                SysConfig.setDataFolder(getContext(), selectedFolder);
+
+                Uri uri = data.getData();
+                Uri docUri = DocumentsContract.buildDocumentUriUsingTree(uri,
+                        DocumentsContract.getTreeDocumentId(uri));
+                String path = ASFUriUtils.getPath(getContext(), docUri);
+
+                SysConfig.setDataFolder(getContext(), path);
 
                 Preference centerPref = findPreference(getString(R.string.key_data_datafolder));
                 SettingsActivity.updatePreferenceSummary(centerPref, null);

@@ -3,12 +3,14 @@ package com.joostit.vfradar.geodata;
 import android.os.Environment;
 import android.util.Xml;
 
+import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.geo.LatLon;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +23,7 @@ import java.util.List;
 
 public class GeoDataLoader {
 
-    public static final String geoDataPath = "/VFRadar/GeoData/";
+    public static final String kmlExtensionRegex = "^([^\\s]+(\\.(?i)(kml))$)";
 
     private static final String ns = null;
 
@@ -30,19 +32,30 @@ public class GeoDataLoader {
     }
 
 
-    public List<GeoObject> loadAllFilesInFolder(){
-        List<GeoObject> retVal = loadFile("");
+    public List<GeoObject> loadAllFilesInFolder() {
+        List<GeoObject> retVal = new ArrayList<>();
+
+        File rootDir = new File(SysConfig.getDataFolder());
+        File geoDataDir = new File(rootDir, "GeoData/");
+
+        File[] kmlFiles = geoDataDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.getName().matches(kmlExtensionRegex);
+            }
+        });
+
+        for (File kmlFile : kmlFiles) {
+            retVal.addAll(loadFile(kmlFile));
+        }
+
         return retVal;
     }
 
 
-    public List<GeoObject> loadFile(String kmlFileName) {
+    public List<GeoObject> loadFile(File kmlFile) {
 
         try {
-            File extDir = Environment.getExternalStorageDirectory();
-            File dataDir = new File(extDir, geoDataPath);
-            File kmlFile = new File(dataDir, kmlFileName);
-
             InputStream inStream = new FileInputStream(kmlFile);
 
             try {
