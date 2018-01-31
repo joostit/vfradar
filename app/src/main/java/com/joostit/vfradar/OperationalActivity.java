@@ -1,12 +1,8 @@
 package com.joostit.vfradar;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -18,7 +14,9 @@ import com.joostit.vfradar.data.AircraftStateCollection;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
 import com.joostit.vfradar.infolisting.InfoListFragment;
-import com.joostit.vfradar.site.SiteDataLoader;
+import com.joostit.vfradar.radardrawing.RadarViewFragment;
+import com.joostit.vfradar.settings.SettingsActivity;
+import com.joostit.vfradar.site.SiteScenarioLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,7 @@ public class OperationalActivity extends AppCompatActivity
 
     private AircraftStateCollection aircaft;
     private VFRadarCore radarCoreConnection;
-    private SiteDataLoader site;
+    private SiteScenarioLoader site;
 
     private LoadSiteDataTask siteDataLoadertask;
     private Handler timerHandler = new Handler();
@@ -76,7 +74,7 @@ public class OperationalActivity extends AppCompatActivity
     private void createComponentObjects() {
         aircaft = new AircraftStateCollection();
         radarCoreConnection = new VFRadarCore(this);
-        site = new SiteDataLoader();
+        site = new SiteScenarioLoader();
     }
 
 

@@ -1,4 +1,4 @@
-package com.joostit.vfradar;
+package com.joostit.vfradar.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

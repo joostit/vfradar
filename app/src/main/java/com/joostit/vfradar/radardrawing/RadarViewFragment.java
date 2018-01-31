@@ -1,4 +1,4 @@
-package com.joostit.vfradar;
+package com.joostit.vfradar.radardrawing;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.joostit.vfradar.R;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.radardrawing.RadarView;

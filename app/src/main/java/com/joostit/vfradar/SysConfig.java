@@ -2,7 +2,6 @@ package com.joostit.vfradar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 import com.joostit.vfradar.geo.LatLon;
@@ -17,6 +16,7 @@ public class SysConfig {
     private static int maxValidRxAge;
     private static String vfradarCoreDataAddress;
     private static int connectionUpdateInterval;
+    private static String dataFolder;
 
     public static int getConnectionUpdateInterval(){
         return connectionUpdateInterval;
@@ -31,6 +31,9 @@ public class SysConfig {
         setLatLon(context, R.string.key_site_center_location, value);
     }
 
+    public static String getDataFolder(){
+        return dataFolder;
+    }
 
     public static int getMaxValidRxAge(){
         return maxValidRxAge;
@@ -51,6 +54,7 @@ public class SysConfig {
         vfradarCoreDataAddress = getString(context, R.string.key_vfradarcore_url, vfradarCoreDataAddress);
         connectionUpdateInterval = getInt(context, R.string.key_update_interval, connectionUpdateInterval);
         centerPosition = getLatLon(context, R.string.key_site_center_location, centerPosition);
+        dataFolder = getString(context, R.string.key_data_datafolder, dataFolder);
     }
 
     private static void setDefaults() {
@@ -58,6 +62,7 @@ public class SysConfig {
         centerPosition = new LatLon(52.278758, 6.899437);
         maxValidRxAge = 15;
         connectionUpdateInterval = 500;
+        dataFolder = "TODO: Set external storage??";
     }
 
     private static int getInt(Context context, int resouceKeyId, int defaultValue){

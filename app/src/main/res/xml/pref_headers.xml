@@ -2,23 +2,28 @@
 
 
     <header
-        android:fragment="com.joostit.vfradar.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.joostit.vfradar.settings.GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.joostit.vfradar.SettingsActivity$ConnectionPreferenceFragment"
+        android:fragment="com.joostit.vfradar.settings.ConnectionPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_connection" />
 
     <header
-        android:fragment="com.joostit.vfradar.SettingsActivity$FilteringPreferenceFragment"
+        android:fragment="com.joostit.vfradar.settings.FilteringPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_filtering" />
 
     <header
-        android:fragment="com.joostit.vfradar.SettingsActivity$SitePreferenceFragment"
+        android:fragment="com.joostit.vfradar.settings.SitePreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_site" />
+
+    <header
+        android:fragment="com.joostit.vfradar.settings.DataPreferencesFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/pref_header_data" />
 
 </preference-headers>

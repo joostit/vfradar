@@ -30,7 +30,13 @@ public class GeoDataLoader {
     }
 
 
-    public List<GeoObject> Load(String kmlFileName) {
+    public List<GeoObject> loadAllFilesInFolder(){
+        List<GeoObject> retVal = loadFile("");
+        return retVal;
+    }
+
+
+    public List<GeoObject> loadFile(String kmlFileName) {
 
         try {
             File extDir = Environment.getExternalStorageDirectory();

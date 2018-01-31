@@ -10,13 +10,13 @@ import java.util.List;
  * Created by Joost on 24-1-2018.
  */
 
-public class SiteDataLoader {
+public class SiteScenarioLoader {
 
     private List<SiteFeature> features = new ArrayList<>();
     private List<GeoObject> geoData = new ArrayList<>();
     private GeoDataLoader geoLoader = new GeoDataLoader();
 
-    public SiteDataLoader(){
+    public SiteScenarioLoader(){
 
     }
 
@@ -24,7 +24,7 @@ public class SiteDataLoader {
         SiteEHTW ehtw = new SiteEHTW();
         features.addAll(ehtw.getSite());
 
-        geoData = geoLoader.Load("UrbanAreasNL_2017_12.kml");
+        geoData = geoLoader.loadFile("UrbanAreasNL_2017_12.kml");
     }
 
 

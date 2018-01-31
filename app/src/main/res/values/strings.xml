@@ -115,4 +115,9 @@
     <string name="startup_location_usePicker">Pick a location</string>
     <string name="cancelButton">Cancel</string>
 
+    <!-- Data preferences -->
+    <string name="pref_header_data">Data</string>
+
+    <string name="pref_title_pick_data_folder">Pick data folder</string>
+
 </resources>
