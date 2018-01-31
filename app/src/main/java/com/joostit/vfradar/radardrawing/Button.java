@@ -10,18 +10,15 @@ import android.graphics.RectF;
 
 public class Button extends DrawableItem {
 
+    RectF buttonBounds = new RectF();
     private String character;
     private float x;
     private float y;
     private float dimension;
-
     private int buttonForeColor = 0xFF009900;
     private int buttonBackColor = 0xFF002200;
-
     private Paint buttonForePaint;
     private Paint buttonBackPaint;
-
-    RectF buttonBounds = new RectF();
 
     public Button(String character, float x, float y, float dimension) {
         this.character = character;

@@ -24,13 +24,13 @@ public class LocationHelper implements LocationListener {
     private LocationUpdateHandler handler;
 
 
-    public void startLocationUpdates(Activity activity, LocationUpdateHandler handler){
+    public void startLocationUpdates(Activity activity, LocationUpdateHandler handler) {
         this.handler = handler;
         this.activity = activity;
         locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 
-        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 buildAlertMessageNoGps();
             }
 
@@ -56,7 +56,7 @@ public class LocationHelper implements LocationListener {
         alert.show();
     }
 
-    public void stopLocationUpdates(){
+    public void stopLocationUpdates() {
         locationManager.removeUpdates(this);
         locationManager = null;
     }
@@ -67,13 +67,16 @@ public class LocationHelper implements LocationListener {
     }
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(String provider) {
+    }
 
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(String provider) {
+    }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
 
     public interface LocationUpdateHandler {

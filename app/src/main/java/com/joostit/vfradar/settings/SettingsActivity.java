@@ -1,31 +1,19 @@
 package com.joostit.vfradar.settings;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBar;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
 import com.joostit.vfradar.R;
-import com.joostit.vfradar.SysConfig;
-import com.joostit.vfradar.geo.LatLon;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -101,11 +89,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
-    static void updatePreferenceSummary(Preference preference, Object value){
-        if(value != null) {
+    static void updatePreferenceSummary(Preference preference, Object value) {
+        if (value != null) {
             sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, value);
-        }
-        else{
+        } else {
             sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                     PreferenceManager
                             .getDefaultSharedPreferences(preference.getContext())

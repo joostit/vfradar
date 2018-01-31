@@ -7,10 +7,9 @@
         android:title="@string/pref_title_use_gps" />
 
     <Preference
-        android:title="@string/pref_title_pick_location"
-        android:summary="@string/pref_summary_pick_location"
         android:key="@string/key_site_pick_location"
-        />
+        android:summary="@string/pref_summary_pick_location"
+        android:title="@string/pref_title_pick_location" />
 
     <EditTextPreference
         android:capitalize="none"
@@ -20,7 +19,7 @@
         android:maxLines="1"
         android:selectAllOnFocus="false"
         android:singleLine="true"
-        android:title="@string/pref_title_center_location"/>
+        android:title="@string/pref_title_center_location" />
 
 
 </PreferenceScreen>

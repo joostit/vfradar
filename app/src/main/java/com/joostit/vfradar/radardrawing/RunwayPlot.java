@@ -4,18 +4,16 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.site.RouteLine;
 import com.joostit.vfradar.site.Runway;
 
 /**
  * Created by Joost on 24-1-2018.
  */
 
-public class RunwayPlot extends DrawableItem{
+public class RunwayPlot extends DrawableItem {
 
 
     private Runway source;
@@ -27,7 +25,7 @@ public class RunwayPlot extends DrawableItem{
     private int textColor = 0xFFb3b300;
     private Paint textPaint;
 
-    public RunwayPlot(Runway source){
+    public RunwayPlot(Runway source) {
         this.source = source;
         init();
 
@@ -47,7 +45,7 @@ public class RunwayPlot extends DrawableItem{
 
     @Override
     public void draw(Canvas canvas) {
-        if(doDraw) {
+        if (doDraw) {
             canvas.drawPath(screenPath, linePaint);
         }
     }
@@ -62,7 +60,8 @@ public class RunwayPlot extends DrawableItem{
 
         float minX = Float.MAX_VALUE;
         float maxX = Float.MIN_VALUE;
-        float minY = Float.MAX_VALUE;;
+        float minY = Float.MAX_VALUE;
+        ;
         float maxY = Float.MIN_VALUE;
 
         LatLon p1 = source.pointA.Move(bearing - 45, source.widthM / 2);

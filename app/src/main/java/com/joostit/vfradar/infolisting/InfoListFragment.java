@@ -1,11 +1,9 @@
 package com.joostit.vfradar.infolisting;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,12 +72,12 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
     }
 
 
-    public void selectAircraft(Integer trackId){
-        for (ListItemView vw: itemViews.values()) {
+    public void selectAircraft(Integer trackId) {
+        for (ListItemView vw : itemViews.values()) {
             vw.setSelected(false);
         }
 
-        if(trackId != null){
+        if (trackId != null) {
 
             ListItemView selectedView = itemViews.get(trackId);
             selectedView.setSelected(true);
@@ -88,15 +86,14 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
     }
 
 
-    private void scrollToView(ListItemView vw){
+    private void scrollToView(ListItemView vw) {
         Rect viewBounds = new Rect();
         vw.getHitRect(viewBounds);
 
         Rect scrollBounds = new Rect();
         scrollView.getDrawingRect(scrollBounds);
 
-        if(!Rect.intersects(scrollBounds, viewBounds))
-        {
+        if (!Rect.intersects(scrollBounds, viewBounds)) {
             scrollView.scrollTo(0, (int) vw.getY());
         }
     }
@@ -106,7 +103,7 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
 
         if (results.added.size() > 0 || results.removed.size() > 0) {
 
-            for (InfoListItemData toRemove : results.removed){
+            for (InfoListItemData toRemove : results.removed) {
                 listView.removeView(itemViews.get(toRemove.trackId));
                 itemViews.remove(toRemove.trackId);
             }
@@ -118,9 +115,10 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
             }
         }
 
-        for (InfoListItemData dataItem: list.getListItems()) {
+        for (InfoListItemData dataItem : list.getListItems()) {
             itemViews.get(dataItem.trackId).updateAircraftInfo(dataItem);
-        };
+        }
+        ;
 
     }
 

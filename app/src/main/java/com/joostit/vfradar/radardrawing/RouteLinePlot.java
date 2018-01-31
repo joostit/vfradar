@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.joostit.vfradar.site.RouteLine;
@@ -22,10 +21,10 @@ public class RouteLinePlot extends DrawableItem {
     private int lineColor = 0xFF4d4d00;
     private Paint linePaint;
 
-    public RouteLinePlot(RouteLine source){
+    public RouteLinePlot(RouteLine source) {
         this.source = source;
         init();
-        
+
     }
 
 
@@ -49,30 +48,29 @@ public class RouteLinePlot extends DrawableItem {
         Path newPath = new Path();
         boolean isInView = false;
 
-        if(source.points.size() ==0){
+        if (source.points.size() == 0) {
             doDraw = false;
             return doDraw;
         }
 
 
-
         PointF point = projection.toScreenPoint(source.points.get(0));
         newPath.moveTo(point.x, point.y);
-        if(bounds.contains(point.x, point.y)){
+        if (bounds.contains(point.x, point.y)) {
             isInView = true;
         }
 
         float previousX = point.x;
         float previousY = point.y;
 
-        for(int i = 1; i < source.points.size(); i++){
+        for (int i = 1; i < source.points.size(); i++) {
             point = projection.toScreenPoint(source.points.get(i));
 
             RectF lineRect = new RectF(previousX, previousY, point.x, point.y);
             previousX = point.x;
             previousY = point.y;
 
-            if(RectF.intersects(lineRect, bounds)){
+            if (RectF.intersects(lineRect, bounds)) {
                 isInView = true;
             }
 

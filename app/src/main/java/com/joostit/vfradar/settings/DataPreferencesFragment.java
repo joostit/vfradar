@@ -17,7 +17,7 @@ import com.joostit.vfradar.utilities.ASFUriUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DataPreferencesFragment extends PreferenceFragment
-        implements Preference.OnPreferenceClickListener{
+        implements Preference.OnPreferenceClickListener {
 
     private final int FOLDER_PICKER_REQUEST = 1;
 
@@ -47,7 +47,7 @@ public class DataPreferencesFragment extends PreferenceFragment
     @Override
     public boolean onPreferenceClick(Preference preference) {
         Boolean isOk = true;
-        if(preference.getKey().equals(getContext().getResources().getString(R.string.key_data_datafolder))){
+        if (preference.getKey().equals(getContext().getResources().getString(R.string.key_data_datafolder))) {
 
             Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             i.addCategory(Intent.CATEGORY_DEFAULT);

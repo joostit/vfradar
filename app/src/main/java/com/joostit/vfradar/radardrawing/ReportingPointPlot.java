@@ -25,7 +25,7 @@ public class ReportingPointPlot extends DrawableItem {
     private PointF screenPoint = null;
     private boolean doDraw;
 
-    public ReportingPointPlot(ReportingPoint source){
+    public ReportingPointPlot(ReportingPoint source) {
         this.source = source;
         init();
     }
@@ -50,7 +50,7 @@ public class ReportingPointPlot extends DrawableItem {
 
         doDraw = bounds.contains(screenPoint.x, screenPoint.y);
 
-        if(doDraw) {
+        if (doDraw) {
             Path newPath = new Path();
 
             newPath.moveTo(screenPoint.x - symbolSize, screenPoint.y + symbolSize);
@@ -68,7 +68,7 @@ public class ReportingPointPlot extends DrawableItem {
     @Override
     public void draw(Canvas canvas) {
 
-        if(!doDraw){
+        if (!doDraw) {
             return;
         }
 

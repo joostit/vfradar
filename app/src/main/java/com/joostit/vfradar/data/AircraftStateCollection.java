@@ -16,17 +16,16 @@ public class AircraftStateCollection {
     public final Map<Integer, TrackedAircraft> trackedAcMap = new HashMap<>();
 
 
-    public synchronized List<TrackedAircraft> doUpdate(List<AircraftState> updates){
+    public synchronized List<TrackedAircraft> doUpdate(List<AircraftState> updates) {
 
         List<TrackedAircraft> toRemove = new ArrayList<TrackedAircraft>(trackedAc);
 
-        for(AircraftState newState : updates){
-            if(hasTrack(newState.trackId)){
+        for (AircraftState newState : updates) {
+            if (hasTrack(newState.trackId)) {
                 TrackedAircraft existing = getItem(newState.trackId);
                 updateTrackedAc(existing, newState);
                 toRemove.remove(existing);
-            }
-            else{
+            } else {
                 TrackedAircraft newTrack = new TrackedAircraft();
                 newTrack.Data = newState;
                 addTrack(newTrack);
@@ -34,7 +33,7 @@ public class AircraftStateCollection {
         }
 
 
-        for(TrackedAircraft removeMe : toRemove){
+        for (TrackedAircraft removeMe : toRemove) {
             removeTrack(removeMe.Data.trackId);
         }
 

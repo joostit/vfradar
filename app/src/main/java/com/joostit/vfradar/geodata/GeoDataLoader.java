@@ -1,6 +1,5 @@
 package com.joostit.vfradar.geodata;
 
-import android.os.Environment;
 import android.util.Xml;
 
 import com.joostit.vfradar.SysConfig;

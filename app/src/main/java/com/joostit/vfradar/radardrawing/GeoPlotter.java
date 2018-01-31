@@ -1,7 +1,6 @@
 package com.joostit.vfradar.radardrawing;
 
 import android.graphics.Bitmap;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -24,7 +23,7 @@ public class GeoPlotter extends DrawableItem {
     private Paint bitmapPaint;
 
 
-    public GeoPlotter(){
+    public GeoPlotter() {
         init();
     }
 
@@ -32,7 +31,7 @@ public class GeoPlotter extends DrawableItem {
     public void draw(Canvas canvas) {
 
         if (doDraw) {
-            for (GeoShapePlot plot: shapePlots){
+            for (GeoShapePlot plot : shapePlots) {
                 plot.draw(canvas);
             }
 
@@ -55,7 +54,7 @@ public class GeoPlotter extends DrawableItem {
         doDraw = false;
         boolean itemsToDraw = false;
 
-        for (GeoShapePlot plot: shapePlots) {
+        for (GeoShapePlot plot : shapePlots) {
             itemsToDraw = plot.updateDrawing(projection, bounds) ? true : itemsToDraw;
         }
 

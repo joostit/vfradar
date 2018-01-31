@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.joostit.vfradar.OperationalActivity"
     android:background="#FF000000"
-    android:keepScreenOn="true">
+    android:keepScreenOn="true"
+    tools:context="com.joostit.vfradar.OperationalActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fragment_container"
@@ -17,11 +16,11 @@
 
         <fragment
             android:id="@+id/radarViewFrag"
-            android:tag="radarViewFragTag"
             android:name="com.joostit.vfradar.radardrawing.RadarViewFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="32" />
+            android:layout_weight="32"
+            android:tag="radarViewFragTag" />
 
         <View
             android:id="@+id/separator1"
@@ -31,31 +30,30 @@
             android:layout_marginTop="5dp"
             android:background="#FF00AA00" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rightScreen_container"
-        android:layout_width="575px"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:weightSum="10">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rightScreen_container"
+            android:layout_width="575px"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:weightSum="10">
 
 
+            <fragment
+                android:id="@+id/menuBarFrag"
+                android:name="com.joostit.vfradar.MenuBarFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="menuBarFragTag" />
 
-        <fragment
-            android:id="@+id/menuBarFrag"
-            android:tag="menuBarFragTag"
-            android:name="com.joostit.vfradar.MenuBarFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <fragment
+                android:id="@+id/aircraftListFrag"
+                android:name="com.joostit.vfradar.infolisting.InfoListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:tag="aircraftListFragTag" />
 
-        <fragment
-            android:id="@+id/aircraftListFrag"
-            android:tag="aircraftListFragTag"
-            android:name="com.joostit.vfradar.infolisting.InfoListFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"/>
-
-    </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>

@@ -22,7 +22,7 @@ import com.joostit.vfradar.geo.LatLon;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SitePreferenceFragment extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener,
-        Preference.OnPreferenceClickListener{
+        Preference.OnPreferenceClickListener {
 
     int PLACE_PICKER_REQUEST = 1;
 
@@ -55,7 +55,7 @@ public class SitePreferenceFragment extends PreferenceFragment
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {
         Boolean isOk = true;
-        if(preference.getKey().equals(getContext().getResources().getString(R.string.key_site_center_location))){
+        if (preference.getKey().equals(getContext().getResources().getString(R.string.key_site_center_location))) {
             String newValue = (String) o;
             if (!isLatLonStringIsValid((String) newValue)) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -67,7 +67,7 @@ public class SitePreferenceFragment extends PreferenceFragment
             }
         }
 
-        if(isOk){
+        if (isOk) {
             SettingsActivity.updatePreferenceSummary(preference, o);
         }
 
@@ -75,21 +75,21 @@ public class SitePreferenceFragment extends PreferenceFragment
     }
 
 
-    private boolean isLatLonStringIsValid(String input){
+    private boolean isLatLonStringIsValid(String input) {
 
         Boolean isOk = true;
         LatLon test = null;
         try {
             test = LatLon.parseLatLon(input);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             isOk = false;
         }
 
-        if(isOk){
-            if((test.Latitude < -90) || (test.Latitude > 90)){
+        if (isOk) {
+            if ((test.Latitude < -90) || (test.Latitude > 90)) {
                 isOk = false;
             }
-            if((test.Longitude < -180) || (test.Longitude > 180)){
+            if ((test.Longitude < -180) || (test.Longitude > 180)) {
                 isOk = false;
             }
         }
@@ -100,7 +100,7 @@ public class SitePreferenceFragment extends PreferenceFragment
     @Override
     public boolean onPreferenceClick(Preference preference) {
         Boolean isOk = true;
-        if(preference.getKey().equals(getContext().getResources().getString(R.string.key_site_pick_location))){
+        if (preference.getKey().equals(getContext().getResources().getString(R.string.key_site_pick_location))) {
 
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
@@ -134,7 +134,7 @@ public class SitePreferenceFragment extends PreferenceFragment
         }
     }
 
-    private void showPlayServiceError(){
+    private void showPlayServiceError() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Error");
         builder.setMessage("Google Play services is unavailable.");

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.joostit.vfradar.Startup.SetupLocationFragment"
-    android:theme="@style/AppTheme.StartupContainerStyle">
+    android:theme="@style/AppTheme.StartupContainerStyle"
+    tools:context="com.joostit.vfradar.Startup.SetupLocationFragment">
 
 
     <TableLayout
@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <TableRow android:layout_marginTop="150dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -19,26 +20,26 @@
                 android:text="@string/startup_location_center" />
 
 
-        <RadioGroup android:id="@+id/centerLocationRadioButtonsGroup">
+            <RadioGroup android:id="@+id/centerLocationRadioButtonsGroup">
 
-            <RadioButton
-                android:id="@+id/useGpsRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/startup_location_useGps" />
+                <RadioButton
+                    android:id="@+id/useGpsRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/startup_location_useGps" />
 
-            <RadioButton
-                android:id="@+id/useLocationPickerRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/startup_location_usePicker" />
+                <RadioButton
+                    android:id="@+id/useLocationPickerRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/startup_location_usePicker" />
 
-            <RadioButton
-                android:id="@+id/useLatLonRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/startup_location_useLatLon" />
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/useLatLonRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/startup_location_useLatLon" />
+            </RadioGroup>
 
         </TableRow>
 
@@ -51,9 +52,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
+                android:backgroundTint="@android:color/transparent"
                 android:ems="10"
-                android:inputType="text"
-                android:backgroundTint="@android:color/transparent"/>
+                android:inputType="text" />
 
         </TableRow>
 
@@ -68,8 +69,7 @@
                 android:layout_marginLeft="34dp"
                 android:ems="10"
                 android:text="123m"
-                android:textColor="#4d4d4d"
-                />
+                android:textColor="#4d4d4d" />
         </TableRow>
 
     </TableLayout>

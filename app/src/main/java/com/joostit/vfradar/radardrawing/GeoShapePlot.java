@@ -106,10 +106,18 @@ public class GeoShapePlot extends DrawableItem {
 
                 newPath.lineTo(screenPoint.x, screenPoint.y);
 
-                if(screenPoint.x > maxX) { maxX = screenPoint.x; }
-                if(screenPoint.x < minX) { minX = screenPoint.x; }
-                if(screenPoint.y > maxY) { maxY = screenPoint.y; }
-                if(screenPoint.y < minY) { minY = screenPoint.y; }
+                if (screenPoint.x > maxX) {
+                    maxX = screenPoint.x;
+                }
+                if (screenPoint.x < minX) {
+                    minX = screenPoint.x;
+                }
+                if (screenPoint.y > maxY) {
+                    maxY = screenPoint.y;
+                }
+                if (screenPoint.y < minY) {
+                    minY = screenPoint.y;
+                }
 
                 sumX += screenPoint.x;
                 sumY += screenPoint.y;
@@ -119,7 +127,7 @@ public class GeoShapePlot extends DrawableItem {
             newPath.close();
         }
 
-        if(source.name.equalsIgnoreCase("Lonneker")){
+        if (source.name.equalsIgnoreCase("Lonneker")) {
             source.toString();
         }
 

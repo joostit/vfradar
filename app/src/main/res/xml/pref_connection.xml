@@ -8,7 +8,7 @@
         android:maxLines="1"
         android:selectAllOnFocus="false"
         android:singleLine="true"
-        android:title="@string/pref_title_coresystem_address"/>
+        android:title="@string/pref_title_coresystem_address" />
 
     <ListPreference
         android:defaultValue="180"

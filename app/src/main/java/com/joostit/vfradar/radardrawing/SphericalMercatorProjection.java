@@ -26,13 +26,12 @@ import com.joostit.vfradar.geo.LatLon;
 
 
 public class SphericalMercatorProjection {
+    private final double WORLD_CIRCUMFERENCE = 40075000;    // Circumference of the earth in meters
     private double mWorldWidth;
     private double offsetX = 0;
     private double offsetY = 0;
     private int screenHight = 0;
     private int screenWidth = 0;
-
-    private final double WORLD_CIRCUMFERENCE = 40075000;    // Circumference of the earth in meters
 
     public SphericalMercatorProjection(final double worldWidth) {
         mWorldWidth = worldWidth;
@@ -50,14 +49,13 @@ public class SphericalMercatorProjection {
         offsetY = screenCenterpoint.y - (0.5 * screenHeight);
     }
 
-    public int screenHight(){
+    public int screenHight() {
         return screenHight;
     }
 
-    public int screenWidth(){
+    public int screenWidth() {
         return screenWidth;
     }
-
 
 
     @SuppressWarnings("deprecation")

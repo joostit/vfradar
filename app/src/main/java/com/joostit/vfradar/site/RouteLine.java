@@ -14,14 +14,16 @@ public class RouteLine extends SiteFeature {
     public String name;
 
     public List<LatLon> points = new ArrayList<>();
+
     public RouteLine() {
         super(SiteFeatureTypes.RouteLine);
     }
 
-    public void addPoint(LatLon point){
+    public void addPoint(LatLon point) {
         points.add(point);
     }
-    public void addPoint(ReportingPoint point){
+
+    public void addPoint(ReportingPoint point) {
         points.add(point.position);
     }
 }

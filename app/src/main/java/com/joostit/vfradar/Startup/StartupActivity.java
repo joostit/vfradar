@@ -1,20 +1,18 @@
 package com.joostit.vfradar.Startup;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -22,19 +20,18 @@ import android.widget.Toast;
 import com.joostit.vfradar.OperationalActivity;
 import com.joostit.vfradar.PermissionHelper;
 import com.joostit.vfradar.R;
-import com.joostit.vfradar.settings.SettingsActivity;
 import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.settings.SettingsActivity;
 
 public class StartupActivity extends AppCompatActivity
-        implements OnStartupFragmentInteractionListener{
+        implements OnStartupFragmentInteractionListener {
 
 
     private final int CONFIG_INTENT_REQUEST_CODE = 1;
+    boolean doubleBackToExitPressedOnce = false;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private TabLayout tabLayout;
     private ImageButton imageButton;
-    boolean doubleBackToExitPressedOnce = false;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -98,19 +95,19 @@ public class StartupActivity extends AppCompatActivity
         }
     }
 
-    private void disableTabs(){
-        LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+    private void disableTabs() {
+        LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
         tabStrip.setEnabled(false);
-        for(int i = 0; i < tabStrip.getChildCount(); i++) {
+        for (int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setClickable(false);
         }
         mViewPager.setEnableSwipe(false);
     }
 
-    private void enableTabs(){
-        LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+    private void enableTabs() {
+        LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
         tabStrip.setEnabled(true);
-        for(int i = 0; i < tabStrip.getChildCount(); i++) {
+        for (int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setClickable(true);
         }
         mViewPager.setEnableSwipe(true);
@@ -143,24 +140,24 @@ public class StartupActivity extends AppCompatActivity
     public void userSelectedNextTab() {
         int currentIndex = tabLayout.getSelectedTabPosition();
 
-        if(currentIndex < mSectionsPagerAdapter.getCount() -1){
-            TabLayout.Tab newTab = tabLayout.getTabAt(currentIndex+1);
+        if (currentIndex < mSectionsPagerAdapter.getCount() - 1) {
+            TabLayout.Tab newTab = tabLayout.getTabAt(currentIndex + 1);
             newTab.select();
         }
     }
 
-    public void userFinishesSetup(){
+    public void userFinishesSetup() {
         Intent myIntent = new Intent(this, OperationalActivity.class);
         finish();
         startActivity(myIntent);
     }
 
-    public void allowPageSwitching(boolean allowed){
-       if(allowed) {
-          enableTabs();
-       }else{
-           disableTabs();
-       }
+    public void allowPageSwitching(boolean allowed) {
+        if (allowed) {
+            enableTabs();
+        } else {
+            disableTabs();
+        }
 
     }
 
@@ -178,11 +175,10 @@ public class StartupActivity extends AppCompatActivity
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
-
 
 
     /**
@@ -198,7 +194,7 @@ public class StartupActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position) {
 
-            switch(position){
+            switch (position) {
                 case 0:
                     return SetupLocationFragment.newInstance();
                 case 1:

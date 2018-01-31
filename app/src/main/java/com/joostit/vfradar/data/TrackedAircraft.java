@@ -6,23 +6,12 @@ package com.joostit.vfradar.data;
 
 public class TrackedAircraft {
 
-    public enum IdTypes{
-        Callsign,
-        Registration,
-        Icao24,
-        FlarmId,
-        OgnId,
-        Cn
-    }
-
     public AircraftState Data;
-
     public Boolean isSelected = false;
     public Boolean isHighlighted = false;
     public Boolean isWarning = false;
 
-
-    public String getIdString(){
+    public String getIdString() {
         String nameString = "";
         if (Data.hasCallsign()) {
             nameString = Data.callSign;
@@ -38,8 +27,8 @@ public class TrackedAircraft {
         return nameString;
     }
 
-    public String getId(IdTypes type){
-        switch (type){
+    public String getId(IdTypes type) {
+        switch (type) {
 
             case Callsign:
                 return Data.callSign;
@@ -58,7 +47,7 @@ public class TrackedAircraft {
         }
     }
 
-    public IdTypes getUserIdType(){
+    public IdTypes getUserIdType() {
 
         if (Data.hasCallsign()) {
             return IdTypes.Callsign;
@@ -73,5 +62,14 @@ public class TrackedAircraft {
         }
 
         return IdTypes.Icao24;
+    }
+
+    public enum IdTypes {
+        Callsign,
+        Registration,
+        Icao24,
+        FlarmId,
+        OgnId,
+        Cn
     }
 }

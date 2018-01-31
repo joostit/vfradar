@@ -5,8 +5,8 @@
     tools:context="com.joostit.vfradar.radardrawing.RadarViewFragment">
 
     <com.joostit.vfradar.radardrawing.RadarView
+        android:id="@+id/radarView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/radarView"/>
+        android:layout_height="match_parent" />
 
 </FrameLayout>

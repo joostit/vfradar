@@ -20,20 +20,14 @@ public class ListItemView extends View {
     private final int selectedHeight = 150;
 
     private final float maxMovementWhilePressing = 20;
-
+    private final int statusTrueBackColor = 0xFF00FF00;
+    private final int statusFalseBackColor = 0xFF004400;
+    private final int statusTrueForeColor = 0xFF002200;
+    private final int statusFalseForeColor = 0xFF002200;
     private float touchDownX = -1;
     private float touchDownY = -1;
     private boolean isPressing;
-
-
     private ListItemViewEventHandler eventHandler;
-
-    private final int statusTrueBackColor = 0xFF00FF00;
-    private final int statusFalseBackColor = 0xFF004400;
-
-    private final int statusTrueForeColor = 0xFF002200;
-    private final int statusFalseForeColor = 0xFF002200;
-
     private int selectedBackColor = 0xFF333333;
     private int boundingRectColor = 0xFF00FF00;
     private int brightTextColor = 0xFF00FF00;
@@ -253,10 +247,9 @@ public class ListItemView extends View {
 
         int w = defaultWidth;
         int h;
-        if(currentState.isSelected){
+        if (currentState.isSelected) {
             h = selectedHeight;
-        }
-        else{
+        } else {
             h = defaultHeight;
         }
 
@@ -264,10 +257,10 @@ public class ListItemView extends View {
         setMeasuredDimension(w, h);
     }
 
-    private void updateHight(){
-        if(currentState.isSelected){
+    private void updateHight() {
+        if (currentState.isSelected) {
             setLayoutParams(new LinearLayout.LayoutParams(defaultWidth, selectedHeight));
-        }else {
+        } else {
             setLayoutParams(new LinearLayout.LayoutParams(defaultWidth, defaultHeight));
         }
         requestLayout();
@@ -355,21 +348,19 @@ public class ListItemView extends View {
         }
     }
 
-    private Paint getBackPaint(boolean isSelected){
-        if(isSelected){
+    private Paint getBackPaint(boolean isSelected) {
+        if (isSelected) {
             return selectedBackPaint;
-        }
-        else{
+        } else {
             return backPaint;
         }
     }
 
 
-    private Paint getBoundingRectPaint(boolean isSelected){
-        if(isSelected){
+    private Paint getBoundingRectPaint(boolean isSelected) {
+        if (isSelected) {
             return selectedBoundingRectPaint;
-        }
-        else{
+        } else {
             return boundingRectPaint;
         }
     }
@@ -414,7 +405,7 @@ public class ListItemView extends View {
         }
     }
 
-    public void setSelected(boolean selected){
+    public void setSelected(boolean selected) {
         currentState.isSelected = selected;
         updateHight();
         this.invalidate();

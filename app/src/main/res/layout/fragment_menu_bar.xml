@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="100dp"
-    tools:context="com.joostit.vfradar.MenuBarFragment"
-    android:background="@drawable/menubarbackground">
+    android:background="@drawable/menubarbackground"
+    tools:context="com.joostit.vfradar.MenuBarFragment">
 
     <ImageButton
         android:id="@+id/preferencesButton"

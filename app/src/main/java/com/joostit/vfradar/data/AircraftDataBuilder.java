@@ -16,22 +16,21 @@ import java.util.List;
 public class AircraftDataBuilder {
 
 
-    public List<AircraftState> parseJson(String jSon){
+    public List<AircraftState> parseJson(String jSon) {
 
         List<AircraftState> retVal = new ArrayList<>();
 
         try {
             JSONArray jsonArray = new JSONArray(jSon);
 
-            for(int i = 0; i < jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonAc = jsonArray.getJSONObject(i);
                 AircraftState ac = buildAircraftObject(jsonAc);
-                if(ac != null){
+                if (ac != null) {
                     retVal.add(ac);
                 }
             }
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -65,7 +64,7 @@ public class AircraftDataBuilder {
             ac.adsbAge = getNullableInt(jsonAc, JsonKeys.adsbAge);
             ac.squawk = getNullableInt(jsonAc, JsonKeys.squawk);
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             ac = null;
         }
@@ -75,10 +74,9 @@ public class AircraftDataBuilder {
     private String getNullableString(JSONObject jsonAc, String key) throws JSONException {
         String raw = jsonAc.optString(key);
 
-        if(StringValue.nullOrEmpty(raw)){
+        if (StringValue.nullOrEmpty(raw)) {
             return null;
-        }
-        else{
+        } else {
             return raw;
         }
     }
@@ -87,10 +85,9 @@ public class AircraftDataBuilder {
     private Double getNullableDouble(JSONObject jsonAc, String key) throws JSONException {
         String raw = jsonAc.optString(key);
 
-        if(StringValue.nullOrEmpty(raw)){
+        if (StringValue.nullOrEmpty(raw)) {
             return null;
-        }
-        else{
+        } else {
             return Double.valueOf(raw);
         }
     }
@@ -98,10 +95,9 @@ public class AircraftDataBuilder {
     private Integer getNullableInt(JSONObject jsonAc, String key) throws JSONException {
         String raw = jsonAc.optString(key);
 
-        if(StringValue.nullOrEmpty(raw)){
+        if (StringValue.nullOrEmpty(raw)) {
             return null;
-        }
-        else{
+        } else {
             return Integer.valueOf(raw);
         }
     }

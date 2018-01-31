@@ -7,11 +7,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="Theme.AppCompat.NoActionBar">
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="Theme.AppCompat.NoActionBar"></style>
 
-    <style name="AppTheme.PopupOverlay" parent="Theme.AppCompat.NoActionBar">
-    </style>
+    <style name="AppTheme.PopupOverlay" parent="Theme.AppCompat.NoActionBar"></style>
 
 
     <style name="AppTheme.StartupContainerStyle" parent="ThemeOverlay.AppCompat.Dark">

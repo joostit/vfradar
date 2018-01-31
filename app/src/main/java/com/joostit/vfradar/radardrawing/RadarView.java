@@ -29,19 +29,14 @@ import java.util.Map;
 public class RadarView extends View {
 
     private final float maxMovementWhilePressing = 20;
-
+    private final String ZOOM_IN = "ZoomIn";
+    private final String ZOOM_OUT = "ZoomOut";
     private float touchDownX = -1;
     private float touchDownY = -1;
     private boolean isPressing;
-
     private float TOUCH_ACCURACY = 50;
-
     private float zoomButtonDimension = 70;
     private float zoomButtonSpacing = 70;
-
-    private final String ZOOM_IN = "ZoomIn";
-    private final String ZOOM_OUT = "ZoomOut";
-
     private OnRadarViewInteractionListener selectionListener;
 
     private List<DrawableItem> siteFeatures = new ArrayList<>();
@@ -386,9 +381,9 @@ public class RadarView extends View {
         return isHandled;
     }
 
-    private void selectPlot(int trackId){
+    private void selectPlot(int trackId) {
         for (AircraftPlot ac : plots) {
-            if(ac.TrackId == trackId){
+            if (ac.TrackId == trackId) {
                 ac.isSelected = true;
             }
         }
@@ -415,7 +410,7 @@ public class RadarView extends View {
 
         deselectAllPlots();
 
-        if(trackId != null){
+        if (trackId != null) {
             selectPlot(trackId);
         }
         redrawAircraftPlots();

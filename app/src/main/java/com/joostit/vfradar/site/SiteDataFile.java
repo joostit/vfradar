@@ -19,7 +19,7 @@ public class SiteDataFile {
     public List<RouteLine> routes = new ArrayList<>();
 
 
-    public List<SiteFeature> getAllFeatures(){
+    public List<SiteFeature> getAllFeatures() {
         List<SiteFeature> retVal = new ArrayList<>();
 
         retVal.addAll(runways);

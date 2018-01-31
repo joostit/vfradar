@@ -9,19 +9,18 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -62,13 +61,13 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
     private LatLon lastGpsFix;
     private boolean gpsCancelledOnPurpose = false;
     private Handler timerHandler = new Handler();
+    private boolean gpsRunning = false;
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
             onGpsSearchTimeExpired();
         }
     };
-    private boolean gpsRunning = false;
 
     public SetupLocationFragment() {
         // Required empty public constructor
@@ -335,7 +334,7 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
         ((RadioButton) rootView.findViewById(R.id.useGpsRadioButton)).setEnabled(allowChanges);
         ((RadioButton) rootView.findViewById(R.id.useLocationPickerRadioButton)).setEnabled(allowChanges);
         ((RadioButton) rootView.findViewById(R.id.useLatLonRadioButton)).setEnabled(allowChanges);
-        latLonTextBox.setEnabled(allowChanges &&(selectedLocationOption == R.id.useLatLonRadioButton));
+        latLonTextBox.setEnabled(allowChanges && (selectedLocationOption == R.id.useLatLonRadioButton));
     }
 
     @Override
@@ -430,7 +429,7 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
     @Override
     public void onPause() {
         super.onPause();
-        if(gpsRunning) {
+        if (gpsRunning) {
             gpsCancelledOnPurpose = true;
             stopGps();
         }

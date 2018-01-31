@@ -18,7 +18,11 @@ public class SysConfig {
     private static int connectionUpdateInterval;
     private static String dataFolder;
 
-    public static int getConnectionUpdateInterval(){
+    static {
+        setDefaults();
+    }
+
+    public static int getConnectionUpdateInterval() {
         return connectionUpdateInterval;
     }
 
@@ -26,33 +30,29 @@ public class SysConfig {
         return centerPosition;
     }
 
-    public static void setCenterPosition(Context context, LatLon value){
+    public static void setCenterPosition(Context context, LatLon value) {
         centerPosition = value;
         setLatLon(context, R.string.key_site_center_location, value);
     }
 
-    public static void setDataFolder(Context context, String value){
+    public static void setDataFolder(Context context, String value) {
         dataFolder = value;
         setString(context, R.string.key_data_datafolder, value);
     }
 
-    public static String getDataFolder(){
+    public static String getDataFolder() {
         return dataFolder;
     }
 
-    public static int getMaxValidRxAge(){
+    public static int getMaxValidRxAge() {
         return maxValidRxAge;
     }
 
-    public static String getVFRadarCoreDataAddress(){
+    public static String getVFRadarCoreDataAddress() {
         return vfradarCoreDataAddress;
     }
 
-    static {
-        setDefaults();
-    }
-
-    public static void loadSettings(Context context){
+    public static void loadSettings(Context context) {
 
         setDefaults();
 
@@ -70,14 +70,14 @@ public class SysConfig {
         dataFolder = "TODO: Set external storage??";
     }
 
-    private static int getInt(Context context, int resouceKeyId, int defaultValue){
+    private static int getInt(Context context, int resouceKeyId, int defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String preferenceKey = context.getResources().getString(resouceKeyId);
-        String val =  preferences.getString(preferenceKey, String.valueOf(defaultValue));
+        String val = preferences.getString(preferenceKey, String.valueOf(defaultValue));
         return Integer.parseInt(val);
     }
 
-    private static String getString(Context context, int resouceKeyId, String defaultValue){
+    private static String getString(Context context, int resouceKeyId, String defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String preferenceKey = context.getResources().getString(resouceKeyId);
         return preferences.getString(preferenceKey, defaultValue);

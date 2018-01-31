@@ -20,21 +20,16 @@ public class AircraftPlot extends DrawableItem {
 
     private static DecimalFormat df1 = new DecimalFormat("#.#");
     private final int txtBackMargin = 2;
-    private int selectedBoxRadius = 30;
-
-
-    private boolean doDraw = false;
-
-    private double lat;
-    private double lon;
-
     public int TrackId;
     public float ScreenX;
     public float ScreenY;
     public Boolean isSelected = false;
     public Boolean isHighlighted = false;
     public Boolean isWarning = false;
-
+    private int selectedBoxRadius = 30;
+    private boolean doDraw = false;
+    private double lat;
+    private double lon;
     private Integer Track;
     private String DisplayName;
     private String InfoLine;

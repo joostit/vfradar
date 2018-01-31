@@ -25,7 +25,7 @@ public class AircraftListCollection {
 
     }
 
-    public synchronized List<InfoListItemData> getListItems(){
+    public synchronized List<InfoListItemData> getListItems() {
         return new ArrayList<>(items);
     }
 
@@ -77,7 +77,7 @@ public class AircraftListCollection {
 
         acItem.altitude = tracked.Data.alt != null ? tracked.Data.alt.toString() : "";
         acItem.model = sanitizeModelString(tracked.Data.model, tracked.Data.type, context);
-        acItem.name =tracked.getId(nameType);
+        acItem.name = tracked.getId(nameType);
         acItem.nameType = getNameTypeTranslation(nameType, context);
         acItem.cn = tracked.Data.cn != null ? tracked.Data.cn.toString() : "";
         updateRelativePosition(acItem, tracked);
@@ -92,28 +92,28 @@ public class AircraftListCollection {
         String typeString = "";
 
         if (!StringValue.nullOrEmpty(rawModel)
-            && !rawModel.equalsIgnoreCase("Unknown")){
+                && !rawModel.equalsIgnoreCase("Unknown")) {
             modelString = rawModel;
         }
 
-        if(!StringValue.nullOrEmpty(type)
-                && !type.equalsIgnoreCase("UNKNOWN")){
+        if (!StringValue.nullOrEmpty(type)
+                && !type.equalsIgnoreCase("UNKNOWN")) {
             typeString = getTypeTranslation(type, context);
         }
 
-        if(StringValue.nullOrEmpty(modelString) && StringValue.nullOrEmpty(typeString)){
+        if (StringValue.nullOrEmpty(modelString) && StringValue.nullOrEmpty(typeString)) {
             return "-";
         }
 
-        if(!StringValue.nullOrEmpty(modelString) && StringValue.nullOrEmpty(typeString)){
+        if (!StringValue.nullOrEmpty(modelString) && StringValue.nullOrEmpty(typeString)) {
             return modelString;
         }
 
-        if(StringValue.nullOrEmpty(modelString) && !StringValue.nullOrEmpty(typeString)){
+        if (StringValue.nullOrEmpty(modelString) && !StringValue.nullOrEmpty(typeString)) {
             return typeString;
         }
 
-        if(!StringValue.nullOrEmpty(modelString) && !StringValue.nullOrEmpty(typeString)){
+        if (!StringValue.nullOrEmpty(modelString) && !StringValue.nullOrEmpty(typeString)) {
             return typeString + ": " + modelString;
         }
 
@@ -125,7 +125,7 @@ public class AircraftListCollection {
 
         String lowercaseType = type.toLowerCase();
 
-        switch (lowercaseType){
+        switch (lowercaseType) {
             case "unknown":
                 return context.getResources().getString(R.string.ognTypesUnknown);
             case "glider":
@@ -163,7 +163,7 @@ public class AircraftListCollection {
     }
 
 
-    private String getNameTypeTranslation(TrackedAircraft.IdTypes idType, Context context){
+    private String getNameTypeTranslation(TrackedAircraft.IdTypes idType, Context context) {
         switch (idType) {
             case Callsign:
                 return context.getResources().getString(R.string.idTypeCallSign) + ":";
@@ -183,18 +183,17 @@ public class AircraftListCollection {
     }
 
 
-    private Boolean determineUpdateValid(String stationId, Integer age){
-        if(stationId == null){
+    private Boolean determineUpdateValid(String stationId, Integer age) {
+        if (stationId == null) {
             return false;
         }
 
-        if(age == null){
+        if (age == null) {
             return false;
         }
 
         return (age < SysConfig.getMaxValidRxAge());
     }
-
 
 
     private void updateRelativePosition(InfoListItemData listItem, TrackedAircraft tracked) {

@@ -4,7 +4,6 @@ import android.util.Xml;
 
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.utilities.XmlParse;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -91,8 +90,7 @@ public class SiteDataLoader {
 
             if (elementName.equals("fileInfo")) {
                 readFileInfoElement(parser, retVal);
-            }
-            else if (elementName.equals("reportingPoints")) {
+            } else if (elementName.equals("reportingPoints")) {
                 readReportingPointsElement(parser, retVal);
             } else if (elementName.equals("runways")) {
                 readRunwaysElement(parser, retVal);
@@ -114,7 +112,7 @@ public class SiteDataLoader {
             String elementName = parser.getName();
             if (elementName.equals("route")) {
                 RouteLine rLine = readRouteElement(parser);
-                if(rLine != null){
+                if (rLine != null) {
                     dataFile.routes.add(rLine);
                 }
             } else {
@@ -174,7 +172,7 @@ public class SiteDataLoader {
             String elementName = parser.getName();
             if (elementName.equals("runway")) {
                 Runway rway = readRunwayElement(parser);
-                if(rway != null){
+                if (rway != null) {
                     dataFile.runways.add(rway);
                 }
             } else {
@@ -202,15 +200,14 @@ public class SiteDataLoader {
                 retVal.pointA = readPointElement(parser);
                 parser.next();
                 parser.next();
-            }
-            else if (elementName.equals("to")) {
+            } else if (elementName.equals("to")) {
                 retVal.nameB = parser.getAttributeValue(null, "name");
                 parser.next();
                 parser.next();
                 retVal.pointB = readPointElement(parser);
                 parser.next();
                 parser.next();
-            }else {
+            } else {
                 XmlParse.skip(parser);
             }
         }
@@ -227,7 +224,7 @@ public class SiteDataLoader {
             if (elementName.equals("reportingPoint")) {
 
                 ReportingPoint rPoint = readReportingPointElement(parser);
-                if(rPoint != null){
+                if (rPoint != null) {
                     dataFile.reportingPoints.add(rPoint);
                 }
             } else {

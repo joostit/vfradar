@@ -8,11 +8,11 @@ public abstract class SiteFeature {
 
     private SiteFeatureTypes type;
 
-    public SiteFeature(SiteFeatureTypes type){
+    public SiteFeature(SiteFeatureTypes type) {
         this.type = type;
     }
 
-    public SiteFeatureTypes getType(){
+    public SiteFeatureTypes getType() {
         return type;
     }
 

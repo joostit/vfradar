@@ -19,7 +19,7 @@ public class Runway extends SiteFeature {
         super(SiteFeatureTypes.Runway);
     }
 
-    public Runway(String name, LatLon pointA, LatLon pointB, String nameA, String nameB, double widthM){
+    public Runway(String name, LatLon pointA, LatLon pointB, String nameA, String nameB, double widthM) {
         this();
         this.name = name;
         this.pointA = pointA;

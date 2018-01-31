@@ -2,9 +2,9 @@ package com.joostit.vfradar;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -29,11 +29,10 @@ public class OperationalActivity extends AppCompatActivity
 
 
     private final int CONFIG_INTENT_REQUEST_CODE = 1;
-
+    boolean doubleBackToExitPressedOnce = false;
     private AircraftStateCollection aircaft;
     private VFRadarCore radarCoreConnection;
     private SiteScenarioLoader site;
-
     private LoadSiteDataTask siteDataLoadertask;
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable = new Runnable() {
@@ -48,12 +47,10 @@ public class OperationalActivity extends AppCompatActivity
         timerHandler.postDelayed(runnable, SysConfig.getConnectionUpdateInterval());
     }
 
-
     private void startTimer() {
         int initialDelay = 100;
         timerHandler.postDelayed(timerRunnable, initialDelay);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +73,6 @@ public class OperationalActivity extends AppCompatActivity
         radarCoreConnection = new VFRadarCore(this);
         site = new SiteScenarioLoader();
     }
-
 
     @Override
     public void onPause() {
@@ -141,7 +137,6 @@ public class OperationalActivity extends AppCompatActivity
 
     }
 
-
     @Override
     public void onPreferencesPressed() {
         stopTimer();
@@ -163,8 +158,6 @@ public class OperationalActivity extends AppCompatActivity
         }
     }
 
-    boolean doubleBackToExitPressedOnce = false;
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -179,7 +172,7 @@ public class OperationalActivity extends AppCompatActivity
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }

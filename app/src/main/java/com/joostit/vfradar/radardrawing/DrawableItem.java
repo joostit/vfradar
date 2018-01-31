@@ -1,7 +1,6 @@
 package com.joostit.vfradar.radardrawing;
 
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 /**

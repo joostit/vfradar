@@ -16,26 +16,26 @@ public class SiteScenarioLoader {
     private List<GeoObject> geoData = new ArrayList<>();
     private GeoDataLoader geoLoader = new GeoDataLoader();
 
-    public SiteScenarioLoader(){
+    public SiteScenarioLoader() {
 
     }
 
-    public void loadData(){
+    public void loadData() {
         SiteDataLoader siteLoader = new SiteDataLoader();
         List<SiteDataFile> siteDataFiles = siteLoader.loadSiteDataFiles();
 
-        for(SiteDataFile dataFile: siteDataFiles){
+        for (SiteDataFile dataFile : siteDataFiles) {
             features.addAll(dataFile.getAllFeatures());
         }
 
         geoData = geoLoader.loadAllFilesInFolder();
     }
 
-    public List<SiteFeature> getSite(){
-            return new ArrayList<SiteFeature>(features);
+    public List<SiteFeature> getSite() {
+        return new ArrayList<SiteFeature>(features);
     }
 
-    public List<GeoObject> getGeoData(){
+    public List<GeoObject> getGeoData() {
         return geoData;
     }
 

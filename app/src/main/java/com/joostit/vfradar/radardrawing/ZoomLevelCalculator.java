@@ -1,8 +1,5 @@
 package com.joostit.vfradar.radardrawing;
 
-import com.joostit.vfradar.geo.LatLon;
-
-import java.awt.font.NumericShaper;
 import java.util.ArrayList;
 import java.util.List;
 

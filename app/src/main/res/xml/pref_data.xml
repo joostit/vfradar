@@ -1,8 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:title="@string/pref_title_pick_data_folder"
         android:key="@string/key_data_datafolder"
-        />
+        android:title="@string/pref_title_pick_data_folder" />
 
 </PreferenceScreen>
