@@ -10,7 +10,7 @@ import java.util.List;
 public class ZoomLevelCalculator {
 
     private List<ZoomLevelInfo> zoomLevels = new ArrayList<>();
-    private int currentZoomLevel = 4;
+    private int currentZoomLevel = 12;
 
     public ZoomLevelCalculator() {
         loadZoomLevels();
