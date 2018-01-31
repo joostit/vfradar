@@ -31,6 +31,11 @@ public class SysConfig {
         setLatLon(context, R.string.key_site_center_location, value);
     }
 
+    public static void setDataFolder(Context context, String value){
+        dataFolder = value;
+        setString(context, R.string.key_data_datafolder, value);
+    }
+
     public static String getDataFolder(){
         return dataFolder;
     }
@@ -82,6 +87,13 @@ public class SysConfig {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String preferenceKey = context.getResources().getString(resouceKeyId);
         return LatLon.parseLatLon(preferences.getString(preferenceKey, defaultValue.toString()));
+    }
+
+    private static void setString(Context context, int resourceKeyId, String value) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(context.getString(resourceKeyId), value);
+        editor.commit();
     }
 
 
