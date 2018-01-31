@@ -8,7 +8,6 @@
         android:id="@+id/scrollLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FF004000"
         android:fadingEdge="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbarThumbVertical="@drawable/scrollbar">
@@ -17,7 +16,8 @@
             android:id="@+id/listLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="1dp">
 
 
             <!-- List items are added programmatically here -->

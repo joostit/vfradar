@@ -26,8 +26,8 @@
             android:id="@+id/separator1"
             android:layout_width="4px"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
             android:background="#FF00AA00" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,6 +35,7 @@
             android:layout_width="575px"
             android:layout_height="fill_parent"
             android:orientation="vertical"
+            android:background="#FF004000"
             android:weightSum="10">
 
 
@@ -43,7 +44,8 @@
                 android:name="com.joostit.vfradar.MenuBarFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="menuBarFragTag" />
+                android:tag="menuBarFragTag"
+                android:layout_margin="2dp"/>
 
             <fragment
                 android:id="@+id/aircraftListFrag"
