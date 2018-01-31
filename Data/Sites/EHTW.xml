@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<vfradarSite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.vfradar.com/ vfradarSite.xsd">
+
+  <reportingpoints>
+    <reportingPoint name="Tango">
+      <point>52.2929031, 6.6399750</point>
+    </reportingPoint>
+    <reportingPoint name="X-Ray">
+      <point>52.323495, 6.724956</point>
+    </reportingPoint>
+    <reportingPoint name="Yankee">
+      <point>52.312747, 6.851478</point>
+    </reportingPoint>
+    <reportingPoint name="Oscar">
+      <point>52.292427, 6.871874</point>
+    </reportingPoint>
+  </reportingpoints>
+
+  <runways>
+    <runway name="EHTW">
+      <width>45</width>
+      <from name="05">
+        <point>52.268293, 6.871564</point>
+      </from>
+      <to name="23">
+        <point>52.283316, 6.906594</point>
+      </to>
+    </runway>
+  </runways>
+
+  <routes>
+    <route name="EHTW_GA_inbound">
+      <point name="Tango">52.2929031, 6.6399750</point>
+      <point name="X-Ray">52.323495, 6.724956</point>
+      <point name="Yankee">52.312747, 6.851478</point>
+      <point name="Oscar">52.292427, 6.871874</point>
+    </route>
+  </routes>
+
+</vfradarSite>

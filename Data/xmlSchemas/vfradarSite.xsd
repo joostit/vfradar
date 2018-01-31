@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="vfradarSite">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="reportingpoints" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="runways" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="routes" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="runways">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="runway" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="routes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="route" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="route">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="point" minOccurs="2" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="runway">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="width" type="xs:double"/>
+        <xs:element name="from" type="runwayHeadType"/>
+        <xs:element name="to" type="runwayHeadType"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string"  use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="runwayHeadType">
+    <xs:sequence>
+      <xs:element ref="point"/>
+    </xs:sequence>
+    <xs:attribute name="name" use="required"/>
+  </xs:complexType>
+  
+
+  <xs:element name="reportingpoints">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="reportingPoint" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="reportingPoint">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="point"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="point">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="LatLonType">
+          <xs:attribute name="name" type="xs:string" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:simpleType name="LatLonType">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>
