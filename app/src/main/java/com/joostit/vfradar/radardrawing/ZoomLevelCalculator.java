@@ -113,7 +113,7 @@ public class ZoomLevelCalculator {
             RingRadius2 = 6000;
             RingRadius3 = 9000;
         }});
-        
+
         zoomLevels.add(new ZoomLevelInfo() {{
             RangeRadius = 15000;
             RingRadius1 = 5000;

@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by Joost on 15-1-2018.
  */
 
-public class RadarView extends View {
+public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler {
 
     private final float maxMovementWhilePressing = 20;
     private final String ZOOM_IN = "ZoomIn";
@@ -42,7 +42,7 @@ public class RadarView extends View {
 
     private List<DrawableItem> siteFeatures = new ArrayList<>();
     private List<AircraftPlot> plots = new ArrayList<>();
-    private GeoPlotter geoPlot = new GeoPlotter();
+    private GeoPlotter geoPlot = new GeoPlotter(this);
     private Map<String, Button> buttons = new HashMap<>();
     private Crosshair crosshair;
 
@@ -164,6 +164,11 @@ public class RadarView extends View {
 
     private void calculateCrosshair() {
         crosshair.updateDrawing(projection, zoomLevels.getZoomLevelInfo(), SysConfig.getCenterPosition(), this.getWidth(), this.getHeight());
+    }
+
+    @Override
+    public void onRedrawRequest() {
+        this.invalidate();
     }
 
 
