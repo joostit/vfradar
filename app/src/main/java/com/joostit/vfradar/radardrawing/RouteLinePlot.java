@@ -43,7 +43,7 @@ public class RouteLinePlot extends DrawableItem {
     }
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
 
         Path newPath = new Path();
         boolean isInView = false;

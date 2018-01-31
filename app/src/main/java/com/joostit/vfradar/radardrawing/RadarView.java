@@ -100,7 +100,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
     public synchronized void updateGeoData(List<GeoObject> geoData) {
         geoPlot.setData(geoData);
-        geoPlot.updateDrawing(projection, getViewBounds());
+        geoPlot.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
         invalidate();
     }
 
@@ -139,7 +139,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
     private synchronized void redrawGraphics() {
 
         projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, SysConfig.getCenterPosition());
-        geoPlot.updateDrawing(projection, getViewBounds());
+        geoPlot.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
         RecalculateSite();
         RecalculateButtons();
         calculateCrosshair();
@@ -153,7 +153,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
     private void RecalculateSite() {
         for (DrawableItem feature : siteFeatures) {
-            feature.updateDrawing(projection, getViewBounds());
+            feature.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
         }
     }
 
@@ -246,7 +246,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
     private synchronized void redrawAircraftPlots() {
         for (AircraftPlot plot : plots) {
-            plot.updateDrawing(projection, getViewBounds());
+            plot.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
         }
     }
 

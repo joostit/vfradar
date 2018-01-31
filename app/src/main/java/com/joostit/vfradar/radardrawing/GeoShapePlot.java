@@ -62,7 +62,7 @@ public class GeoShapePlot extends DrawableItem {
     }
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
         Path newPath = new Path();
         newPath.setFillType(Path.FillType.EVEN_ODD);
         boolean isInView = false;

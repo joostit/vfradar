@@ -19,11 +19,13 @@ import java.util.List;
 
 public class GeoPlotter extends DrawableItem {
 
+    Bitmap lastDrawing;
     private boolean doDraw = false;
     private List<GeoShapePlot> shapePlots = new ArrayList<>();
     private Paint bitmapPaint;
     private RedrawGeoDataTask redrawTask;
     private OnRedrawRequestHandler redrawHandler;
+    private ZoomLevelInfo lastZoomlevel = null;
 
     public GeoPlotter(OnRedrawRequestHandler redrawHandler) {
         this.redrawHandler = redrawHandler;
@@ -40,6 +42,10 @@ public class GeoPlotter extends DrawableItem {
         }
     }
 
+    private void saveToBitmap(){
+        //Bitmap  bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
+    }
+
     private void init() {
         bitmapPaint = new Paint();
         bitmapPaint.setAntiAlias(false);
@@ -50,7 +56,7 @@ public class GeoPlotter extends DrawableItem {
     }
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
 
         if(redrawTask != null){
             redrawTask.cancel(true);
@@ -58,7 +64,7 @@ public class GeoPlotter extends DrawableItem {
 
         doDraw = false;
 
-        redrawTask = new RedrawGeoDataTask(this, projection, bounds);
+        redrawTask = new RedrawGeoDataTask(projection, bounds, zoomLevelInfo);
         redrawTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return false;
@@ -80,14 +86,14 @@ public class GeoPlotter extends DrawableItem {
 
     private class RedrawGeoDataTask extends AsyncTask<Object, Void, Object> {
 
-        private GeoPlotter initiator;
         private SphericalMercatorProjection projection;
         private RectF bounds;
+        private ZoomLevelInfo newZoomLevel;
 
-        RedrawGeoDataTask(GeoPlotter initiator, SphericalMercatorProjection projection, RectF bounds) {
-            this.initiator = initiator;
+        RedrawGeoDataTask(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo newZoomLevel) {
             this.bounds = bounds;
             this.projection = projection;
+            this.newZoomLevel = newZoomLevel;
         }
 
         @Override
@@ -100,7 +106,7 @@ public class GeoPlotter extends DrawableItem {
                     itemsToDraw = false;
                     break;
                 }
-                itemsToDraw = plot.updateDrawing(projection, bounds) ? true : itemsToDraw;
+                itemsToDraw = plot.updateDrawing(projection, bounds, newZoomLevel) ? true : itemsToDraw;
             }
 
             doDraw = itemsToDraw;

@@ -92,7 +92,7 @@ public class Crosshair extends DrawableItem {
     }
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
         // No specific implementation. Use the other overload for this
         return false;
     }

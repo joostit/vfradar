@@ -82,7 +82,7 @@ public class Button extends DrawableItem {
     }
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
         // No specific implementation
         return true;
     }

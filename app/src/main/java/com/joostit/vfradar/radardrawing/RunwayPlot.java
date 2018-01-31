@@ -51,7 +51,7 @@ public class RunwayPlot extends DrawableItem {
     }
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
 
         boolean isInView;
         double bearing = source.pointA.BearingTo(source.pointB);

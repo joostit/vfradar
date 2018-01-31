@@ -271,7 +271,7 @@ public class AircraftPlot extends DrawableItem {
 
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
         PointF screenPoint = projection.toScreenPoint(lat, lon);
         ScreenX = screenPoint.x;
         ScreenY = screenPoint.y;

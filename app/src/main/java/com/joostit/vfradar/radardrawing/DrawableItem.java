@@ -16,7 +16,7 @@ public abstract class DrawableItem {
 
     public abstract void draw(Canvas canvas);
 
-    public abstract boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds);
+    public abstract boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo);
 
 
 }

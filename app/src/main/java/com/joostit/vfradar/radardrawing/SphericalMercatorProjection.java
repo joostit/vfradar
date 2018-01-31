@@ -49,14 +49,6 @@ public class SphericalMercatorProjection {
         offsetY = screenCenterpoint.y - (0.5 * screenHeight);
     }
 
-    public int screenHight() {
-        return screenHight;
-    }
-
-    public int screenWidth() {
-        return screenWidth;
-    }
-
 
     @SuppressWarnings("deprecation")
     public synchronized PointF toScreenPoint(final LatLon position) {

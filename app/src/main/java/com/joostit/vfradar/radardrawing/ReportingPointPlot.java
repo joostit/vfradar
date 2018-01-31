@@ -45,7 +45,7 @@ public class ReportingPointPlot extends DrawableItem {
     }
 
     @Override
-    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds) {
+    public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
         screenPoint = projection.toScreenPoint(source.position);
 
         doDraw = bounds.contains(screenPoint.x, screenPoint.y);
