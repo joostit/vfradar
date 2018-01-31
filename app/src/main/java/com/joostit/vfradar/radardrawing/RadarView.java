@@ -37,6 +37,7 @@ public class RadarView extends View {
     private float TOUCH_ACCURACY = 50;
     private float zoomButtonDimension = 70;
     private float zoomButtonSpacing = 70;
+    private float zoomButtonY = 40;
     private OnRadarViewInteractionListener selectionListener;
 
     private List<DrawableItem> siteFeatures = new ArrayList<>();
@@ -188,7 +189,7 @@ public class RadarView extends View {
     }
 
     private float getZoomButtonY() {
-        return zoomButtonSpacing;
+        return zoomButtonY;
     }
 
     private void drawButtons(Canvas canvas) {

@@ -10,13 +10,21 @@ import android.graphics.RectF;
 
 public class Button extends DrawableItem {
 
+    private final float lineGrowSize = -3;
+    private final int textSize = 50;
+    private final float foreStrokeWidth = 8;
+    private final float lineStrokeWidth = 2;
+
     RectF buttonBounds = new RectF();
+    RectF lineBounds = new RectF();
     private String character;
     private float x;
     private float y;
     private float dimension;
     private int buttonForeColor = 0xFF009900;
     private int buttonBackColor = 0xFF002200;
+    private int buttonLineColor = 0xFF00DD00;
+    private Paint buttonLinePaint;
     private Paint buttonForePaint;
     private Paint buttonBackPaint;
 
@@ -31,15 +39,20 @@ public class Button extends DrawableItem {
 
     private void init() {
 
+        buttonLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        buttonLinePaint.setStyle(Paint.Style.STROKE);
+        buttonLinePaint.setColor(buttonLineColor);
+        buttonLinePaint.setStrokeWidth(lineStrokeWidth);
+
         buttonForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         buttonForePaint.setStyle(Paint.Style.STROKE);
         buttonForePaint.setColor(buttonForeColor);
-        buttonForePaint.setStrokeWidth(10);
+        buttonForePaint.setStrokeWidth(foreStrokeWidth);
         buttonForePaint.setTextAlign(Paint.Align.CENTER);
-        buttonForePaint.setTextSize(60);
+        buttonForePaint.setTextSize(textSize);
 
         buttonBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        buttonBackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        buttonBackPaint.setStyle(Paint.Style.FILL);
         buttonBackPaint.setColor(buttonBackColor);
         buttonBackPaint.setStrokeWidth(20);
 
@@ -51,6 +64,7 @@ public class Button extends DrawableItem {
         this.y = y;
 
         buttonBounds = new RectF(x, y, (float) x + dimension, y + dimension);
+        lineBounds = new RectF(x - lineGrowSize, y - lineGrowSize, (float) x + dimension + lineGrowSize, y + dimension + lineGrowSize);
     }
 
 
@@ -59,6 +73,7 @@ public class Button extends DrawableItem {
 
         canvas.drawRoundRect(buttonBounds, 10, 10, buttonBackPaint);
         canvas.drawRoundRect(buttonBounds, 10, 10, buttonForePaint);
+        canvas.drawRoundRect(lineBounds, 10, 10, buttonLinePaint);
 
         float textHeight = buttonForePaint.descent() - buttonForePaint.ascent();
         float textOffset = (textHeight / 2) - buttonForePaint.descent();
