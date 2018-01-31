@@ -16,11 +16,16 @@ public class SiteScenarioLoader {
     private List<GeoObject> geoData = new ArrayList<>();
     private GeoDataLoader geoLoader = new GeoDataLoader();
 
+
     public SiteScenarioLoader(){
 
     }
 
     public void loadData(){
+
+        SiteDataLoader siteLoader = new SiteDataLoader();
+        siteLoader.loadSiteDataFiles();
+
         SiteEHTW ehtw = new SiteEHTW();
         features.addAll(ehtw.getSite());
 

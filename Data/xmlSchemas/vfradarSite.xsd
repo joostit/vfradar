@@ -2,12 +2,24 @@
 <xs:schema
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="vfradarSite">
+  <xs:element name="vfradarSiteData">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="reportingpoints" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="fileInfo" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="reportingPoints" minOccurs="1" maxOccurs="1"/>
         <xs:element ref="runways" minOccurs="1" maxOccurs="1"/>
         <xs:element ref="routes" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="fileInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string"/>
+        <xs:element name="description" type="xs:string"/>
+        <xs:element name="author" type="xs:string"/>
+        <xs:element name="lastUpdated" type="xs:date"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -31,7 +43,9 @@
   <xs:element name="route">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="point" minOccurs="2" maxOccurs="unbounded"/>
+        <xs:choice minOccurs="2" maxOccurs="unbounded">
+            <xs:element ref="point"/>
+        </xs:choice>
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
@@ -54,14 +68,17 @@
     </xs:sequence>
     <xs:attribute name="name" use="required"/>
   </xs:complexType>
-  
 
-  <xs:element name="reportingpoints">
+  <xs:element name="reportingPoints">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="reportingPoint" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
+    <xs:unique name="repPointKey">
+      <xs:selector xpath="reportingPoint" />
+      <xs:field xpath="@name" />
+    </xs:unique>
   </xs:element>
 
   <xs:element name="reportingPoint">
@@ -83,7 +100,6 @@
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
-
 
   <xs:simpleType name="LatLonType">
     <xs:restriction base="xs:token">

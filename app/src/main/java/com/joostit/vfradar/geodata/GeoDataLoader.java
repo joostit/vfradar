@@ -5,6 +5,7 @@ import android.util.Xml;
 
 import com.joostit.vfradar.SysConfig;
 import com.joostit.vfradar.geo.LatLon;
+import com.joostit.vfradar.utilities.XmlParse;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -24,7 +25,7 @@ import java.util.List;
 public class GeoDataLoader {
 
     public static final String kmlExtensionRegex = "^([^\\s]+(\\.(?i)(kml))$)";
-
+    public static final String geoDataFolder = "GeoData/";
     private static final String ns = null;
 
     public GeoDataLoader() {
@@ -36,7 +37,7 @@ public class GeoDataLoader {
         List<GeoObject> retVal = new ArrayList<>();
 
         File rootDir = new File(SysConfig.getDataFolder());
-        File geoDataDir = new File(rootDir, "GeoData/");
+        File geoDataDir = new File(rootDir, geoDataFolder);
 
         File[] kmlFiles = geoDataDir.listFiles(new FileFilter() {
             @Override
@@ -90,7 +91,7 @@ public class GeoDataLoader {
             if (name.equals("Document")) {
                 entries = readDocument(parser);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
         return entries;
@@ -110,7 +111,7 @@ public class GeoDataLoader {
             if (name.equals("Folder")) {
                 entries = readFolder(parser);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
         return entries;
@@ -133,7 +134,7 @@ public class GeoDataLoader {
                     entries.add(newEntry);
                 }
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
         return entries;
@@ -162,7 +163,7 @@ public class GeoDataLoader {
             } else if (name.equals("MultiGeometry")) {
                 readMultiGeometryData(parser, newEntry);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
 
         }
@@ -191,7 +192,7 @@ public class GeoDataLoader {
             if (name.equals("Polygon")) {
                 readPolygonData(parser, newEntry);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
     }
@@ -209,7 +210,7 @@ public class GeoDataLoader {
             } else if (elementName.equals("innerBoundaryIs")) {
                 readInnerBoundaryIsData(parser, newEntry);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
 
@@ -227,7 +228,7 @@ public class GeoDataLoader {
             if (elementName.equals("LinearRing")) {
                 addLinearRingData(parser, newEntry);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
 
         }
@@ -245,7 +246,7 @@ public class GeoDataLoader {
             if (elementName.equals("LinearRing")) {
                 addLinearRingData(parser, newEntry);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
 
         }
@@ -265,7 +266,7 @@ public class GeoDataLoader {
                 GeoPolygon points = readCoordinates(parser);
                 newEntry.shape.polygons.add(points);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
     }
@@ -274,7 +275,7 @@ public class GeoDataLoader {
         GeoPolygon retVal = new GeoPolygon();
 
         parser.require(XmlPullParser.START_TAG, ns, "coordinates");
-        String coordinateString = readText(parser);
+        String coordinateString = XmlParse.readText(parser);
         String[] coordinates = coordinateString.trim().split("\\s+");
 
         for (String latlon : coordinates) {
@@ -301,7 +302,7 @@ public class GeoDataLoader {
             if (name.equals("SchemaData")) {
                 readSchemaData(parser, newEntry);
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
 
@@ -317,47 +318,13 @@ public class GeoDataLoader {
             }
             String elementName = parser.getAttributeValue(null, "name");
             if (elementName.equalsIgnoreCase("name")) {
-                newEntry.name = readSimpleDataText(parser);
+                newEntry.name = XmlParse.readElementText(parser, "SimpleData");
             } else {
-                skip(parser);
+                XmlParse.skip(parser);
             }
         }
 
     }
 
-    private String readSimpleDataText(XmlPullParser parser) throws XmlPullParserException, IOException {
-
-        parser.require(XmlPullParser.START_TAG, ns, "SimpleData");
-        String text = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "SimpleData");
-        return text;
-
-    }
-
-    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String result = "";
-        if (parser.next() == XmlPullParser.TEXT) {
-            result = parser.getText();
-            parser.nextTag();
-        }
-        return result;
-    }
-
-    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
-        }
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-                case XmlPullParser.END_TAG:
-                    depth--;
-                    break;
-                case XmlPullParser.START_TAG:
-                    depth++;
-                    break;
-            }
-        }
-    }
 
 }

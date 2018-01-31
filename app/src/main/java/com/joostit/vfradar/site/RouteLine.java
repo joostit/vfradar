@@ -11,17 +11,16 @@ import java.util.List;
 
 public class RouteLine extends SiteFeature {
 
-    public List<LatLon> points = new ArrayList<>();
+    public String name;
 
+    public List<LatLon> points = new ArrayList<>();
     public RouteLine() {
         super(SiteFeatureTypes.RouteLine);
     }
 
-
     public void addPoint(LatLon point){
         points.add(point);
     }
-
     public void addPoint(ReportingPoint point){
         points.add(point.position);
     }
