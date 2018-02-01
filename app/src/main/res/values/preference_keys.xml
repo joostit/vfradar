@@ -15,4 +15,5 @@
     <string name="key_site_elevationM">SiteElevationM</string>
 
     <string name="key_units_height">HeightUnit</string>
+    <string name="key_units_verticalRate">VericalRateUnit</string>
 </resources>

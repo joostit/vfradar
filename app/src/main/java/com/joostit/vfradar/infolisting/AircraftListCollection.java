@@ -8,7 +8,6 @@ import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
-import com.joostit.vfradar.utilities.Numbers;
 import com.joostit.vfradar.utilities.StringValue;
 
 import java.util.ArrayList;
@@ -20,7 +19,8 @@ public class AircraftListCollection {
 
     public final List<InfoListItemData> items = new ArrayList<>();
     private final Map<Integer, InfoListItemData> itemMap = new HashMap<>();
-    private UserUnitConvert userUnitConverter = new UserUnitConvert();;
+    private UserUnitConvert userUnitConverter = new UserUnitConvert();
+    ;
 
     public AircraftListCollection() {
     }
@@ -62,24 +62,14 @@ public class AircraftListCollection {
 
     private void updateListItemData(InfoListItemData acItem, TrackedAircraft tracked, Context context) {
 
-        if (tracked.Data.vRate != null) {
-            double val = Numbers.round(tracked.Data.vRate, 1);
-            if (val > 0) {
-                acItem.vRate = "+" + String.valueOf(val);
-            } else {
-                acItem.vRate = String.valueOf(val);
-            }
-        } else {
-            acItem.vRate = "";
-        }
+        acItem.vRate = userUnitConverter.getVerticalRateString(tracked.Data.vRate);
 
         TrackedAircraft.IdTypes nameType = tracked.getUserIdType();
 
-        if(tracked.Data.alt != null) {
+        if (tracked.Data.alt != null) {
             acItem.altitude = userUnitConverter.getHeight(tracked.Data.alt) + " " + userUnitConverter.getHeightUnitIndicator();
-        }
-        else{
-            acItem.altitude ="";
+        } else {
+            acItem.altitude = "";
         }
         acItem.model = sanitizeModelString(tracked.Data.model, tracked.Data.type, context);
         acItem.name = tracked.getId(nameType);

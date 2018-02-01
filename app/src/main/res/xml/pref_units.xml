@@ -9,4 +9,12 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_units_height" />
 
+    <ListPreference
+        android:entries="@array/pref_units_vertical_rate_titles"
+        android:entryValues="@array/pref_units_vertical_rate_values"
+        android:key="@string/key_units_verticalRate"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_units_vertical_rate" />
+
 </PreferenceScreen>

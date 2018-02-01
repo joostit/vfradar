@@ -91,6 +91,16 @@
         <item>Meter</item>
     </string-array>
 
+    <string name="pref_title_units_vertical_rate">Vertical rate</string>
+    <string-array name="pref_units_vertical_rate_titles">
+        <item>Feet per minute</item>
+        <item>Meter per second</item>
+    </string-array>
+    <string-array name="pref_units_vertical_rate_values">
+        <item>FeetPerMinute</item>
+        <item>MeterPerSecond</item>
+    </string-array>
+
     <!-- Filtering preferences -->
 
     <string name="pref_header_filtering">Filtering</string>

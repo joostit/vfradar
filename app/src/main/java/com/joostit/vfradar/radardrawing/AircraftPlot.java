@@ -252,16 +252,9 @@ public class AircraftPlot extends DrawableItem {
         String infoLineString = "";
 
         if (aircraft.Data.hasAltitude()) {
-
             String altString = unitConverter.getHeight(aircraft.Data.alt) + " " + unitConverter.getHeightUnitIndicator();
-
             infoLineString = altString;
-
-            if ((aircraft.Data.hasVRate()) && (aircraft.Data.vRate != 0)) {
-                double vRateRounded = Math.round(aircraft.Data.vRate * 10) / 10.0;
-                String plusSign = (aircraft.Data.vRate > 0.0) ? "+" : "";
-                infoLineString += "  " + plusSign + df1.format(vRateRounded);
-            }
+            infoLineString += "  " + unitConverter.getVerticalRateString(aircraft.Data.vRate);
         }
 
         InfoLine = infoLineString;

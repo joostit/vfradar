@@ -20,18 +20,29 @@ public class SysConfig {
     private static String dataFolder;
     private static HeightUnits heightUnit;
     private static int siteElevation;
+    private static VerticalRateUnits verticalRateUnit;
+
 
     static {
         setDefaults();
     }
 
-    public static HeightUnits getHeightUnits() {
+    public static HeightUnits getHeightUnit() {
         return heightUnit;
     }
 
     public static void setHeightUnits(Context context, HeightUnits value) {
         heightUnit = value;
         setString(context, R.string.key_units_height, heightUnit.name());
+    }
+
+    public static VerticalRateUnits getVerticalRateUnit() {
+        return verticalRateUnit;
+    }
+
+    public static void setVerticalRateUnit(Context context, VerticalRateUnits value) {
+        verticalRateUnit = value;
+        setString(context, R.string.key_units_verticalRate, verticalRateUnit.name());
     }
 
 
@@ -84,6 +95,7 @@ public class SysConfig {
         siteElevation = getIntFromStringPreference(context, R.string.key_site_elevationM, siteElevation);
         dataFolder = getString(context, R.string.key_data_datafolder, dataFolder);
         heightUnit = HeightUnits.valueOf(getString(context, R.string.key_units_height, heightUnit.name()));
+        verticalRateUnit = VerticalRateUnits.valueOf(getString(context, R.string.key_units_verticalRate, verticalRateUnit.name()));
     }
 
     private static void setDefaults() {
@@ -94,6 +106,7 @@ public class SysConfig {
         connectionUpdateInterval = 500;
         dataFolder = "";
         heightUnit = HeightUnits.Feet;
+        verticalRateUnit = VerticalRateUnits.FeetPerMinute;
     }
 
     private static int getInt(Context context, int resouceKeyId, int defaultValue) {

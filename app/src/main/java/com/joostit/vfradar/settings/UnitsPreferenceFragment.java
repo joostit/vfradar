@@ -23,6 +23,7 @@ public class UnitsPreferenceFragment extends PreferenceFragment{
         setHasOptionsMenu(true);
 
         SettingsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_units_height)));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_units_verticalRate)));
     }
 
 
