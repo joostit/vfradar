@@ -10,8 +10,10 @@ import android.widget.Toast;
 
 import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.data.AircraftDataListener;
+import com.joostit.vfradar.data.AircraftDataUpdate;
 import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.data.AircraftStateCollection;
+import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
 import com.joostit.vfradar.infolisting.InfoListFragment;
@@ -102,8 +104,8 @@ public class OperationalActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        List<TrackedAircraft> newState = new ArrayList<>();
-        updateFragments(newState);
+        AircraftTrackingUpdate emptyUpdate = new AircraftTrackingUpdate(new ArrayList<TrackedAircraft>(), false);
+        updateFragments(emptyUpdate);
 
         siteDataLoadertask = new LoadSiteDataTask(this);
         siteDataLoadertask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -120,20 +122,20 @@ public class OperationalActivity extends AppCompatActivity
     }
 
     @Override
-    public void newAircraftDataReceived(List<AircraftState> ac) {
-        List<TrackedAircraft> newState = aircaft.doUpdate(ac);
-        updateFragments(newState);
+    public void newAircraftDataReceived(AircraftDataUpdate ac) {
+        AircraftTrackingUpdate lastUpdatedState = aircaft.doUpdate(ac);
+        updateFragments(lastUpdatedState);
     }
 
-    private void updateFragments(List<TrackedAircraft> ac) {
+    private void updateFragments(AircraftTrackingUpdate lastUpdateState) {
         RadarViewFragment rView = (RadarViewFragment) getFragmentManager().findFragmentByTag("radarViewFragTag");
         if (rView != null) {
-            rView.UpdateAircraft(ac);
+            rView.UpdateAircraft(lastUpdateState);
         }
 
         InfoListFragment acListFragment = (InfoListFragment) getFragmentManager().findFragmentByTag("aircraftListFragTag");
         if (acListFragment != null) {
-            acListFragment.UpdateAircraft(ac);
+            acListFragment.UpdateAircraft(lastUpdateState);
         }
 
     }

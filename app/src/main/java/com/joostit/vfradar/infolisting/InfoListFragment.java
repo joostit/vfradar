@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.joostit.vfradar.R;
+import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 
 import java.util.HashMap;
@@ -98,8 +99,8 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
         }
     }
 
-    public void UpdateAircraft(List<TrackedAircraft> ac) {
-        InfoListUpdateResults results = list.updateItems(ac, getContext());
+    public void UpdateAircraft(AircraftTrackingUpdate lastUpdateState) {
+        InfoListUpdateResults results = list.updateItems(lastUpdateState, getContext());
 
         if (results.added.size() > 0 || results.removed.size() > 0) {
 

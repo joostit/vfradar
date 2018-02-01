@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.joostit.vfradar.config.SysConfig;
+import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.site.ReportingPoint;
@@ -86,8 +87,8 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         selectionListener = radarViewFragment;
     }
 
-    public synchronized void UpdateAircraft(List<TrackedAircraft> ac) {
-        updateAircraftPlotData(ac);
+    public synchronized void UpdateAircraft(AircraftTrackingUpdate lastUpdateState) {
+        updateAircraftPlotData(lastUpdateState);
         redrawAircraftPlots();
         invalidate();
     }
@@ -205,11 +206,11 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
     }
 
-    private synchronized void updateAircraftPlotData(List<TrackedAircraft> tracks) {
+    private synchronized void updateAircraftPlotData(AircraftTrackingUpdate lastUpdateState) {
 
         List<AircraftPlot> toRemove = new ArrayList<AircraftPlot>(plots);
 
-        for (TrackedAircraft track : tracks) {
+        for (TrackedAircraft track : lastUpdateState.trackedAircraft) {
             AircraftPlot plot = findPlotByTrackid(track.Data.trackId);
 
             if (plot == null) {

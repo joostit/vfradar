@@ -8,13 +8,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Joost on 22-1-2018.
  */
 
-public class VFRadarCoreReaderTask extends AsyncTask<URL, Integer, List<AircraftState>> {
+public class VFRadarCoreReaderTask extends AsyncTask<URL, Integer, AircraftDataUpdate> {
 
     private AircraftDataListener listener;
 
@@ -24,12 +25,15 @@ public class VFRadarCoreReaderTask extends AsyncTask<URL, Integer, List<Aircraft
     }
 
     @Override
-    protected List<AircraftState> doInBackground(URL... params) {
+    protected AircraftDataUpdate doInBackground(URL... params) {
 
         String jsonString = null;
-        List<AircraftState> retVal = null;
+        AircraftDataUpdate retVal = null;
         StringBuilder result = new StringBuilder();
         AircraftDataBuilder dataBuilder = new AircraftDataBuilder();
+        boolean connectionSuccess = false;
+        boolean parseSuccess = false;
+        List<AircraftState> jsonResult = new ArrayList<>();
 
         try {
             URL url = params[0];
@@ -44,21 +48,30 @@ public class VFRadarCoreReaderTask extends AsyncTask<URL, Integer, List<Aircraft
             }
 
             jsonString = result.toString();
+            connectionSuccess = true;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         if (jsonString != null) {
-            retVal = dataBuilder.parseJson(jsonString);
+
+            try {
+                jsonResult = dataBuilder.parseJson(jsonString);
+                parseSuccess = true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
+
+        retVal = new AircraftDataUpdate(jsonResult, connectionSuccess && parseSuccess);
 
         return retVal;
 
     }
 
     @Override
-    protected void onPostExecute(List<AircraftState> ac) {
+    protected void onPostExecute(AircraftDataUpdate ac) {
 
         listener.newAircraftDataReceived(ac);
 

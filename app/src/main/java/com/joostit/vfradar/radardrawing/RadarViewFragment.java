@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.joostit.vfradar.R;
+import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.site.SiteFeature;
@@ -65,9 +66,9 @@ public class RadarViewFragment extends Fragment implements RadarView.OnRadarView
         mListener = null;
     }
 
-    public void UpdateAircraft(List<TrackedAircraft> ac) {
+    public void UpdateAircraft(AircraftTrackingUpdate lastUpdateState) {
         RadarView rView = getView().findViewById(R.id.radarView);
-        rView.UpdateAircraft(ac);
+        rView.UpdateAircraft(lastUpdateState);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class VFRadarCore implements AircraftDataListener {
     }
 
     @Override
-    public void newAircraftDataReceived(List<AircraftState> ac) {
+    public void newAircraftDataReceived(AircraftDataUpdate ac) {
         isExecuting = false;
         if (ac != null) {
             listener.newAircraftDataReceived(ac);

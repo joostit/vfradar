@@ -5,6 +5,7 @@ import android.content.Context;
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.config.UserUnitConvert;
+import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
@@ -29,13 +30,13 @@ public class AircraftListCollection {
         return new ArrayList<>(items);
     }
 
-    public synchronized InfoListUpdateResults updateItems(List<TrackedAircraft> aircraftUpdate, Context context) {
+    public synchronized InfoListUpdateResults updateItems(AircraftTrackingUpdate lastUpdateState, Context context) {
 
         InfoListUpdateResults retVal = new InfoListUpdateResults();
 
         List<InfoListItemData> itemsToRemove = new ArrayList<>(items);
 
-        for (TrackedAircraft tracked : aircraftUpdate) {
+        for (TrackedAircraft tracked : lastUpdateState.trackedAircraft) {
             InfoListItemData acItem;
             if (hasItem(tracked.Data.trackId)) {
                 acItem = getItem(tracked.Data.trackId);
