@@ -11,7 +11,7 @@
         android:title="@string/pref_title_coresystem_address" />
 
     <ListPreference
-        android:defaultValue="180"
+        android:defaultValue="500"
         android:entries="@array/pref_update_interval_titles"
         android:entryValues="@array/pref_update_interval_values"
         android:key="@string/key_update_interval"

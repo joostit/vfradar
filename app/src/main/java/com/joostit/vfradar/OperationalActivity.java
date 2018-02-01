@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.data.AircraftDataListener;
 import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.data.AircraftStateCollection;

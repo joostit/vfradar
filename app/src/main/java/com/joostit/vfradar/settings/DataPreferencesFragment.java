@@ -12,7 +12,7 @@ import android.provider.DocumentsContract;
 import android.view.MenuItem;
 
 import com.joostit.vfradar.R;
-import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.utilities.ASFUriUtils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)

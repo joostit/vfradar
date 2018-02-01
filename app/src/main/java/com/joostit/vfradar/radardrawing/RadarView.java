@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geodata.GeoObject;
 import com.joostit.vfradar.site.ReportingPoint;

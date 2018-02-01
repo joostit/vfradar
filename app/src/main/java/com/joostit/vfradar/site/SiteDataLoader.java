@@ -2,7 +2,7 @@ package com.joostit.vfradar.site;
 
 import android.util.Xml;
 
-import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.XmlParse;
 
@@ -42,9 +42,13 @@ public class SiteDataLoader {
         });
 
         for (File xmlFile : xmlFiles) {
-            SiteDataFile loaded = loadFile(xmlFile);
-            if (loaded != null) {
-                allFiles.add(loaded);
+            try {
+                SiteDataFile loaded = loadFile(xmlFile);
+                if (loaded != null) {
+                    allFiles.add(loaded);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
 

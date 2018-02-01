@@ -3,7 +3,7 @@ package com.joostit.vfradar.infolisting;
 import android.content.Context;
 
 import com.joostit.vfradar.R;
-import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;

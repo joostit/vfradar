@@ -12,4 +12,7 @@
     <string name="key_site_center_location">SiteLocation</string>
     <string name="key_site_pick_location">PickLocation</string>
     <string name="key_site_use_gps">SiteUserGps</string>
+    <string name="key_site_elevationM">SiteElevationM</string>
+
+    <string name="key_units_height">HeightUnit</string>
 </resources>

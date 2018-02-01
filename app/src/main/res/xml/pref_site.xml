@@ -21,5 +21,14 @@
         android:singleLine="true"
         android:title="@string/pref_title_center_location" />
 
+    <EditTextPreference
+        android:defaultValue="0"
+        android:inputType="number"
+        android:key="@string/key_site_elevationM"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_site_elevation" />
+
 
 </PreferenceScreen>

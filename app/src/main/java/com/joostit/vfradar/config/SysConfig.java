@@ -1,9 +1,10 @@
-package com.joostit.vfradar;
+package com.joostit.vfradar.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.joostit.vfradar.R;
 import com.joostit.vfradar.geo.LatLon;
 
 /**
@@ -17,9 +18,30 @@ public class SysConfig {
     private static String vfradarCoreDataAddress;
     private static int connectionUpdateInterval;
     private static String dataFolder;
+    private static HeightUnits heightUnit;
+    private static int siteElevation;
 
     static {
         setDefaults();
+    }
+
+    public static HeightUnits getHeightUnits() {
+        return heightUnit;
+    }
+
+    public static void setHeightUnits(Context context, HeightUnits value) {
+        heightUnit = value;
+        setString(context, R.string.key_units_height, heightUnit.name());
+    }
+
+
+    public static int getSiteElevation() {
+        return siteElevation;
+    }
+
+    public static void setSiteElevation(Context context, int elevation) {
+        siteElevation = elevation;
+        setIntToStringPreference(context, R.string.key_site_elevationM, siteElevation);
     }
 
     public static int getConnectionUpdateInterval() {
@@ -59,15 +81,19 @@ public class SysConfig {
         vfradarCoreDataAddress = getString(context, R.string.key_vfradarcore_url, vfradarCoreDataAddress);
         connectionUpdateInterval = getInt(context, R.string.key_update_interval, connectionUpdateInterval);
         centerPosition = getLatLon(context, R.string.key_site_center_location, centerPosition);
+        siteElevation = getIntFromStringPreference(context, R.string.key_site_elevationM, siteElevation);
         dataFolder = getString(context, R.string.key_data_datafolder, dataFolder);
+        heightUnit = HeightUnits.valueOf(getString(context, R.string.key_units_height, heightUnit.name()));
     }
 
     private static void setDefaults() {
         vfradarCoreDataAddress = "http://192.168.178.101:60002/live/all";
         centerPosition = new LatLon(52.278758, 6.899437);
+        siteElevation = 0;
         maxValidRxAge = 15;
         connectionUpdateInterval = 500;
-        dataFolder = "TODO: Set external storage??";
+        dataFolder = "";
+        heightUnit = HeightUnits.Feet;
     }
 
     private static int getInt(Context context, int resouceKeyId, int defaultValue) {
@@ -75,6 +101,11 @@ public class SysConfig {
         String preferenceKey = context.getResources().getString(resouceKeyId);
         String val = preferences.getString(preferenceKey, String.valueOf(defaultValue));
         return Integer.parseInt(val);
+    }
+
+    private static int getIntFromStringPreference(Context context, int resouceKeyId, Integer defaultValue) {
+        String value = getString(context, resouceKeyId, defaultValue.toString());
+        return Integer.parseInt(value);
     }
 
     private static String getString(Context context, int resouceKeyId, String defaultValue) {
@@ -89,13 +120,23 @@ public class SysConfig {
         return LatLon.parseLatLon(preferences.getString(preferenceKey, defaultValue.toString()));
     }
 
+    private static void setInt(Context context, int resourceKeyId, int value) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(context.getString(resourceKeyId), value);
+        editor.commit();
+    }
+
+    private static void setIntToStringPreference(Context context, int resourceKeyId, Integer value) {
+        setString(context, resourceKeyId, value.toString());
+    }
+
     private static void setString(Context context, int resourceKeyId, String value) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(context.getString(resourceKeyId), value);
         editor.commit();
     }
-
 
     private static void setLatLon(Context context, int resourceKeyId, LatLon value) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);

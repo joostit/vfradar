@@ -2,7 +2,7 @@ package com.joostit.vfradar.data;
 
 import android.os.AsyncTask;
 
-import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.config.SysConfig;
 
 import java.net.MalformedURLException;
 import java.net.URL;

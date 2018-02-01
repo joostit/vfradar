@@ -79,6 +79,18 @@
     </string-array>
 
 
+    <!-- Units preferences-->
+    <string name="pref_header_units">Units</string>
+    <string name="pref_title_units_height">Altitude</string>
+    <string-array name="pref_units_height_titles">
+        <item>Feet</item>
+        <item>Meters</item>
+    </string-array>
+    <string-array name="pref_units_height_values">
+        <item>Feet</item>
+        <item>Meter</item>
+    </string-array>
+
     <!-- Filtering preferences -->
 
     <string name="pref_header_filtering">Filtering</string>
@@ -98,6 +110,8 @@
 
     <string name="pref_title_pick_location">Pick location</string>
     <string name="pref_summary_pick_location">Use a map to pick the center position (requires an active internet connection)</string>
+    <string name="pref_title_site_elevation">Elevation</string>
+
 
     <string name="pref_title_center_location">Center location</string>
     <string name="pref_default_center_location">0.00000, 0.00000</string>

@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.joostit.vfradar.OperationalActivity;
 import com.joostit.vfradar.PermissionHelper;
 import com.joostit.vfradar.R;
-import com.joostit.vfradar.SysConfig;
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.settings.SettingsActivity;
 
 public class StartupActivity extends AppCompatActivity
