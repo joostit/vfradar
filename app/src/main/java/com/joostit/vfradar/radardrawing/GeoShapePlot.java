@@ -77,25 +77,29 @@ public class GeoShapePlot extends DrawableItem {
         int pointCount = 0;
 
 
+        // Determine of the square bounding rectangle is anywhere within the screen bounds
+        // Using only the bounding rectangle saves us from iterating though tens of thousands of Points
+        // each redraw, thus increasing performance
         LatLonRect geoBounds = source.getBoundingRect();
-
+        LatLon bottomLeft = new LatLon(geoBounds.leftLat, geoBounds.bottomLon);
         LatLon topLeft = new LatLon(geoBounds.leftLat, geoBounds.topLon);
+        LatLon topRight = new LatLon(geoBounds.rightLat, geoBounds.topLon);
         LatLon bottomRight = new LatLon(geoBounds.rightLat, geoBounds.bottomLon);
 
-
+        PointF bottomLeftScreen = projection.toScreenPoint(bottomLeft);
         PointF topLeftScreen = projection.toScreenPoint(topLeft);
+        PointF topRightScreen = projection.toScreenPoint(topRight);
         PointF bottomRightScreen = projection.toScreenPoint(bottomRight);
-        RectF geoScreenBounds = new RectF(topLeftScreen.x, bottomRightScreen.y, bottomRightScreen.x, topLeftScreen.y);
 
-        if(RectF.intersects(geoScreenBounds, bounds)){
+        if (bounds.contains(bottomLeftScreen.x, bottomLeftScreen.y)
+                || bounds.contains(topLeftScreen.x, topLeftScreen.y)
+                || bounds.contains(topRightScreen.x, topRightScreen.y)
+                || bounds.contains(bottomRightScreen.x, bottomRightScreen.y)) {
             isInView = true;
-        }
-        else{
-            doDraw =false;
+        } else {
+            doDraw = false;
             return false;
         }
-
-
 
         for (GeoPolygon polygon : source.shape.polygons) {
 
@@ -105,9 +109,7 @@ public class GeoShapePlot extends DrawableItem {
 
             LatLon startlatLon = polygon.get(0);
             PointF startPoint = projection.toScreenPoint(startlatLon);
-//            if (bounds.contains(startPoint.x, startPoint.y)) {
-//                isInView = true;
-//            }
+
             newPath.moveTo(startPoint.x, startPoint.y);
             sumX += startPoint.x;
             sumY += startPoint.y;
@@ -116,11 +118,6 @@ public class GeoShapePlot extends DrawableItem {
             for (int i = 1; i < polygon.size(); i++) {
                 LatLon pos = polygon.get(i);
                 PointF screenPoint = projection.toScreenPoint(pos);
-
-//                if (bounds.contains(screenPoint.x, screenPoint.y)) {
-//                    isInView = true;
-//                }
-
                 newPath.lineTo(screenPoint.x, screenPoint.y);
 
                 if (screenPoint.x > maxX) {
@@ -163,7 +160,6 @@ public class GeoShapePlot extends DrawableItem {
             } else {
                 newTextPoint = null;
             }
-
 
         } else {
             newTextPoint = null;
