@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.joostit.vfradar.R;
+import com.joostit.vfradar.data.AircraftTrackingUpdate;
 
 
 public class MenuBarFragment extends Fragment {
@@ -70,6 +71,11 @@ public class MenuBarFragment extends Fragment {
 
         });
 
+    }
+
+    public void updateAircraft(AircraftTrackingUpdate lastUpdateState) {
+        StatusBarView statusView = getView().findViewById(R.id.statusBarView);
+        statusView.updateStatus(lastUpdateState);
     }
 
     public interface OnMenuBarFragmentInteractionListener {

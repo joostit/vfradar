@@ -17,6 +17,11 @@ public class AircraftTrackingUpdate {
         this.trackedAircraft = trackedAircraft;
     }
 
+    public AircraftTrackingUpdate(){
+        this.updateSuccess = false;
+        this.trackedAircraft = new ArrayList<>();
+    }
+
     public boolean getUpdateSuccess(){
         return updateSuccess;
     }

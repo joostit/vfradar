@@ -48,6 +48,7 @@
         android:layout_height="wrap_content">
 
         <com.joostit.vfradar.InfoBar.StatusBarView
+            android:id="@+id/statusBarView"
             android:layout_width="match_parent"
             android:layout_height="70px" />
 

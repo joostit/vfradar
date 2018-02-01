@@ -99,7 +99,7 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
         }
     }
 
-    public void UpdateAircraft(AircraftTrackingUpdate lastUpdateState) {
+    public void updateAircraft(AircraftTrackingUpdate lastUpdateState) {
         InfoListUpdateResults results = list.updateItems(lastUpdateState, getContext());
 
         if (results.added.size() > 0 || results.removed.size() > 0) {

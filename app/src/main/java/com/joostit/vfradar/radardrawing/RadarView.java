@@ -87,7 +87,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         selectionListener = radarViewFragment;
     }
 
-    public synchronized void UpdateAircraft(AircraftTrackingUpdate lastUpdateState) {
+    public synchronized void updateAircraft(AircraftTrackingUpdate lastUpdateState) {
         updateAircraftPlotData(lastUpdateState);
         redrawAircraftPlots();
         invalidate();

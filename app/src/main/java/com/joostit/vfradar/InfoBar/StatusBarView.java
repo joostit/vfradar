@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.joostit.vfradar.data.AircraftTrackingUpdate;
+
 /**
  * Created by Joost on 1-2-2018.
  */
@@ -46,6 +48,7 @@ public class StatusBarView extends View {
     private Paint dataTextBackPaint;
     private Paint dataTextBoundPaint;
 
+    private AircraftTrackingUpdate lastUpdate = new AircraftTrackingUpdate();
 
     public StatusBarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -53,6 +56,13 @@ public class StatusBarView extends View {
 
         init();
     }
+
+
+    public void updateStatus(AircraftTrackingUpdate update){
+        this.lastUpdate = update;
+        this.invalidate();
+    }
+
 
     private void init() {
         boundingRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -122,9 +132,8 @@ public class StatusBarView extends View {
 
         canvas.drawText(scenarioName, 0, scenarioName.length(), txtX, txtY, dataTextPaint);
 
-        drawStatusRect(canvas, 462, statusIndicatorsY, 90, "Network", false);
+        drawStatusRect(canvas, 462, statusIndicatorsY, 90, "Network", lastUpdate.getUpdateSuccess());
     }
-
 
     private void drawStatusRect(Canvas canvas, float x, float y, float width, String text, boolean status){
 
@@ -147,7 +156,6 @@ public class StatusBarView extends View {
         newTextPoint.y = drawBounds.centerY() + (textStretchY / 2);
         return newTextPoint;
     }
-
 
     private Paint getStatusBackPaint(boolean valueTrue) {
         if (valueTrue) {
