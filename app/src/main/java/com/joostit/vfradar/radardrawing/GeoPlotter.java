@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class GeoPlotter extends DrawableItem {
 
-    Bitmap screenBuffer;
+    private Bitmap screenBuffer;
     private List<GeoShapePlot> shapePlots = new ArrayList<>();
     private Paint bitmapPaint;
     private Paint bitmapScaledPaint;
@@ -66,8 +66,6 @@ public class GeoPlotter extends DrawableItem {
             return bitmapScaledPaint;
         }
     }
-
-
 
     private void init() {
         bitmapPaint = new Paint();
