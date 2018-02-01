@@ -151,7 +151,7 @@ public class GeoShapePlot extends DrawableItem {
             textPaint.getTextBounds(source.name, 0, source.name.length(), textBounds);
 
             int textStretchX = textBounds.right;
-            int textStretchY = textBounds.bottom - textBounds.top;  // text is drawn both on topLon and below the Y position
+            int textStretchY = textBounds.bottom - textBounds.top;
 
             if ((polyStretchX > textStretchX) && (polyStretchY > textStretchY)) {
                 newTextPoint = new PointF();

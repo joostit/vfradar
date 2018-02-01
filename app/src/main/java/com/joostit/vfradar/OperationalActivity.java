@@ -8,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.joostit.vfradar.InfoBar.MenuBarFragment;
 import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.data.AircraftDataListener;
 import com.joostit.vfradar.data.AircraftDataUpdate;
-import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.data.AircraftStateCollection;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
@@ -22,7 +22,6 @@ import com.joostit.vfradar.settings.SettingsActivity;
 import com.joostit.vfradar.site.SiteScenarioLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class OperationalActivity extends AppCompatActivity
         implements RadarViewFragment.OnRadarViewInteractionListener,

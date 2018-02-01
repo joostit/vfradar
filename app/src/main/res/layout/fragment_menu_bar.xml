@@ -1,33 +1,57 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
-    android:layout_height="100dp"
-    android:background="@drawable/menubarbackground"
-    tools:context="com.joostit.vfradar.MenuBarFragment">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.joostit.vfradar.InfoBar.MenuBarFragment"
+    android:background="@drawable/menubarbackground">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <ImageButton
         android:id="@+id/preferencesButton"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginEnd="5dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="2dp"
         android:background="#00000000"
         android:src="@drawable/gear_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/logoTextView"
-        android:layout_width="168dp"
-        android:layout_height="60dp"
-        android:text="VFRadar"
-        android:textAlignment="center"
-        android:textColor="#FF00EE00"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/preferencesButton"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/logoTextView"
+            android:layout_width="168dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="35dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:text="VFRadar"
+            android:textAlignment="center"
+            android:textColor="#FF00EE00"
+            android:textSize="40sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/preferencesButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.joostit.vfradar.InfoBar.StatusBarView
+            android:layout_width="match_parent"
+            android:layout_height="70px" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

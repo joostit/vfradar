@@ -41,7 +41,7 @@
 
             <fragment
                 android:id="@+id/menuBarFrag"
-                android:name="com.joostit.vfradar.MenuBarFragment"
+                android:name="com.joostit.vfradar.InfoBar.MenuBarFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:tag="menuBarFragTag"

@@ -1,4 +1,4 @@
-package com.joostit.vfradar;
+package com.joostit.vfradar.InfoBar;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import com.joostit.vfradar.R;
 
 
 public class MenuBarFragment extends Fragment {
