@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
+import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.TrackedAircraft;
 
 import java.text.DecimalFormat;
@@ -46,6 +47,7 @@ public class AircraftPlot extends DrawableItem {
     private int acTextGuideLineColor = 0xAA008000;
     private int acTextBackColor = 0xBB000000;
 
+    private UserUnitConvert unitConverter = new UserUnitConvert();
 
     private float[] selectedGradientstops = new float[]{0, 1};
     private int[] selectedGradientColors = new int[]{selectedBackCenterColor, selectedBackEndColor};
@@ -251,12 +253,14 @@ public class AircraftPlot extends DrawableItem {
 
         if (aircraft.Data.hasAltitude()) {
 
-            infoLineString = aircraft.Data.alt.toString();
+            String altString = unitConverter.getHeight(aircraft.Data.alt) + " " + unitConverter.getHeightUnitIndicator();
+
+            infoLineString = altString;
 
             if ((aircraft.Data.hasVRate()) && (aircraft.Data.vRate != 0)) {
                 double vRateRounded = Math.round(aircraft.Data.vRate * 10) / 10.0;
                 String plusSign = (aircraft.Data.vRate > 0.0) ? "+" : "";
-                infoLineString += "    " + plusSign + df1.format(vRateRounded);
+                infoLineString += "  " + plusSign + df1.format(vRateRounded);
             }
         }
 

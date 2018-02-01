@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.config.SysConfig;
+import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.DistanceString;
@@ -19,10 +20,9 @@ public class AircraftListCollection {
 
     public final List<InfoListItemData> items = new ArrayList<>();
     private final Map<Integer, InfoListItemData> itemMap = new HashMap<>();
-
+    private UserUnitConvert userUnitConverter = new UserUnitConvert();;
 
     public AircraftListCollection() {
-
     }
 
     public synchronized List<InfoListItemData> getListItems() {
@@ -75,7 +75,12 @@ public class AircraftListCollection {
 
         TrackedAircraft.IdTypes nameType = tracked.getUserIdType();
 
-        acItem.altitude = tracked.Data.alt != null ? tracked.Data.alt.toString() : "";
+        if(tracked.Data.alt != null) {
+            acItem.altitude = userUnitConverter.getHeight(tracked.Data.alt) + " " + userUnitConverter.getHeightUnitIndicator();
+        }
+        else{
+            acItem.altitude ="";
+        }
         acItem.model = sanitizeModelString(tracked.Data.model, tracked.Data.type, context);
         acItem.name = tracked.getId(nameType);
         acItem.nameType = getNameTypeTranslation(nameType, context);

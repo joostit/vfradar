@@ -39,7 +39,7 @@ public class SitePreferenceFragment extends PreferenceFragment
         filePickPref.setOnPreferenceClickListener(this);
 
         SettingsActivity.updatePreferenceSummary(centerPref, null);
-        SettingsActivity.updatePreferenceSummary(findPreference(getString(R.string.key_site_elevationM)), null);
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_site_elevationM)));
     }
 
 

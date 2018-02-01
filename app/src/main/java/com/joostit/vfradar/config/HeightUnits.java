@@ -5,8 +5,8 @@ package com.joostit.vfradar.config;
  */
 
 public enum HeightUnits {
-    Meter(1),
-    Feet(2);
+    Meter(0),
+    Feet(1);
 
 
     private final int value;
