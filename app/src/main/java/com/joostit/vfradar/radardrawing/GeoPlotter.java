@@ -7,6 +7,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import com.joostit.vfradar.geodata.GeoObject;
+import com.joostit.vfradar.utilities.Numbers;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class GeoPlotter extends DrawableItem {
     Bitmap screenBuffer;
     private List<GeoShapePlot> shapePlots = new ArrayList<>();
     private Paint bitmapPaint;
+    private Paint bitmapScaledPaint;
+    private int bitmapScaledColor = 0xCC000000;
     private RedrawGeoDataTask redrawTask;
     private OnRedrawRequestHandler redrawHandler;
     private ZoomLevelInfo lastZoomlevel = null;
@@ -49,9 +53,20 @@ public class GeoPlotter extends DrawableItem {
                     bmpBounds.left + xDisplacement + plotWidth,
                     bmpBounds.top + yDisplacement + plotHeight);
 
-            canvas.drawBitmap(screenBuffer, bmpBounds, plotBounds, bitmapPaint);
+            canvas.drawBitmap(screenBuffer, bmpBounds, plotBounds, getBitmapPaint());
         }
     }
+
+
+    private Paint getBitmapPaint(){
+        if(Numbers.isDoubleZero(screenBufferScale - 1)){
+         return bitmapPaint;
+        }
+        else{
+            return bitmapScaledPaint;
+        }
+    }
+
 
 
     private void init() {
@@ -60,6 +75,12 @@ public class GeoPlotter extends DrawableItem {
         bitmapPaint.setFilterBitmap(false);
         bitmapPaint.setStyle(Paint.Style.STROKE);
         bitmapPaint.setDither(false);
+        bitmapScaledPaint = new Paint();
+        bitmapScaledPaint.setAntiAlias(false);
+        bitmapScaledPaint.setFilterBitmap(false);
+        bitmapScaledPaint.setStyle(Paint.Style.STROKE);
+        bitmapScaledPaint.setDither(false);
+        bitmapScaledPaint.setColor(bitmapScaledColor);
     }
 
     @Override

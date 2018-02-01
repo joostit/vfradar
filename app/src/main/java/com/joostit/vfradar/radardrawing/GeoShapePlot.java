@@ -77,9 +77,9 @@ public class GeoShapePlot extends DrawableItem {
         int pointCount = 0;
 
 
-        // Determine of the square bounding rectangle is anywhere within the screen bounds
+        // Determine if the square bounding rectangle is anywhere within the screen bounds.
         // Using only the bounding rectangle saves us from iterating though tens of thousands of Points
-        // each redraw, thus increasing performance
+        // on each redraw, thus increasing performance
         LatLonRect geoBounds = source.getBoundingRect();
         LatLon bottomLeft = new LatLon(geoBounds.leftLat, geoBounds.bottomLon);
         LatLon topLeft = new LatLon(geoBounds.leftLat, geoBounds.topLon);

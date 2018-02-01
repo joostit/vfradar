@@ -6,6 +6,7 @@ package com.joostit.vfradar.utilities;
 
 public final class Numbers {
 
+    public static final double IS_ZERO_THRESHOLD = 0.00000001;
 
     public static double round(double input, int decimals) {
 
@@ -19,5 +20,8 @@ public final class Numbers {
         return Math.round(input * (double) factor) / (double) factor;
     }
 
+    public static boolean isDoubleZero(double value) {
+        return ((value >= -IS_ZERO_THRESHOLD) && (value <= IS_ZERO_THRESHOLD));
+    }
 
 }
