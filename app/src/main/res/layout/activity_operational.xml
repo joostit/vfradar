@@ -35,7 +35,7 @@
             android:layout_width="575px"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:background="#FF004000"
+            android:background="#FF001300"
             android:weightSum="10">
 
 
