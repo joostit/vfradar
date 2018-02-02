@@ -5,8 +5,12 @@ package com.joostit.vfradar.radardrawing;
  */
 
 public class ZoomLevelInfo {
-    public double RingRadius1;
-    public double RingRadius2;
-    public double RingRadius3;
-    public double RangeRadius;
+    public double ringRadius1;
+    public double ringRadius2;
+    public double ringRadius3;
+    public double rangeRadius;
+
+    public boolean isDistanceWithinLastRing(double distanceM){
+        return distanceM < ringRadius3;
+    }
 }

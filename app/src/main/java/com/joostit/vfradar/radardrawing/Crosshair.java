@@ -56,13 +56,13 @@ public class Crosshair extends DrawableItem {
         this.height = height;
         float centerY = height / 2;
 
-        ring1Annot = DistanceString.getString(zlInfo.RingRadius1);
-        ring2Annot = DistanceString.getString(zlInfo.RingRadius2);
-        ring3Annot = DistanceString.getString(zlInfo.RingRadius3);
+        ring1Annot = DistanceString.getString(zlInfo.ringRadius1);
+        ring2Annot = DistanceString.getString(zlInfo.ringRadius2);
+        ring3Annot = DistanceString.getString(zlInfo.ringRadius3);
 
-        LatLon ring1NorthPoint = centerPosition.Move(0, zlInfo.RingRadius1);
-        LatLon ring2NorthPoint = centerPosition.Move(0, zlInfo.RingRadius2);
-        LatLon ring3NorthPoint = centerPosition.Move(0, zlInfo.RingRadius3);
+        LatLon ring1NorthPoint = centerPosition.Move(0, zlInfo.ringRadius1);
+        LatLon ring2NorthPoint = centerPosition.Move(0, zlInfo.ringRadius2);
+        LatLon ring3NorthPoint = centerPosition.Move(0, zlInfo.ringRadius3);
 
         PointF ring1ScreenTop = projection.toScreenPoint(ring1NorthPoint.latitude, ring1NorthPoint.longitude);
         PointF ring2ScreenTop = projection.toScreenPoint(ring2NorthPoint.latitude, ring2NorthPoint.longitude);

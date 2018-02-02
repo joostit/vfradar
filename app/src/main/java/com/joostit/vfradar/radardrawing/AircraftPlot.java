@@ -8,8 +8,10 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.geo.LatLon;
 
 import java.text.DecimalFormat;
 
@@ -29,8 +31,7 @@ public class AircraftPlot extends DrawableItem {
     public Boolean isWarning = false;
     private int selectedBoxRadius = 30;
     private boolean doDraw = false;
-    private double lat;
-    private double lon;
+    public LatLon position = new LatLon();
     private Integer Track;
     private String DisplayName;
     private String InfoLine;
@@ -260,8 +261,8 @@ public class AircraftPlot extends DrawableItem {
         InfoLine = infoLineString;
 
         Track = aircraft.Data.track;
-        lat = aircraft.Data.lat;
-        lon = aircraft.Data.lon;
+        position.latitude = aircraft.Data.lat;
+        position.longitude = aircraft.Data.lon;
         isHighlighted = aircraft.isHighlighted;
         isWarning = aircraft.isWarning;
     }
@@ -269,11 +270,16 @@ public class AircraftPlot extends DrawableItem {
 
     @Override
     public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
-        PointF screenPoint = projection.toScreenPoint(lat, lon);
+        PointF screenPoint = projection.toScreenPoint(position);
         ScreenX = screenPoint.x;
         ScreenY = screenPoint.y;
 
         doDraw = bounds.contains(ScreenX, ScreenY);
         return doDraw;
+    }
+
+    public double getDistanceFromCenter(){
+        double distanceM = SysConfig.getCenterPosition().DistanceTo(position);
+        return distanceM;
     }
 }

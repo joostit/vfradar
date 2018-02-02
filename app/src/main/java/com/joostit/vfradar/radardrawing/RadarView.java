@@ -139,7 +139,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
     private synchronized void redrawGraphics() {
 
-        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().RangeRadius * 1.08, SysConfig.getCenterPosition());
+        projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().rangeRadius * 1.08, SysConfig.getCenterPosition());
         geoPlot.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
         RecalculateSite();
         RecalculateButtons();
@@ -347,6 +347,10 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         zoomLevels.zoomIn();
         redrawGraphics();
     }
+    private void zoomTo(int zoomLevel) {
+        zoomLevels.zoomTo(zoomLevel);
+        redrawGraphics();
+    }
 
     private boolean processAircraftTouchEvent(MotionEvent event) {
 
@@ -419,9 +423,28 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
         if (trackId != null) {
             selectPlot(trackId);
+            zoomToAircraft(trackId);
         }
         redrawAircraftPlots();
         invalidate();
+    }
+
+    private void zoomToAircraft(Integer trackId) {
+        AircraftPlot toSelect = findPlotByTrackid(trackId);
+        double distance = toSelect.getDistanceFromCenter();
+
+        int requiredZoomLevel = 0;
+
+        for(int zl = 0; zl < zoomLevels.size(); zl++){
+            if(zoomLevels.getZoomLevelInfoAt(zl).isDistanceWithinLastRing(distance)){
+                requiredZoomLevel = zl;
+                break;
+            }
+        }
+
+        if(requiredZoomLevel > zoomLevels.getCurrentZoomLevel()){
+            zoomTo(requiredZoomLevel);
+        }
     }
 
 

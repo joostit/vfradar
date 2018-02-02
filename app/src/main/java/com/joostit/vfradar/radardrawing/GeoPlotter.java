@@ -85,7 +85,7 @@ public class GeoPlotter extends DrawableItem {
     public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
 
         if(lastZoomlevel != null) {
-            screenBufferScale = lastZoomlevel.RangeRadius / zoomLevelInfo.RangeRadius;
+            screenBufferScale = lastZoomlevel.rangeRadius / zoomLevelInfo.rangeRadius;
         }
         else{
             screenBufferScale = 1;
