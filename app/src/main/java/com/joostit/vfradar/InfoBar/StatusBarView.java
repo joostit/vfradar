@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
+import com.joostit.vfradar.utilities.DrawUtils;
 
 /**
  * Created by Joost on 1-2-2018.
@@ -20,7 +21,7 @@ public class StatusBarView extends View {
 
     private final int boundingRectMargin = 4;
     private final int statusIndicatorsY = 15;
-    private final int statusRounding = 3;
+
     private final int statusHeight = 38;
 
     private int statusTextSize = 21;
@@ -41,7 +42,7 @@ public class StatusBarView extends View {
     private Paint statusFalseForePaint;
     private Paint statusTrueBackPaint;
     private Paint statusFalseBackPaint;
-    private Paint statusRectForePaint;
+    private Paint statusRectBoundsPaint;
     private Paint boundingRectPaint;
     private Paint backPaint;
     private Paint dataTextPaint;
@@ -74,10 +75,10 @@ public class StatusBarView extends View {
         backPaint.setStyle(Paint.Style.FILL);
         backPaint.setColor(backColor);
 
-        statusRectForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        statusRectForePaint.setStyle(Paint.Style.STROKE);
-        statusRectForePaint.setColor(statusRectForeColor);
-        statusRectForePaint.setStrokeWidth(1.5f);
+        statusRectBoundsPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        statusRectBoundsPaint.setStyle(Paint.Style.STROKE);
+        statusRectBoundsPaint.setColor(statusRectForeColor);
+        statusRectBoundsPaint.setStrokeWidth(1.5f);
 
         statusTrueBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         statusTrueBackPaint.setStyle(Paint.Style.FILL);
@@ -131,30 +132,10 @@ public class StatusBarView extends View {
         float txtY = 45;
 
         canvas.drawText(scenarioName, 0, scenarioName.length(), txtX, txtY, dataTextPaint);
-
-        drawStatusRect(canvas, 462, statusIndicatorsY, 90, "Network", lastUpdate.getUpdateSuccess());
-    }
-
-    private void drawStatusRect(Canvas canvas, float x, float y, float width, String text, boolean status){
-
-        RectF statusBack = new RectF(x, y, x + width, y + statusHeight);
-        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(status));
-        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectForePaint);
-
-        PointF textPoint = centerText(statusBack, text);
-        canvas.drawText(text, textPoint.x, textPoint.y - 1, getStatusForePaint(status));
-    }
-
-    private PointF centerText(RectF drawBounds, String text){
-        Rect textBounds = new Rect();
-        statusTrueForePaint.getTextBounds(text, 0, text.length(), textBounds);
-        int textStretchX = textBounds.right;
-        int textStretchY = textBounds.bottom - textBounds.top;
-
-        PointF newTextPoint = new PointF();
-        newTextPoint.x = drawBounds.centerX() - (textStretchX / 2);
-        newTextPoint.y = drawBounds.centerY() + (textStretchY / 2);
-        return newTextPoint;
+        boolean success = lastUpdate.getUpdateSuccess();
+        Paint forePaint = getStatusForePaint(success);
+        Paint backPaint = getStatusBackPaint(success);
+        DrawUtils.drawStatusRect(canvas, 462, statusIndicatorsY, 90, statusHeight, "Network", statusRectBoundsPaint, forePaint, backPaint);
     }
 
     private Paint getStatusBackPaint(boolean valueTrue) {

@@ -24,7 +24,7 @@ public class DebugFencedAreaCreator {
     private FencedArea createArea1(){
         FencedArea area = new FencedArea();
 
-        area.name = "test1";
+        area.name = "Zuid circuit";
 
         area.alertType = FenceAlerts.Notification;
         area.topFt = 40000;

@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.joostit.vfradar.geofencing.FenceAlerts;
+import com.joostit.vfradar.utilities.DrawUtils;
+
 /**
  * Created by Joost on 28-1-2018.
  */
@@ -36,8 +39,13 @@ public class ListItemView extends View {
     private int modelTextColor = 0xFF00EE00;
     private int dataTextColor = 0xFF00DD00;
     private int relativeBearingArrowColor = 0xFF00DD00;
-    private int statusRectForeColor = 0xFF009900;
+    private int statusRectBoundsColor = 0xFF009900;
     private int bearingArrowBackColor = 0xFF005500;
+
+    private int noteRectForeColor = 0xFF333300;
+    private int noteRectBackColor = 0xFFe6e600;
+    private int warnRectForeColor = 0xFF330000;
+    private int warnRectBackColor = 0xFFff0000;
 
     private int nameTextSize = 55;
     private int nameTypeTextSize = 18;
@@ -60,7 +68,13 @@ public class ListItemView extends View {
     private Paint statusTrueBackPaint;
     private Paint statusFalseBackPaint;
     private Paint relativeBearingArrowPaint;
-    private Paint statusRectForePaint;
+    private Paint statusRectBoundsPaint;
+
+    private Paint noteRectForePaint;
+    private Paint noteRectBackPaint;
+
+    private Paint warnRectForePaint;
+    private Paint warnRectBackPaint;
 
     private Paint namePaint;
     private InfoListItemData currentState = new InfoListItemData();
@@ -124,10 +138,10 @@ public class ListItemView extends View {
         dataTextPaint.setColor(dataTextColor);
         dataTextPaint.setTextSize(dataTextSize);
 
-        statusRectForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        statusRectForePaint.setStyle(Paint.Style.STROKE);
-        statusRectForePaint.setColor(statusRectForeColor);
-        statusRectForePaint.setStrokeWidth(1.5f);
+        statusRectBoundsPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        statusRectBoundsPaint.setStyle(Paint.Style.STROKE);
+        statusRectBoundsPaint.setColor(statusRectBoundsColor);
+        statusRectBoundsPaint.setStrokeWidth(1.5f);
 
         statusTrueBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         statusTrueBackPaint.setStyle(Paint.Style.FILL);
@@ -155,6 +169,30 @@ public class ListItemView extends View {
         bearingArrowBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bearingArrowBackPaint.setStyle(Paint.Style.FILL);
         bearingArrowBackPaint.setColor(bearingArrowBackColor);
+
+
+        statusRectBoundsPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        statusRectBoundsPaint.setStyle(Paint.Style.STROKE);
+        statusRectBoundsPaint.setColor(statusRectBoundsColor);
+        statusRectBoundsPaint.setStrokeWidth(1.5f);
+
+        noteRectBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        noteRectBackPaint.setStyle(Paint.Style.FILL);
+        noteRectBackPaint.setColor(noteRectBackColor);
+
+        noteRectForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        noteRectForePaint.setStyle(Paint.Style.FILL);
+        noteRectForePaint.setColor(noteRectForeColor);
+        noteRectForePaint.setTextSize(statusTextSize);
+
+        warnRectBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        warnRectBackPaint.setStyle(Paint.Style.FILL);
+        warnRectBackPaint.setColor(warnRectBackColor);
+
+        warnRectForePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        warnRectForePaint.setStyle(Paint.Style.FILL);
+        warnRectForePaint.setColor(warnRectForeColor);
+        warnRectForePaint.setTextSize(statusTextSize);
     }
 
 
@@ -195,13 +233,56 @@ public class ListItemView extends View {
 
         RectF statusBack = new RectF(statusColumn, statusRow1, statusColumn + statusWidth, statusRow1 + statusHeight);
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(currentState.hasAdsb));
-        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectForePaint);
+        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectBoundsPaint);
         canvas.drawText("ADS-B", statusColumn + 5, statusRow1 + StatusTextHeight, getStatusForePaint(currentState.hasAdsb));
 
         statusBack = new RectF(statusColumn, statusRow2, statusColumn + statusWidth, statusRow2 + statusHeight);
         canvas.drawRoundRect(statusBack, statusRounding, statusRounding, getStatusBackPaint(currentState.hasOgn));
-        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectForePaint);
+        canvas.drawRoundRect(statusBack, statusRounding, statusRounding, statusRectBoundsPaint);
         canvas.drawText("OGN", statusColumn + 12, statusRow2 + StatusTextHeight, getStatusForePaint(currentState.hasOgn));
+
+        int noteX = columnRuler2;
+        int noteY = 13;
+        int noteSize = 200;
+
+        for(InfoListNotification notification : currentState.notifications){
+
+            DrawUtils.drawStatusRect(canvas, noteX, noteY, noteSize, statusHeight,
+                    notification.name,
+                    statusRectBoundsPaint,
+                    getStatusForePaint(notification.notificationType),
+                    getStatusBackPaint(notification.notificationType));
+        }
+
+    }
+
+
+    private Paint getStatusForePaint(FenceAlerts alertType){
+        switch (alertType) {
+            case None:
+                return null;
+
+            case Notification:
+                return noteRectForePaint;
+
+            case Warning:
+                return warnRectForePaint;
+        }
+        return null;
+    }
+
+    private Paint getStatusBackPaint(FenceAlerts alertType){
+        switch (alertType) {
+            case None:
+                return null;
+
+            case Notification:
+                return noteRectBackPaint;
+
+            case Warning:
+                return warnRectBackPaint;
+        }
+        return null;
     }
 
     private void drawRelativeBearingArrow(Canvas canvas, float x, float y, int bearing) {
@@ -314,6 +395,11 @@ public class ListItemView extends View {
 
         if (update.hasOgn != currentState.hasOgn) {
             currentState.hasOgn = update.hasOgn;
+            hasChanged = true;
+        }
+
+        if(update.notifications != currentState.notifications){
+            currentState.notifications = update.notifications;
             hasChanged = true;
         }
 
