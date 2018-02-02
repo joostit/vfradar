@@ -11,15 +11,15 @@ public class LatLon {
 
     private static final String validNumberRegEx = "^\\d+(\\.\\d+)$";
     private static NumberFormat format = NumberFormat.getInstance(Locale.ROOT);
-    public double Latitude;
-    public double Longitude;
+    public double latitude;
+    public double longitude;
 
     public LatLon() {
     }
 
     public LatLon(double lat, double lon) {
-        Latitude = lat;
-        Longitude = lon;
+        latitude = lat;
+        longitude = lon;
     }
 
     public static LatLon parseLatLon(String input) throws NumberFormatException {
@@ -31,17 +31,17 @@ public class LatLon {
             String latString = parts[0].trim();
             if (latString.matches(validNumberRegEx)) {
                 Number latNumber = format.parse(latString);
-                retVal.Latitude = latNumber.doubleValue();
+                retVal.latitude = latNumber.doubleValue();
             } else {
-                throw new Exception("Latitude cannot contain non-numerical characters");
+                throw new Exception("latitude cannot contain non-numerical characters");
             }
 
             String lonString = parts[1].trim();
             if (lonString.matches(validNumberRegEx)) {
                 Number lonNumber = format.parse(lonString);
-                retVal.Longitude = lonNumber.doubleValue();
+                retVal.longitude = lonNumber.doubleValue();
             } else {
-                throw new Exception("Longitude cannot contain non-numerical characters");
+                throw new Exception("longitude cannot contain non-numerical characters");
             }
 
         } catch (Exception e) {
@@ -53,13 +53,13 @@ public class LatLon {
 
     @Override
     public String toString() {
-        return String.format(Locale.ROOT, "%f", Latitude) + ", " + String.format(Locale.ROOT, "%f", Longitude);
+        return String.format(Locale.ROOT, "%f", latitude) + ", " + String.format(Locale.ROOT, "%f", longitude);
     }
 
     public String toFriendlyString() {
 
-        double lat = Math.round(Latitude * 1000000) / 1000000.0;
-        double lon = Math.round(Longitude * 1000000) / 1000000.0;
+        double lat = Math.round(latitude * 1000000) / 1000000.0;
+        double lon = Math.round(longitude * 1000000) / 1000000.0;
 
         String latStr = String.format(Locale.ROOT, "%.6f", lat);
         String lonStr = String.format(Locale.ROOT, "%.6f", lon);

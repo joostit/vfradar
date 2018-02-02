@@ -33,10 +33,10 @@ public class GeoObject {
 
         for(GeoPolygon polygon : shape.polygons){
             for(LatLon pos : polygon){
-                bounds.bottomLon = (pos.Longitude < bounds.bottomLon) ? pos.Longitude : bounds.bottomLon;
-                bounds.leftLat = (pos.Latitude < bounds.leftLat) ? pos.Latitude : bounds.leftLat;
-                bounds.topLon = (pos.Longitude > bounds.topLon) ? pos.Longitude : bounds.topLon;
-                bounds.rightLat = (pos.Latitude > bounds.rightLat) ? pos.Latitude : bounds.rightLat;
+                bounds.bottomLon = (pos.longitude < bounds.bottomLon) ? pos.longitude : bounds.bottomLon;
+                bounds.leftLat = (pos.latitude < bounds.leftLat) ? pos.latitude : bounds.leftLat;
+                bounds.topLon = (pos.longitude > bounds.topLon) ? pos.longitude : bounds.topLon;
+                bounds.rightLat = (pos.latitude > bounds.rightLat) ? pos.latitude : bounds.rightLat;
             }
         }
     }

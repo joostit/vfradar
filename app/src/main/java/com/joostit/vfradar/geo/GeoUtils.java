@@ -30,10 +30,10 @@ public class GeoUtils {
      */
     public static double Distance(LatLon pos1, double el1, LatLon pos2, double el2) {
 
-        double lat1 = pos1.Latitude;
-        double lon1 = pos1.Longitude;
-        double lat2 = pos2.Latitude;
-        double lon2 = pos2.Longitude;
+        double lat1 = pos1.latitude;
+        double lon1 = pos1.longitude;
+        double lat2 = pos2.latitude;
+        double lon2 = pos2.longitude;
 
         final int R = 6371; // Radius of the earth
 
@@ -53,10 +53,10 @@ public class GeoUtils {
     }
 
     public static double Bearing(LatLon pos1, LatLon pos2) {
-        double longitude1 = pos1.Longitude;
-        double longitude2 = pos2.Longitude;
-        double latitude1 = Math.toRadians(pos1.Latitude);
-        double latitude2 = Math.toRadians(pos2.Latitude);
+        double longitude1 = pos1.longitude;
+        double longitude2 = pos2.longitude;
+        double latitude1 = Math.toRadians(pos1.latitude);
+        double latitude2 = Math.toRadians(pos2.latitude);
         double longDiff = Math.toRadians(longitude2 - longitude1);
         double y = Math.sin(longDiff) * Math.cos(latitude2);
         double x = Math.cos(latitude1) * Math.sin(latitude2) - Math.sin(latitude1) * Math.cos(latitude2) * Math.cos(longDiff);
@@ -65,8 +65,8 @@ public class GeoUtils {
     }
 
     public static LatLon Move(LatLon start, double bearing, double distanceM) {
-        double lat1 = Math.toRadians(start.Latitude);
-        double lng1 = Math.toRadians(start.Longitude);
+        double lat1 = Math.toRadians(start.latitude);
+        double lng1 = Math.toRadians(start.longitude);
         double brng = Math.toRadians(bearing);
 
         double R = 6371000;

@@ -52,7 +52,7 @@ public class SphericalMercatorProjection {
 
     @SuppressWarnings("deprecation")
     public synchronized PointF toScreenPoint(final LatLon position) {
-        return toScreenPoint(position.Latitude, position.Longitude);
+        return toScreenPoint(position.latitude, position.longitude);
     }
 
     @SuppressWarnings("deprecation")
@@ -71,8 +71,8 @@ public class SphericalMercatorProjection {
 
     @SuppressWarnings("deprecation")
     public synchronized PointF toWorldPoint(final LatLon position) {
-        final double x = position.Longitude / 360 + .5;
-        final double siny = Math.sin(Math.toRadians(position.Latitude));
+        final double x = position.longitude / 360 + .5;
+        final double siny = Math.sin(Math.toRadians(position.latitude));
         final double y = 0.5 * Math.log((1 + siny) / (1 - siny)) / -(2 * Math.PI) + .5;
         PointF retVal = new PointF((float) (x * mWorldWidth), (float) (y * mWorldWidth));
         return retVal;

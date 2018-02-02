@@ -61,7 +61,7 @@ public class SitePreferenceFragment extends PreferenceFragment
             if (!isLatLonStringIsValid((String) newValue)) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Error");
-                builder.setMessage("Invalid Latitude/Longitude value.\nUse the '000.00000, 000.00000' format.");
+                builder.setMessage("Invalid latitude/longitude value.\nUse the '000.00000, 000.00000' format.");
                 builder.setPositiveButton(android.R.string.ok, null);
                 builder.show();
                 isOk = false;
@@ -87,10 +87,10 @@ public class SitePreferenceFragment extends PreferenceFragment
         }
 
         if (isOk) {
-            if ((test.Latitude < -90) || (test.Latitude > 90)) {
+            if ((test.latitude < -90) || (test.latitude > 90)) {
                 isOk = false;
             }
-            if ((test.Longitude < -180) || (test.Longitude > 180)) {
+            if ((test.longitude < -180) || (test.longitude > 180)) {
                 isOk = false;
             }
         }
