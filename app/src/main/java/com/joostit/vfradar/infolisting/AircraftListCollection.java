@@ -38,12 +38,12 @@ public class AircraftListCollection {
 
         for (TrackedAircraft tracked : lastUpdateState.trackedAircraft) {
             InfoListItemData acItem;
-            if (hasItem(tracked.Data.trackId)) {
-                acItem = getItem(tracked.Data.trackId);
+            if (hasItem(tracked.data.trackId)) {
+                acItem = getItem(tracked.data.trackId);
                 itemsToRemove.remove(acItem);
             } else {
                 acItem = new InfoListItemData();
-                acItem.trackId = tracked.Data.trackId;
+                acItem.trackId = tracked.data.trackId;
                 addItem(acItem);
                 retVal.added.add(acItem);
             }
@@ -63,23 +63,23 @@ public class AircraftListCollection {
 
     private void updateListItemData(InfoListItemData acItem, TrackedAircraft tracked, Context context) {
 
-        acItem.vRate = userUnitConverter.getVerticalRateString(tracked.Data.vRate);
+        acItem.vRate = userUnitConverter.getVerticalRateString(tracked.data.vRate);
 
         TrackedAircraft.IdTypes nameType = tracked.getUserIdType();
 
-        if (tracked.Data.alt != null) {
-            acItem.altitude = userUnitConverter.getHeight(tracked.Data.alt) + " " + userUnitConverter.getHeightUnitIndicator();
+        if (tracked.data.alt != null) {
+            acItem.altitude = userUnitConverter.getHeight(tracked.data.alt) + " " + userUnitConverter.getHeightUnitIndicator();
         } else {
             acItem.altitude = "";
         }
-        acItem.model = sanitizeModelString(tracked.Data.model, tracked.Data.type, context);
+        acItem.model = sanitizeModelString(tracked.data.model, tracked.data.type, context);
         acItem.name = tracked.getId(nameType);
         acItem.nameType = getNameTypeTranslation(nameType, context);
-        acItem.cn = tracked.Data.cn != null ? tracked.Data.cn.toString() : "";
+        acItem.cn = tracked.data.cn != null ? tracked.data.cn.toString() : "";
         updateRelativePosition(acItem, tracked);
 
-        acItem.hasAdsb = determineUpdateValid(tracked.Data.adsbStation, tracked.Data.adsbAge);
-        acItem.hasOgn = determineUpdateValid(tracked.Data.ognStation, tracked.Data.ognAge);
+        acItem.hasAdsb = determineUpdateValid(tracked.data.adsbStation, tracked.data.adsbAge);
+        acItem.hasOgn = determineUpdateValid(tracked.data.ognStation, tracked.data.ognAge);
 
     }
 
@@ -194,7 +194,7 @@ public class AircraftListCollection {
 
     private void updateRelativePosition(InfoListItemData listItem, TrackedAircraft tracked) {
 
-        LatLon acPos = new LatLon(tracked.Data.lat, tracked.Data.lon);
+        LatLon acPos = tracked.data.position;
         LatLon here = SysConfig.getCenterPosition();
 
         double distance = here.DistanceTo(acPos);

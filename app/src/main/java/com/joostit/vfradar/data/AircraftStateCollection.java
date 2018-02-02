@@ -27,14 +27,14 @@ public class AircraftStateCollection {
                 toRemove.remove(existing);
             } else {
                 TrackedAircraft newTrack = new TrackedAircraft();
-                newTrack.Data = newState;
+                newTrack.data = newState;
                 addTrack(newTrack);
             }
         }
 
 
         for (TrackedAircraft removeMe : toRemove) {
-            removeTrack(removeMe.Data.trackId);
+            removeTrack(removeMe.data.trackId);
         }
 
         AircraftTrackingUpdate retVal = new AircraftTrackingUpdate(new ArrayList<TrackedAircraft>(trackedAc), updates.getUpdateSuccess());
@@ -46,7 +46,7 @@ public class AircraftStateCollection {
     private void updateTrackedAc(TrackedAircraft item, AircraftState newState) {
 
         // ToDo: We're replacing the object reference instead of changing its values. Is this bad...?
-        item.Data = newState;
+        item.data = newState;
     }
 
 
@@ -60,7 +60,7 @@ public class AircraftStateCollection {
 
     private synchronized void addTrack(TrackedAircraft item) {
         trackedAc.add(item);
-        trackedAcMap.put(item.Data.trackId, item);
+        trackedAcMap.put(item.data.trackId, item);
     }
 
     private synchronized void removeTrack(int trackId) {

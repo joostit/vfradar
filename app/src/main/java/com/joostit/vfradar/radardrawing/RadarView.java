@@ -211,11 +211,11 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         List<AircraftPlot> toRemove = new ArrayList<AircraftPlot>(plots);
 
         for (TrackedAircraft track : lastUpdateState.trackedAircraft) {
-            AircraftPlot plot = findPlotByTrackid(track.Data.trackId);
+            AircraftPlot plot = findPlotByTrackid(track.data.trackId);
 
             if (plot == null) {
                 plot = new AircraftPlot();
-                plot.TrackId = track.Data.trackId;
+                plot.trackId = track.data.trackId;
                 plots.add(plot);
             } else {
                 toRemove.remove(plot);
@@ -235,7 +235,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         AircraftPlot found = null;
 
         for (AircraftPlot plot : plots) {
-            if (plot.TrackId == trackId) {
+            if (plot.trackId == trackId) {
                 found = plot;
                 break;
             }
@@ -384,7 +384,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         invalidate();
 
         if (nearestHit.isSelected) {
-            dispatchSelectionChanged(nearestHit.TrackId);
+            dispatchSelectionChanged(nearestHit.trackId);
         } else {
             dispatchSelectionChanged(null);
         }
@@ -394,7 +394,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
     private void selectPlot(int trackId) {
         for (AircraftPlot ac : plots) {
-            if (ac.TrackId == trackId) {
+            if (ac.trackId == trackId) {
                 ac.isSelected = true;
             }
         }

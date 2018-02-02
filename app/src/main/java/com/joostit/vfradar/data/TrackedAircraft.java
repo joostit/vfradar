@@ -1,28 +1,32 @@
 package com.joostit.vfradar.data;
 
+import com.joostit.vfradar.geofencing.GeoFenceStatus;
+
 /**
  * Created by Joost on 15-1-2018.
  */
 
 public class TrackedAircraft {
 
-    public AircraftState Data;
+    public AircraftState data;
     public Boolean isSelected = false;
     public Boolean isHighlighted = false;
     public Boolean isWarning = false;
 
+    public GeoFenceStatus isInside = new GeoFenceStatus();
+
     public String getIdString() {
         String nameString = "";
-        if (Data.hasCallsign()) {
-            nameString = Data.callSign;
-        } else if (Data.hasRegistration()) {
-            nameString = Data.reg;
-        } else if (Data.hasIcao24Id()) {
-            nameString = Data.icao24;
-        } else if (Data.hasFlarmId()) {
-            nameString = Data.flarmId;
-        } else if (Data.hasOgnId()) {
-            nameString = Data.ognId;
+        if (data.hasCallsign()) {
+            nameString = data.callSign;
+        } else if (data.hasRegistration()) {
+            nameString = data.reg;
+        } else if (data.hasIcao24Id()) {
+            nameString = data.icao24;
+        } else if (data.hasFlarmId()) {
+            nameString = data.flarmId;
+        } else if (data.hasOgnId()) {
+            nameString = data.ognId;
         }
         return nameString;
     }
@@ -31,17 +35,17 @@ public class TrackedAircraft {
         switch (type) {
 
             case Callsign:
-                return Data.callSign;
+                return data.callSign;
             case Registration:
-                return Data.reg;
+                return data.reg;
             case Icao24:
-                return Data.icao24;
+                return data.icao24;
             case FlarmId:
-                return Data.flarmId;
+                return data.flarmId;
             case OgnId:
-                return Data.ognId;
+                return data.ognId;
             case Cn:
-                return Data.cn;
+                return data.cn;
             default:
                 return "UNSUPPORTED ID TYPE";
         }
@@ -49,15 +53,15 @@ public class TrackedAircraft {
 
     public IdTypes getUserIdType() {
 
-        if (Data.hasCallsign()) {
+        if (data.hasCallsign()) {
             return IdTypes.Callsign;
-        } else if (Data.hasRegistration()) {
+        } else if (data.hasRegistration()) {
             return IdTypes.Registration;
-        } else if (Data.hasIcao24Id()) {
+        } else if (data.hasIcao24Id()) {
             return IdTypes.Icao24;
-        } else if (Data.hasFlarmId()) {
+        } else if (data.hasFlarmId()) {
             return IdTypes.FlarmId;
-        } else if (Data.hasOgnId()) {
+        } else if (data.hasOgnId()) {
             return IdTypes.OgnId;
         }
 

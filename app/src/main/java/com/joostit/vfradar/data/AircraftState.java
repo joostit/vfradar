@@ -1,5 +1,6 @@
 package com.joostit.vfradar.data;
 
+import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.StringValue;
 
 /**
@@ -17,8 +18,7 @@ public class AircraftState {
     public String callSign;
     public String model;
     public String type;
-    public double lat;
-    public double lon;
+    public LatLon position = new LatLon();
     public Integer speed;
     public Integer track;
     public Double turnRate;

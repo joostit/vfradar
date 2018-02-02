@@ -51,8 +51,8 @@ public class AircraftDataBuilder {
             ac.callSign = getNullableString(jsonAc, JsonKeys.callSign);
             ac.model = getNullableString(jsonAc, JsonKeys.model);
             ac.type = getNullableString(jsonAc, JsonKeys.type);
-            ac.lat = jsonAc.getDouble(JsonKeys.lat);
-            ac.lon = jsonAc.getDouble(JsonKeys.lon);
+            ac.position.latitude = jsonAc.getDouble(JsonKeys.lat);
+            ac.position.longitude = jsonAc.getDouble(JsonKeys.lon);
             ac.speed = getNullableInt(jsonAc, JsonKeys.speed);
             ac.track = getNullableInt(jsonAc, JsonKeys.track);
             ac.turnRate = getNullableDouble(jsonAc, JsonKeys.turnRate);

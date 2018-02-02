@@ -13,17 +13,14 @@ import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 
-import java.text.DecimalFormat;
-
 /**
  * Created by Joost on 15-1-2018.
  */
 
 public class AircraftPlot extends DrawableItem {
 
-    private static DecimalFormat df1 = new DecimalFormat("#.#");
     private final int txtBackMargin = 2;
-    public int TrackId;
+    public int trackId;
     public float ScreenX;
     public float ScreenY;
     public Boolean isSelected = false;
@@ -33,8 +30,8 @@ public class AircraftPlot extends DrawableItem {
     private boolean doDraw = false;
     public LatLon position = new LatLon();
     private Integer Track;
-    private String DisplayName;
-    private String InfoLine;
+    private String displayName;
+    private String infoLine;
 
     private int selectedBackCenterColor = 0xFF000000;
     private int selectedBackEndColor = 0xFF737373;
@@ -139,8 +136,8 @@ public class AircraftPlot extends DrawableItem {
         double track = hasTrack ? Track : 0;
         float x = ScreenX;
         float y = ScreenY;
-        String nameLine = DisplayName;
-        String infoLine = InfoLine;
+        String nameLine = displayName;
+        String infoLine = this.infoLine;
 
         double arrRightBearing = track + arrowAngle;
         double arrLeftBearing = track - arrowAngle;
@@ -245,24 +242,23 @@ public class AircraftPlot extends DrawableItem {
 
         String nameString = aircraft.getIdString();
 
-        if (aircraft.Data.hasCn()) {
-            nameString += " (" + aircraft.Data.cn + ")";
+        if (aircraft.data.hasCn()) {
+            nameString += " (" + aircraft.data.cn + ")";
         }
-        DisplayName = nameString;
+        displayName = nameString;
 
         String infoLineString = "";
 
-        if (aircraft.Data.hasAltitude()) {
-            String altString = unitConverter.getHeight(aircraft.Data.alt) + " " + unitConverter.getHeightUnitIndicator();
+        if (aircraft.data.hasAltitude()) {
+            String altString = unitConverter.getHeight(aircraft.data.alt) + " " + unitConverter.getHeightUnitIndicator();
             infoLineString = altString;
-            infoLineString += "  " + unitConverter.getVerticalRateString(aircraft.Data.vRate);
+            infoLineString += "  " + unitConverter.getVerticalRateString(aircraft.data.vRate);
         }
 
-        InfoLine = infoLineString;
+        infoLine = infoLineString;
 
-        Track = aircraft.Data.track;
-        position.latitude = aircraft.Data.lat;
-        position.longitude = aircraft.Data.lon;
+        Track = aircraft.data.track;
+        position = aircraft.data.position;
         isHighlighted = aircraft.isHighlighted;
         isWarning = aircraft.isWarning;
     }
