@@ -26,7 +26,18 @@ public class GeoFenceHandler {
 
         for(TrackedAircraft ac : trackedAircraft){
             for(FencedArea area : areas){
-                //boolean isInArea = area.isInArea(ac.data)
+                boolean isInArea = area.isInArea(ac);
+
+                if(isInArea){
+                    if(!ac.isInside.areas.contains(area)){
+                        ac.isInside.areas.add(area);
+                    }
+                }
+                else{
+                    if(!ac.isInside.areas.contains(area)){
+                        ac.isInside.areas.remove(area);
+                    }
+                }
             }
         }
 

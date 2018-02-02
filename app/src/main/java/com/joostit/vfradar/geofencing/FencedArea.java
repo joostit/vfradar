@@ -1,5 +1,6 @@
 package com.joostit.vfradar.geofencing;
 
+import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 
 import java.util.ArrayList;
@@ -18,12 +19,22 @@ public class FencedArea {
     public int topFt;
 
 
-    public boolean isInArea(LatLon position) {
+    public boolean isInArea(TrackedAircraft ac) {
+        boolean retVal;
+        if ((ac.data.alt > bottomFt) && (ac.data.alt < topFt)) {
+            retVal = isInPolygon(ac.data.position);
+        } else {
+            retVal = false;
+        }
+        return retVal;
+    }
+
+    private boolean isInPolygon(LatLon position) {
         int i, j;
         boolean isInside = false;
         int sides = polygon.size();
         for (i = 0, j = sides - 1; i < sides; j = i++) {
-            //verifying if your coordinate is inside your region
+
             if (
                     (
                             (

@@ -16,6 +16,7 @@ import com.joostit.vfradar.data.AircraftStateCollection;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
+import com.joostit.vfradar.geofencing.GeoFenceHandler;
 import com.joostit.vfradar.infolisting.InfoListFragment;
 import com.joostit.vfradar.radardrawing.RadarViewFragment;
 import com.joostit.vfradar.settings.SettingsActivity;
@@ -33,6 +34,7 @@ public class OperationalActivity extends AppCompatActivity
     private final int CONFIG_INTENT_REQUEST_CODE = 1;
     boolean doubleBackToExitPressedOnce = false;
     private AircraftStateCollection aircaft;
+    private GeoFenceHandler areaHandler;
     private VFRadarCore radarCoreConnection;
     private SiteScenarioLoader site;
     private LoadSiteDataTask siteDataLoadertask;
@@ -71,7 +73,9 @@ public class OperationalActivity extends AppCompatActivity
     }
 
     private void createComponentObjects() {
-        aircaft = new AircraftStateCollection();
+        areaHandler = new GeoFenceHandler();
+        areaHandler.loadFencedAreas();
+        aircaft = new AircraftStateCollection(areaHandler);
         radarCoreConnection = new VFRadarCore(this);
         site = new SiteScenarioLoader();
     }

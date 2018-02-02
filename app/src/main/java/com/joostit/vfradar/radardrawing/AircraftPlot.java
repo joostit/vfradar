@@ -12,6 +12,8 @@ import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
+import com.joostit.vfradar.geofencing.FenceAlerts;
+import com.joostit.vfradar.geofencing.FencedArea;
 
 /**
  * Created by Joost on 15-1-2018.
@@ -32,6 +34,7 @@ public class AircraftPlot extends DrawableItem {
     private Integer Track;
     private String displayName;
     private String infoLine;
+
 
     private int selectedBackCenterColor = 0xFF000000;
     private int selectedBackEndColor = 0xFF737373;
@@ -256,11 +259,24 @@ public class AircraftPlot extends DrawableItem {
         }
 
         infoLine = infoLineString;
-
         Track = aircraft.data.track;
         position = aircraft.data.position;
-        isHighlighted = aircraft.isHighlighted;
-        isWarning = aircraft.isWarning;
+
+        boolean areaHighlight = false;
+        boolean areaWarning = false;
+
+        for (FencedArea area : aircraft.isInside.areas) {
+            if (area.alertType == FenceAlerts.Notification) {
+                areaHighlight = true;
+            }
+
+            if(area.alertType == FenceAlerts.Warning){
+                areaWarning = true;
+            }
+        }
+
+        isHighlighted = areaHighlight;
+        isWarning = areaWarning;
     }
 
 
@@ -274,7 +290,7 @@ public class AircraftPlot extends DrawableItem {
         return doDraw;
     }
 
-    public double getDistanceFromCenter(){
+    public double getDistanceFromCenter() {
         double distanceM = SysConfig.getCenterPosition().DistanceTo(position);
         return distanceM;
     }

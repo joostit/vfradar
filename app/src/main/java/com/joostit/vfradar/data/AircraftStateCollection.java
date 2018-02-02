@@ -1,5 +1,7 @@
 package com.joostit.vfradar.data;
 
+import com.joostit.vfradar.geofencing.GeoFenceHandler;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +13,18 @@ import java.util.Map;
 
 public class AircraftStateCollection {
 
+    private GeoFenceHandler areaHandler;
 
     public final List<TrackedAircraft> trackedAc = new ArrayList<>();
     public final Map<Integer, TrackedAircraft> trackedAcMap = new HashMap<>();
 
+    public AircraftStateCollection(GeoFenceHandler areaHandler){
+        this.areaHandler = areaHandler;
+    }
 
     public synchronized AircraftTrackingUpdate doUpdate(AircraftDataUpdate updates) {
 
-        List<TrackedAircraft> toRemove = new ArrayList<TrackedAircraft>(trackedAc);
+        List<TrackedAircraft> toRemove = new ArrayList<>(trackedAc);
 
         for (AircraftState newState : updates.trackedAircraft) {
             if (hasTrack(newState.trackId)) {
@@ -37,7 +43,9 @@ public class AircraftStateCollection {
             removeTrack(removeMe.data.trackId);
         }
 
-        AircraftTrackingUpdate retVal = new AircraftTrackingUpdate(new ArrayList<TrackedAircraft>(trackedAc), updates.getUpdateSuccess());
+        areaHandler.applyFences(trackedAc);
+
+        AircraftTrackingUpdate retVal = new AircraftTrackingUpdate(new ArrayList<>(trackedAc), updates.getUpdateSuccess());
 
         return retVal;
     }

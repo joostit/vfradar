@@ -9,9 +9,6 @@ import com.joostit.vfradar.geofencing.GeoFenceStatus;
 public class TrackedAircraft {
 
     public AircraftState data;
-    public Boolean isSelected = false;
-    public Boolean isHighlighted = false;
-    public Boolean isWarning = false;
 
     public GeoFenceStatus isInside = new GeoFenceStatus();
 
