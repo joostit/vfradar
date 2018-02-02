@@ -48,10 +48,16 @@ public class AircraftPlot extends DrawableItem {
     private int acTextGuideLineColor = 0xAA008000;
     private int acTextBackColor = 0xBB000000;
 
+    private int noteBackEndColor = 0x00000000;
+    private int noteBackCenterColor = 0xDDFFFF00;
+
     private UserUnitConvert unitConverter = new UserUnitConvert();
 
     private float[] selectedGradientstops = new float[]{0, 1};
     private int[] selectedGradientColors = new int[]{selectedBackCenterColor, selectedBackEndColor};
+
+    private float[] noteGradientstops = new float[]{0, 1};
+    private int[] noteGradientColors = new int[]{noteBackCenterColor, noteBackEndColor};
 
     private Paint acNamePaint;
     private Paint acInfoPaint;
@@ -129,7 +135,7 @@ public class AircraftPlot extends DrawableItem {
         float longArrowLength = 10;
         float shortArrowLength = 9;
 
-        int boxSize = 25;
+        int boxSize = 30;
         int boxRound = 7;
         double shortLineLength = 20;
         double longLineLength = 22;
@@ -173,13 +179,18 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawRoundRect(boxRect, boxRound, boxRound, acWarningBoxPaint);
         }
         if (isHighlighted) {
-            canvas.drawRoundRect(boxRect, boxRound, boxRound, acHighlightBoxPaint);
+            RadialGradient highlightedGradient = new RadialGradient(x, y, boxSize, noteGradientColors, noteGradientstops, Shader.TileMode.CLAMP);
+
+            acHighlightBoxPaint.setShader(highlightedGradient);
+
+
+            canvas.drawCircle(x, y, boxSize, acHighlightBoxPaint);// .drawRoundRect(boxRect, boxRound, boxRound, acHighlightBoxPaint);
         }
         if (isSelected) {
 
-            RadialGradient radialGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
+            RadialGradient selectedGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
 
-            acSelectedBoxPaint.setShader(radialGradient);
+            acSelectedBoxPaint.setShader(selectedGradient);
 
             RectF selectBoxRect = new RectF(x - selectedBoxRadius, y - selectedBoxRadius, x + selectedBoxRadius, y + selectedBoxRadius);
             canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedBoxPaint);
