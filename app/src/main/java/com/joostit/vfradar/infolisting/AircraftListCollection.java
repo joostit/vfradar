@@ -8,6 +8,7 @@ import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
+import com.joostit.vfradar.geofencing.FencedArea;
 import com.joostit.vfradar.utilities.DistanceString;
 import com.joostit.vfradar.utilities.StringValue;
 
@@ -80,6 +81,19 @@ public class AircraftListCollection {
 
         acItem.hasAdsb = determineUpdateValid(tracked.data.adsbStation, tracked.data.adsbAge);
         acItem.hasOgn = determineUpdateValid(tracked.data.ognStation, tracked.data.ognAge);
+
+        for (FencedArea area : tracked.isInside.areas) {
+            if(!acItem.hasNotification(area.name)){
+                acItem.notifications.add(new InfoListNotification(area.name, area.alertType));
+            }
+        }
+
+        for (int i = 0; i < acItem.notifications.size(); i++){
+            InfoListNotification notification = acItem.notifications.get(i);
+            if(!tracked.isInside.isInArea(notification.name)){
+                acItem.notifications.remove(i);
+            }
+        }
 
     }
 

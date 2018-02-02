@@ -32,7 +32,7 @@ public class GeoObject {
         bounds.rightLat = Double.MIN_VALUE;
 
         for(GeoPolygon polygon : shape.polygons){
-            for(LatLon pos : polygon){
+            for(LatLon pos : polygon.points){
                 bounds.bottomLon = (pos.longitude < bounds.bottomLon) ? pos.longitude : bounds.bottomLon;
                 bounds.leftLat = (pos.latitude < bounds.leftLat) ? pos.latitude : bounds.leftLat;
                 bounds.topLon = (pos.longitude > bounds.topLon) ? pos.longitude : bounds.topLon;

@@ -281,7 +281,7 @@ public class GeoDataLoader {
             String[] latLonSplit = latlon.trim().split(",");
             Double lon = Double.parseDouble(latLonSplit[0]);
             Double lat = Double.parseDouble(latLonSplit[1]);
-            retVal.add(new LatLon(lat, lon));
+            retVal.points.add(new LatLon(lat, lon));
         }
 
         return retVal;

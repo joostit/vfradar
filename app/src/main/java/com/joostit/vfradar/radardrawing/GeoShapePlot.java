@@ -103,11 +103,11 @@ public class GeoShapePlot extends DrawableItem {
 
         for (GeoPolygon polygon : source.shape.polygons) {
 
-            if (polygon.size() < 2) {
+            if (polygon.points.size() < 2) {
                 continue;
             }
 
-            LatLon startlatLon = polygon.get(0);
+            LatLon startlatLon = polygon.points.get(0);
             PointF startPoint = projection.toScreenPoint(startlatLon);
 
             newPath.moveTo(startPoint.x, startPoint.y);
@@ -115,8 +115,8 @@ public class GeoShapePlot extends DrawableItem {
             sumY += startPoint.y;
             pointCount++;
 
-            for (int i = 1; i < polygon.size(); i++) {
-                LatLon pos = polygon.get(i);
+            for (int i = 1; i < polygon.points.size(); i++) {
+                LatLon pos = polygon.points.get(i);
                 PointF screenPoint = projection.toScreenPoint(pos);
                 newPath.lineTo(screenPoint.x, screenPoint.y);
 
