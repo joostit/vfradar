@@ -22,9 +22,14 @@ public class FencedArea {
 
     public boolean isInArea(TrackedAircraft ac) {
         boolean retVal;
-        if ((ac.data.alt > bottomFt) && (ac.data.alt < topFt)) {
-            retVal = shape.isInshape(ac.data.position);
-        } else {
+        if (ac.data.alt != null) {
+            if ((ac.data.alt > bottomFt) && (ac.data.alt < topFt)) {
+                retVal = shape.isInshape(ac.data.position);
+            } else {
+                retVal = false;
+            }
+        }
+        else{
             retVal = false;
         }
         return retVal;
