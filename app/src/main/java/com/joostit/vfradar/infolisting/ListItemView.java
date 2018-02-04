@@ -398,10 +398,7 @@ public class ListItemView extends View {
             hasChanged = true;
         }
 
-        if(update.notifications != currentState.notifications){
-            currentState.notifications = update.notifications;
-            hasChanged = true;
-        }
+        currentState.notifications = update.notifications;
 
         if (hasChanged) {
             this.invalidate();

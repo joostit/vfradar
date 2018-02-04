@@ -34,7 +34,7 @@ public class GeoFenceHandler {
                     }
                 }
                 else{
-                    if(!ac.isInside.areas.contains(area)){
+                    if(ac.isInside.areas.contains(area)){
                         ac.isInside.areas.remove(area);
                     }
                 }

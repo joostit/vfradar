@@ -1,37 +1,37 @@
-package com.joostit.vfradar.geofencing;
+package com.joostit.vfradar.geoTesting;
 
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geodata.GeoPolygon;
+import com.joostit.vfradar.geofencing.FenceAlerts;
+import com.joostit.vfradar.geofencing.FencedArea;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Joost on 2-2-2018.
+ * Created by Joost on 4-2-2018.
  */
 
-public class DebugFencedAreaCreator {
-
-    public List<FencedArea> getFencedAreas(){
+public class GeoFenceTestData {
+    public static List<FencedArea> getFencedAreas(){
 
         List<FencedArea> retVal = new ArrayList<>();
 
-        retVal.add(createArea1());
+        retVal.add(createArea());
 
         return retVal;
     }
 
-    private FencedArea createArea1(){
+    public static FencedArea createArea(){
         FencedArea area = new FencedArea();
 
-        area.name = "Zuid circuit";
-
+        area.name = "TestArea";
         area.alertType = FenceAlerts.Notification;
-        area.topFt = 40000;
-        area.bottomFt = 300;
+        area.topFt = 1000;
+        area.bottomFt = 500;
         GeoPolygon polygon = new GeoPolygon();
 
-        polygon.points.add(new LatLon (52.26923886292269, 6.882929583130513));
+        polygon.points.add(new LatLon(52.26923886292269, 6.882929583130513));
 
         polygon.points.add(new LatLon (52.6904312737833, 6.617817234939025));
         polygon.points.add(new LatLon (51.94372962764766, 6.197737626705766));
@@ -48,6 +48,4 @@ public class DebugFencedAreaCreator {
 
         return area;
     }
-
 }
-

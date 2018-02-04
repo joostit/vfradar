@@ -19,6 +19,6 @@ public class GeoShape {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 }
