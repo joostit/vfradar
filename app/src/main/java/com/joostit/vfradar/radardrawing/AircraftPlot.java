@@ -36,7 +36,7 @@ public class AircraftPlot extends DrawableItem {
     private String infoLine;
 
 
-    private int selectedBackCenterColor = 0xFF000000;
+    private int selectedBackCenterColor = 0x22000000;
     private int selectedBackEndColor = 0xFF737373;
     private int acForeColor = 0xFF00FF00;
     private int acBackColor = 0xFF008000;
@@ -49,7 +49,7 @@ public class AircraftPlot extends DrawableItem {
     private int acTextBackColor = 0xBB000000;
 
     private int noteBackEndColor = 0x00000000;
-    private int noteBackCenterColor = 0xDDFFFF00;
+    private int noteBackCenterColor = 0xFFFFFF00;
 
     private UserUnitConvert unitConverter = new UserUnitConvert();
 
@@ -175,6 +175,17 @@ public class AircraftPlot extends DrawableItem {
 
         RectF boxRect = new RectF(x - boxSize, y - boxSize, x + boxSize, y + boxSize);
 
+        if (isSelected) {
+
+            RadialGradient selectedGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
+
+            acSelectedBoxPaint.setShader(selectedGradient);
+
+            RectF selectBoxRect = new RectF(x - selectedBoxRadius, y - selectedBoxRadius, x + selectedBoxRadius, y + selectedBoxRadius);
+            canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedBoxPaint);
+            canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedOutlinePaint);
+        }
+
         if (isWarning) {
             canvas.drawRoundRect(boxRect, boxRound, boxRound, acWarningBoxPaint);
         }
@@ -186,16 +197,7 @@ public class AircraftPlot extends DrawableItem {
 
             canvas.drawCircle(x, y, boxSize, acHighlightBoxPaint);// .drawRoundRect(boxRect, boxRound, boxRound, acHighlightBoxPaint);
         }
-        if (isSelected) {
 
-            RadialGradient selectedGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
-
-            acSelectedBoxPaint.setShader(selectedGradient);
-
-            RectF selectBoxRect = new RectF(x - selectedBoxRadius, y - selectedBoxRadius, x + selectedBoxRadius, y + selectedBoxRadius);
-            canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedBoxPaint);
-            canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedOutlinePaint);
-        }
 
 
         float nameTxtX = x + 20;
