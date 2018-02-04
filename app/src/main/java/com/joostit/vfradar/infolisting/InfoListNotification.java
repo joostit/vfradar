@@ -22,4 +22,20 @@ public class InfoListNotification {
         this.name = name;
         this.notificationType = type;
     }
+
+
+    public boolean isOtherMoreSevere(InfoListNotification other) {
+
+        if(other.notificationType == FenceAlerts.Warning){
+            if(this.notificationType == FenceAlerts.Notification){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
 }

@@ -21,6 +21,7 @@ public class ListItemView extends View {
     private final int defaultWidth = 570;
     private final int defaultHeight = 150;
     private final int selectedHeight = 150;
+    private final int geoFenceRectHeight = 30;
 
     private final float maxMovementWhilePressing = 20;
     private final int statusTrueBackColor = 0xFF00FF00;
@@ -225,7 +226,7 @@ public class ListItemView extends View {
 
         int statusColumn = 495;
         int statusWidth = 62;
-        int statusHeight = 25;
+        int statusHeight = 26;
         int statusRounding = 3;
         int statusRow1 = 75;
         int statusRow2 = 110;
@@ -245,13 +246,33 @@ public class ListItemView extends View {
         int noteY = 13;
         int noteSize = 200;
 
+        InfoListNotification notificationToDisplay = null;
+        boolean multipleNotifications = currentState.notifications.size() > 1;
+
         for(InfoListNotification notification : currentState.notifications){
 
-            DrawUtils.drawStatusRect(canvas, noteX, noteY, noteSize, statusHeight,
-                    notification.name,
+            if(notificationToDisplay == null){
+                notificationToDisplay = notification;
+            }
+            else{
+                if(notificationToDisplay.isOtherMoreSevere(notification)){
+                    notificationToDisplay = notification;
+                }
+            }
+        }
+
+        if(notificationToDisplay != null) {
+            String notificationName = notificationToDisplay.name;
+
+            if(multipleNotifications){
+                notificationName += " , ...";
+            }
+
+            DrawUtils.drawStatusRect(canvas, noteX, noteY, noteSize, geoFenceRectHeight,
+                    notificationName,
                     statusRectBoundsPaint,
-                    getStatusForePaint(notification.notificationType),
-                    getStatusBackPaint(notification.notificationType));
+                    getStatusForePaint(notificationToDisplay.notificationType),
+                    getStatusBackPaint(notificationToDisplay.notificationType));
         }
 
     }

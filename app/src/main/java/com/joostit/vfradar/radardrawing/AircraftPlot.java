@@ -29,6 +29,8 @@ public class AircraftPlot extends DrawableItem {
     public Boolean isHighlighted = false;
     public Boolean isWarning = false;
     private int selectedBoxRadius = 30;
+    private final int warnCircleRadius = 35;
+    private final int noteCircleRadius = 30;
     private boolean doDraw = false;
     public LatLon position = new LatLon();
     private Integer Track;
@@ -51,6 +53,9 @@ public class AircraftPlot extends DrawableItem {
     private int noteBackEndColor = 0x00000000;
     private int noteBackCenterColor = 0xFFFFFF00;
 
+    private int warnBackEndColor = 0x00000000;
+    private int warnBackCenterColor = 0xFFFF0000;
+
     private UserUnitConvert unitConverter = new UserUnitConvert();
 
     private float[] selectedGradientstops = new float[]{0, 1};
@@ -58,6 +63,9 @@ public class AircraftPlot extends DrawableItem {
 
     private float[] noteGradientstops = new float[]{0, 1};
     private int[] noteGradientColors = new int[]{noteBackCenterColor, noteBackEndColor};
+
+    private float[] warnGradientstops = new float[]{0, 1};
+    private int[] warnGradientColors = new int[]{warnBackCenterColor, warnBackEndColor};
 
     private Paint acNamePaint;
     private Paint acInfoPaint;
@@ -135,7 +143,6 @@ public class AircraftPlot extends DrawableItem {
         float longArrowLength = 10;
         float shortArrowLength = 9;
 
-        int boxSize = 30;
         int boxRound = 7;
         double shortLineLength = 20;
         double longLineLength = 22;
@@ -173,29 +180,24 @@ public class AircraftPlot extends DrawableItem {
         float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
         float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
 
-        RectF boxRect = new RectF(x - boxSize, y - boxSize, x + boxSize, y + boxSize);
-
         if (isSelected) {
-
             RadialGradient selectedGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
-
             acSelectedBoxPaint.setShader(selectedGradient);
-
             RectF selectBoxRect = new RectF(x - selectedBoxRadius, y - selectedBoxRadius, x + selectedBoxRadius, y + selectedBoxRadius);
             canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedBoxPaint);
             canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedOutlinePaint);
         }
 
         if (isWarning) {
-            canvas.drawRoundRect(boxRect, boxRound, boxRound, acWarningBoxPaint);
-        }
-        if (isHighlighted) {
-            RadialGradient highlightedGradient = new RadialGradient(x, y, boxSize, noteGradientColors, noteGradientstops, Shader.TileMode.CLAMP);
-
-            acHighlightBoxPaint.setShader(highlightedGradient);
-
-
-            canvas.drawCircle(x, y, boxSize, acHighlightBoxPaint);// .drawRoundRect(boxRect, boxRound, boxRound, acHighlightBoxPaint);
+            RadialGradient warningGradient = new RadialGradient(x, y, warnCircleRadius, warnGradientColors, warnGradientstops, Shader.TileMode.CLAMP);
+            acWarningBoxPaint.setShader(warningGradient);
+            canvas.drawCircle(x, y, warnCircleRadius, acWarningBoxPaint);
+        } else {
+            if (isHighlighted) {
+                RadialGradient highlightedGradient = new RadialGradient(x, y, noteCircleRadius, noteGradientColors, noteGradientstops, Shader.TileMode.CLAMP);
+                acHighlightBoxPaint.setShader(highlightedGradient);
+                canvas.drawCircle(x, y, noteCircleRadius, acHighlightBoxPaint);
+            }
         }
 
 
