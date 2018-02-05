@@ -13,21 +13,23 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Joost on 5-2-2018.
  */
 
-public abstract class KmlLoader {
-
+public abstract class KmlLoader <placeHolderObject extends GeoObject> {
 
     public static final String kmlExtensionRegex = "^([^\\s]+(\\.(?i)(kml))$)";
-
     protected static final String ns = null;
 
-    public List<GeoObject> loadFile(File kmlFile) {
+
+    public List<placeHolderObject> loadFile(File kmlFile) {
 
         try {
             InputStream inStream = new FileInputStream(kmlFile);
@@ -48,8 +50,8 @@ public abstract class KmlLoader {
     }
 
 
-    private List<GeoObject> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<GeoObject> entries = null;
+    private List<placeHolderObject> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<placeHolderObject> entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "kml");
 
@@ -68,7 +70,7 @@ public abstract class KmlLoader {
         return entries;
     }
 
-    private List<GeoObject> readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private List<placeHolderObject> readDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "Document");
@@ -81,6 +83,12 @@ public abstract class KmlLoader {
 
             if (name.equals("Folder")) {
                 entries = readFolder(parser);
+            } else if (name.equals("Placemark")) {
+                placeHolderObject newEntry = readPlacemark(parser);
+                if (newEntry != null) {
+                    entries = new ArrayList<>();
+                    entries.add(newEntry);
+                }
             } else {
                 XmlParse.skip(parser);
             }
@@ -88,8 +96,8 @@ public abstract class KmlLoader {
         return entries;
     }
 
-    private List<GeoObject> readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<GeoObject> entries = new ArrayList<>();
+    private List<placeHolderObject> readFolder(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<placeHolderObject> entries = new ArrayList<>();
 
         parser.require(XmlPullParser.START_TAG, ns, "Folder");
 
@@ -100,7 +108,7 @@ public abstract class KmlLoader {
             String name = parser.getName();
 
             if (name.equals("Placemark")) {
-                GeoObject newEntry = readPlacemark(parser);
+                placeHolderObject newEntry = readPlacemark(parser);
                 if (newEntry != null) {
                     entries.add(newEntry);
                 }
@@ -111,11 +119,10 @@ public abstract class KmlLoader {
         return entries;
     }
 
-    // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
-    // to their respective "read" methods for processing. Otherwise, skips the tag.
-    private GeoObject readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        GeoObject newEntry = new GeoObject();
+    private placeHolderObject readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
+
+        placeHolderObject newEntry = createNewPlaceholderObject();
 
         parser.require(XmlPullParser.START_TAG, ns, "Placemark");
 
@@ -124,18 +131,27 @@ public abstract class KmlLoader {
                 continue;
             }
 
-            String name = parser.getName();
+            String elementName = parser.getName();
+            boolean isParsed = false;
 
-            if (name.equals("name")) {
+            if (elementName.equals("name")) {
                 newEntry.name = XmlParse.readText(parser);
-            } else if (name.equals("Polygon")) {
+                isParsed = true;
+            } else if (elementName.equals("Polygon")) {
                 readPolygonData(parser, newEntry);
-            } else if (name.equals("MultiGeometry")) {
+                isParsed = true;
+            } else if (elementName.equals("MultiGeometry")) {
                 readMultiGeometryData(parser, newEntry);
-            } else {
-                XmlParse.skip(parser);
+                isParsed = true;
+            }
+            else{
+                isParsed = parseCustomPlaceholderElement(parser, elementName, newEntry);
             }
 
+            if(!isParsed)
+            {
+                XmlParse.skip(parser);
+            }
         }
 
         if (newEntry != null) {
@@ -148,8 +164,7 @@ public abstract class KmlLoader {
         return newEntry;
     }
 
-
-    private void readMultiGeometryData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+    private void readMultiGeometryData(XmlPullParser parser, placeHolderObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "MultiGeometry");
 
@@ -167,7 +182,7 @@ public abstract class KmlLoader {
         }
     }
 
-    private void readPolygonData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+    private void readPolygonData(XmlPullParser parser, placeHolderObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "Polygon");
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -186,7 +201,7 @@ public abstract class KmlLoader {
 
     }
 
-    private void readInnerBoundaryIsData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+    private void readInnerBoundaryIsData(XmlPullParser parser, placeHolderObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "innerBoundaryIs");
 
@@ -204,7 +219,7 @@ public abstract class KmlLoader {
         }
     }
 
-    private void readOuterBoundaryIsData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+    private void readOuterBoundaryIsData(XmlPullParser parser, placeHolderObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "outerBoundaryIs");
 
@@ -223,7 +238,7 @@ public abstract class KmlLoader {
     }
 
 
-    private void addLinearRingData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
+    private void addLinearRingData(XmlPullParser parser, placeHolderObject newEntry) throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, ns, "LinearRing");
 
@@ -258,5 +273,11 @@ public abstract class KmlLoader {
         return retVal;
     }
 
+
+    protected abstract placeHolderObject createNewPlaceholderObject();
+
+    protected boolean parseCustomPlaceholderElement(XmlPullParser parser, String elementName, placeHolderObject geoObject)  throws XmlPullParserException, IOException {
+        return false;
+    }
 
 }

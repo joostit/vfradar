@@ -1,6 +1,7 @@
 package com.joostit.vfradar.geo.geofencing;
 
 import com.joostit.vfradar.data.TrackedAircraft;
+import com.joostit.vfradar.geo.GeoObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,8 @@ public class GeoFenceHandler {
 
 
     public void loadFencedAreas() {
-
-        DebugFencedAreaCreator creator = new DebugFencedAreaCreator();
-        areas.addAll(creator.getFencedAreas());
-
+        GeoFenceLoader loader = new GeoFenceLoader();
+        areas = loader.loadAllFilesInFolder();
     }
 
     public void applyFences(List<TrackedAircraft> trackedAircraft){

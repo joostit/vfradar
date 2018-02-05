@@ -3,6 +3,7 @@ package com.joostit.vfradar.geo;
 import android.util.Xml;
 
 import com.joostit.vfradar.config.SysConfig;
+import com.joostit.vfradar.geo.geofencing.FencedArea;
 import com.joostit.vfradar.utilities.XmlParse;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by Joost on 25-1-2018.
  */
 
-public class GeoDataLoader extends KmlLoader {
+public class GeoDataLoader extends KmlLoader<GeoObject> {
 
     public static final String geoDataFolder = "GeoData/";
 
@@ -44,4 +45,8 @@ public class GeoDataLoader extends KmlLoader {
         return retVal;
     }
 
+    @Override
+    protected GeoObject createNewPlaceholderObject() {
+        return new GeoObject();
+    }
 }

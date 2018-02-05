@@ -42,7 +42,6 @@ public class AircraftStateCollection {
             }
         }
 
-
         for (TrackedAircraft removeMe : toRemove) {
             removeTrack(removeMe.data.trackId);
         }

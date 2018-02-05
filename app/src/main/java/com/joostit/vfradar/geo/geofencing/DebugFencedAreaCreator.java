@@ -24,12 +24,11 @@ public class DebugFencedAreaCreator {
 
     private FencedArea createArea1(){
         FencedArea area = new FencedArea();
-
         area.name = "Noord circuit";
 
         area.alertType = FenceAlerts.Warning;
-        area.topFt = 40000;
-        area.bottomFt = 300;
+        area.altitude.setTopFt(40000);
+        area.altitude.setBottomFt(300);
         GeoPolygon polygon = new GeoPolygon();
 
         polygon.points.add(new LatLon (52.26923886292269, 6.882929583130513));
@@ -57,8 +56,8 @@ public class DebugFencedAreaCreator {
         area.name = "Zuid circuit";
 
         area.alertType = FenceAlerts.Notification;
-        area.topFt = 40000;
-        area.bottomFt = 300;
+        area.altitude.setTopFt(40000);
+        area.altitude.setBottomFt(300);
         GeoPolygon polygon = new GeoPolygon();
 
         polygon.points.add(new LatLon (52.61245345338619,6.957017620786203));

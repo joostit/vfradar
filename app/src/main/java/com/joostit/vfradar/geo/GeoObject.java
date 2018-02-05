@@ -8,8 +8,6 @@ public class GeoObject {
 
     public String name = "";
     public GeoShape shape = new GeoShape();
-    public GeoAltitude altitude = new GeoAltitude();
-
 
     private LatLonRect bounds = null;
 

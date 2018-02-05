@@ -280,30 +280,32 @@ public class ListItemView extends View {
 
     private Paint getStatusForePaint(FenceAlerts alertType){
         switch (alertType) {
-            case None:
-                return null;
 
             case Notification:
                 return noteRectForePaint;
 
             case Warning:
                 return warnRectForePaint;
+
+            default:
+                return null;
         }
-        return null;
+
     }
 
     private Paint getStatusBackPaint(FenceAlerts alertType){
         switch (alertType) {
-            case None:
-                return null;
 
             case Notification:
                 return noteRectBackPaint;
 
             case Warning:
                 return warnRectBackPaint;
+
+            default:
+                return null;
+
         }
-        return null;
     }
 
     private void drawRelativeBearingArrow(Canvas canvas, float x, float y, int bearing) {
