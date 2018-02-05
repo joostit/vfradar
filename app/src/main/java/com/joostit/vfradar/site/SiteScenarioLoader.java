@@ -2,6 +2,7 @@ package com.joostit.vfradar.site;
 
 import com.joostit.vfradar.geo.GeoDataLoader;
 import com.joostit.vfradar.geo.GeoObject;
+import com.joostit.vfradar.geo.geofencing.GeoFenceHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class SiteScenarioLoader {
     private List<SiteFeature> features = new ArrayList<>();
     private List<GeoObject> geoData = new ArrayList<>();
     private GeoDataLoader geoLoader = new GeoDataLoader();
+    private GeoFenceHandler areaHandler = new GeoFenceHandler();
 
     public SiteScenarioLoader() {
 
@@ -23,16 +25,17 @@ public class SiteScenarioLoader {
     public void loadData() {
         SiteDataLoader siteLoader = new SiteDataLoader();
         List<SiteDataFile> siteDataFiles = siteLoader.loadSiteDataFiles();
-
         for (SiteDataFile dataFile : siteDataFiles) {
             features.addAll(dataFile.getAllFeatures());
         }
 
         geoData = geoLoader.loadAllFilesInFolder();
-
         for (GeoObject obj: geoData ) {
             obj.recalculateBoundingRect();
         }
+
+        areaHandler = new GeoFenceHandler();
+        areaHandler.loadFencedAreas();
     }
 
     public List<SiteFeature> getSite() {
@@ -41,6 +44,10 @@ public class SiteScenarioLoader {
 
     public List<GeoObject> getGeoData() {
         return geoData;
+    }
+
+    public GeoFenceHandler getGeoFenceHandler(){
+        return areaHandler;
     }
 
 

@@ -110,7 +110,7 @@ public abstract class KmlLoader {
         }
         return entries;
     }
-    
+
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
     // to their respective "read" methods for processing. Otherwise, skips the tag.
     private GeoObject readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {

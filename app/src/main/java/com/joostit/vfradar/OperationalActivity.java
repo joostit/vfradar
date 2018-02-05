@@ -73,9 +73,7 @@ public class OperationalActivity extends AppCompatActivity
     }
 
     private void createComponentObjects() {
-        areaHandler = new GeoFenceHandler();
-        areaHandler.loadFencedAreas();
-        aircaft = new AircraftStateCollection(areaHandler);
+        aircaft = new AircraftStateCollection();
         radarCoreConnection = new VFRadarCore(this);
         site = new SiteScenarioLoader();
     }
@@ -208,6 +206,7 @@ public class OperationalActivity extends AppCompatActivity
             if (rView != null) {
                 rView.UpdateSiteFeatures(site.getSite());
                 rView.updateGeoData(site.getGeoData());
+                aircaft.setGeoFences(site.getGeoFenceHandler());
             }
         }
 

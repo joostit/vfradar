@@ -18,7 +18,11 @@ public class AircraftStateCollection {
     public final List<TrackedAircraft> trackedAc = new ArrayList<>();
     public final Map<Integer, TrackedAircraft> trackedAcMap = new HashMap<>();
 
-    public AircraftStateCollection(GeoFenceHandler areaHandler){
+    public AircraftStateCollection(){
+
+    }
+
+    public void setGeoFences(GeoFenceHandler areaHandler){
         this.areaHandler = areaHandler;
     }
 
@@ -43,7 +47,9 @@ public class AircraftStateCollection {
             removeTrack(removeMe.data.trackId);
         }
 
-        areaHandler.applyFences(trackedAc);
+        if(areaHandler != null) {
+            areaHandler.applyFences(trackedAc);
+        }
 
         AircraftTrackingUpdate retVal = new AircraftTrackingUpdate(new ArrayList<>(trackedAc), updates.getUpdateSuccess());
 
