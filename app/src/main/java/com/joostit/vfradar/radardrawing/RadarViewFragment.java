@@ -80,9 +80,9 @@ public class RadarViewFragment extends Fragment implements RadarView.OnRadarView
         rView.updateSiteFeatures(site);
     }
 
-    public void updateGeoData(List<GeoObject> geoData) {
+    public void updateGeoData(List<GeoObject> geoData, List<GeoObject> geoFenceData) {
         RadarView rView = getView().findViewById(R.id.radarView);
-        rView.updateGeoData(geoData);
+        rView.updateGeoData(geoData, geoFenceData);
     }
 
     public void selectAircraft(Integer trackId) {

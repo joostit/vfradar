@@ -1,4 +1,4 @@
-package com.joostit.vfradar.radardrawing;
+package com.joostit.vfradar.radardrawing.geo;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,6 +7,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import com.joostit.vfradar.geo.GeoObject;
+import com.joostit.vfradar.radardrawing.DrawableItem;
+import com.joostit.vfradar.radardrawing.SphericalMercatorProjection;
+import com.joostit.vfradar.radardrawing.ZoomLevelInfo;
 import com.joostit.vfradar.utilities.Numbers;
 
 import java.util.ArrayList;

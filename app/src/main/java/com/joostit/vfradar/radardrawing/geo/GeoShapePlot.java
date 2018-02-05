@@ -1,4 +1,4 @@
-package com.joostit.vfradar.radardrawing;
+package com.joostit.vfradar.radardrawing.geo;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,6 +11,9 @@ import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geo.GeoObject;
 import com.joostit.vfradar.geo.GeoPolygon;
 import com.joostit.vfradar.geo.LatLonRect;
+import com.joostit.vfradar.radardrawing.DrawableItem;
+import com.joostit.vfradar.radardrawing.SphericalMercatorProjection;
+import com.joostit.vfradar.radardrawing.ZoomLevelInfo;
 
 /**
  * Created by Joost on 25-1-2018.

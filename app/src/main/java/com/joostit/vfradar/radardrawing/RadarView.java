@@ -13,6 +13,7 @@ import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.GeoObject;
+import com.joostit.vfradar.radardrawing.geo.GeoPlotter;
 import com.joostit.vfradar.site.ReportingPoint;
 import com.joostit.vfradar.site.RouteLine;
 import com.joostit.vfradar.site.Runway;
@@ -43,7 +44,8 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
     private List<DrawableItem> siteFeatures = new ArrayList<>();
     private List<AircraftPlot> plots = new ArrayList<>();
-    private GeoPlotter geoPlot = new GeoPlotter(this);
+    private GeoPlotter geoPlotter = new GeoPlotter(this);
+    private GeoPlotter geoFencePlotter = new GeoPlotter(this);
     private Map<String, Button> buttons = new HashMap<>();
     private Crosshair crosshair;
 
@@ -99,9 +101,12 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         invalidate();
     }
 
-    public synchronized void updateGeoData(List<GeoObject> geoData) {
-        geoPlot.setData(geoData);
-        geoPlot.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
+    public synchronized void updateGeoData(List<GeoObject> geoData, List<GeoObject> geoFenceData) {
+        geoPlotter.setData(geoData);
+        geoPlotter.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
+
+        geoFencePlotter.setData(geoFenceData);
+        geoFencePlotter.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
         invalidate();
     }
 
@@ -133,14 +138,14 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
                 siteFeatures.add(plot);
             }
         }
-
     }
 
 
     private synchronized void redrawGraphics() {
 
         projection.setScreen(this.getHeight(), this.getWidth(), this.getHeight(), zoomLevels.getZoomLevelInfo().rangeRadius * 1.08, SysConfig.getCenterPosition());
-        geoPlot.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
+        geoPlotter.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
+        geoFencePlotter.updateDrawing(projection, getViewBounds(), zoomLevels.getZoomLevelInfo());
         RecalculateSite();
         RecalculateButtons();
         calculateCrosshair();
@@ -178,9 +183,10 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
         // Black background
         canvas.drawARGB(255, 0, 0, 0);
-        geoPlot.draw(canvas);
+        geoPlotter.draw(canvas);
         crosshair.draw(canvas);
         drawSite(canvas);
+        geoFencePlotter.draw(canvas);
         drawAllAircraft(canvas);
         drawButtons(canvas);
     }

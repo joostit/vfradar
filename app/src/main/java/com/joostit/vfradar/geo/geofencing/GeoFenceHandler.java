@@ -15,6 +15,9 @@ public class GeoFenceHandler {
 
     private List<FencedArea> areas = new ArrayList<>();
 
+    public List<FencedArea> getAllAreas(){
+        return areas;
+    }
 
     public void loadFencedAreas() {
         GeoFenceLoader loader = new GeoFenceLoader();

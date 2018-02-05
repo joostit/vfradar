@@ -205,7 +205,7 @@ public class OperationalActivity extends AppCompatActivity
             RadarViewFragment rView = (RadarViewFragment) initiator.getFragmentManager().findFragmentByTag("radarViewFragTag");
             if (rView != null) {
                 rView.UpdateSiteFeatures(site.getSite());
-                rView.updateGeoData(site.getGeoData());
+                rView.updateGeoData(site.getGeoData(), site.getGeoFenceData());
                 aircaft.setGeoFences(site.getGeoFenceHandler());
             }
         }

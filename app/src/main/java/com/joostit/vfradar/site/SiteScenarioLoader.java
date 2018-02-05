@@ -39,7 +39,13 @@ public class SiteScenarioLoader {
     }
 
     public List<GeoObject> getGeoData() {
-        return geoData;
+        return new ArrayList<>(geoData);
+    }
+
+    public List<GeoObject> getGeoFenceData(){
+        List<GeoObject> geoObjects = new ArrayList<>();
+        geoObjects.addAll(areaHandler.getAllAreas());
+        return geoObjects;
     }
 
     public GeoFenceHandler getGeoFenceHandler(){
