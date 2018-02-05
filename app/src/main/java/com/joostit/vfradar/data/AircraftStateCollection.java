@@ -1,5 +1,6 @@
 package com.joostit.vfradar.data;
 
+import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.geo.geofencing.GeoFenceHandler;
 
 import java.util.ArrayList;
@@ -29,8 +30,9 @@ public class AircraftStateCollection {
     public synchronized AircraftTrackingUpdate doUpdate(AircraftDataUpdate updates) {
 
         List<TrackedAircraft> toRemove = new ArrayList<>(trackedAc);
+        List<AircraftState> filteredAircraft = performFilter(updates);
 
-        for (AircraftState newState : updates.trackedAircraft) {
+        for (AircraftState newState : filteredAircraft) {
             if (hasTrack(newState.trackId)) {
                 TrackedAircraft existing = getItem(newState.trackId);
                 updateTrackedAc(existing, newState);
@@ -53,6 +55,34 @@ public class AircraftStateCollection {
         AircraftTrackingUpdate retVal = new AircraftTrackingUpdate(new ArrayList<>(trackedAc), updates.getUpdateSuccess());
 
         return retVal;
+    }
+
+    private List<AircraftState> performFilter(AircraftDataUpdate rawUpdate) {
+
+        if(!SysConfig.isFilterEnabled()){
+            return rawUpdate.trackedAircraft;
+        }
+
+        List<AircraftState> filteredList = new ArrayList<>();
+
+        for(AircraftState rawState : rawUpdate.trackedAircraft){
+
+            if(SysConfig.getCenterPosition().DistanceTo(rawState.position) <= SysConfig.getFilterMaxDist() * 1000){
+
+                // If we don't have an altitude, always keep the track, just in case :')
+                if(rawState.hasAltitude()){
+                    if(rawState.alt <= SysConfig.getFilterMaxAlt()){
+                        filteredList.add(rawState);
+                    }
+                }
+                else{
+                    filteredList.add(rawState);
+                }
+            }
+
+        }
+
+        return filteredList;
     }
 
 
