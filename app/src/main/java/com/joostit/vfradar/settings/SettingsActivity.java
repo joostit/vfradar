@@ -140,7 +140,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || ConnectionPreferenceFragment.class.getName().equals(fragmentName)
                 || FilteringPreferenceFragment.class.getName().equals(fragmentName)
                 || SitePreferenceFragment.class.getName().equals(fragmentName)
