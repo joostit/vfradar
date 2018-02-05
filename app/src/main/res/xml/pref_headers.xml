@@ -1,6 +1,5 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <header
         android:fragment="com.joostit.vfradar.settings.GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
@@ -8,27 +7,27 @@
 
     <header
         android:fragment="com.joostit.vfradar.settings.ConnectionPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_connection_black_24dp"
         android:title="@string/pref_header_data_connection" />
 
     <header
         android:fragment="com.joostit.vfradar.settings.FilteringPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_filtering_black_24dp"
         android:title="@string/pref_header_filtering" />
 
     <header
         android:fragment="com.joostit.vfradar.settings.SitePreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_map_black_24dp"
         android:title="@string/pref_header_site" />
 
     <header
         android:fragment="com.joostit.vfradar.settings.DataPreferencesFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_data_black_24dp"
         android:title="@string/pref_header_data" />
 
     <header
         android:fragment="com.joostit.vfradar.settings.AppearancePreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_radar_black_24dp"
         android:title="@string/pref_header_appearance" />
 
 </preference-headers>
