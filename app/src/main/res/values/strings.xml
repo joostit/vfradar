@@ -107,9 +107,13 @@
 
     <string name="pref_title_filter_enabled">Filter enabled</string>
     <string name="pref_title_filter_summary">Enabled the filter to limit the number of shown plots</string>
+    <string name="pref_default_filter_enabled">false</string>
 
-    <string name="pref_title_max_altitude">Maximum Altitude</string>
+    <string name="pref_title_max_altitude">Maximum Altitude (feet)</string>
     <string name="pref_default_max_altitude">40000</string>
+
+    <string name="pref_title_max_distance">Maximum distance (km)</string>
+    <string name="pref_default_max_distance">240</string>
 
 
     <!-- Site preferences -->
@@ -120,7 +124,7 @@
 
     <string name="pref_title_pick_location">Pick location</string>
     <string name="pref_summary_pick_location">Use a map to pick the center position (requires an active internet connection)</string>
-    <string name="pref_title_site_elevation">Elevation</string>
+    <string name="pref_title_site_elevation">Elevation (meter)</string>
 
 
     <string name="pref_title_center_location">Center location</string>

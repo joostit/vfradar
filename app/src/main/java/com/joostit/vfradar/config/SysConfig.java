@@ -21,7 +21,11 @@ public class SysConfig {
     private static HeightUnits heightUnit;
     private static int siteElevation;
     private static VerticalRateUnits verticalRateUnit;
-    private static Boolean showGeoFences;
+    private static boolean showGeoFences;
+    private static boolean filterEnabled;
+    private static int filterMaxAlt;
+    private static int filterMaxDist;
+
 
     static {
         setDefaults();
@@ -44,6 +48,19 @@ public class SysConfig {
         verticalRateUnit = value;
         setString(context, R.string.key_units_verticalRate, verticalRateUnit.name());
     }
+
+    public static boolean isFilterEnabled() {
+        return filterEnabled;
+    }
+
+    public static int getFilterMaxAlt() {
+        return filterMaxAlt;
+    }
+
+    public static int getFilterMaxDist() {
+        return filterMaxDist;
+    }
+
     public static Boolean getShowGeoFences() {
         return showGeoFences;
     }
@@ -99,6 +116,9 @@ public class SysConfig {
         heightUnit = HeightUnits.valueOf(getString(context, R.string.key_units_height, heightUnit.name()));
         verticalRateUnit = VerticalRateUnits.valueOf(getString(context, R.string.key_units_verticalRate, verticalRateUnit.name()));
         showGeoFences = getBoolean(context, R.string.key_appearance_showGeoFences, showGeoFences);
+        filterEnabled = getBoolean(context, R.string.key_plot_filter_enabled, filterEnabled);
+        filterMaxAlt = getIntFromStringPreference(context, R.string.key_plot_filter_maxAlt, filterMaxAlt);
+        filterMaxDist = getIntFromStringPreference(context, R.string.key_plot_filter_maxDist, filterMaxDist);
     }
 
     private static void setDefaults() {
@@ -111,6 +131,9 @@ public class SysConfig {
         heightUnit = HeightUnits.Feet;
         verticalRateUnit = VerticalRateUnits.FeetPerMinute;
         showGeoFences = true;
+        filterEnabled = false;
+        filterMaxAlt = 40000;
+        filterMaxDist = 240;
     }
 
     private static int getInt(Context context, int resouceKeyId, int defaultValue) {
