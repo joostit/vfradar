@@ -7,6 +7,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import com.joostit.vfradar.geo.GeoShape;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geo.GeoObject;
 import com.joostit.vfradar.geo.GeoPolygon;
@@ -25,11 +26,9 @@ public class GeoShapePlot extends DrawableItem {
 
     private boolean doDraw = false;
     private Path screenPath = new Path();
-
-    private int pathColor = 0xFF1a1a1a;
-    private Paint pathPaint;
+    private Paint polygonStrokePaint;
+    private Paint polygonFillPaint;
     private Paint textPaint;
-    private int textColor = 0xFF4d4d4d;
     private PointF textPoint = new PointF(0, 0);
 
 
@@ -38,18 +37,10 @@ public class GeoShapePlot extends DrawableItem {
         init();
     }
 
-
     private void init() {
-        pathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        pathPaint.setStyle(Paint.Style.FILL);
-        pathPaint.setStrokeWidth(2);
-        pathPaint.setColor(pathColor);
-
-        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setColor(textColor);
-        textPaint.setTextSize(25);
-
+        polygonStrokePaint = GeoShapePaints.createPolygonForePaint(source.getObjectType());
+        polygonFillPaint = GeoShapePaints.createPolygonBackPaint(source.getObjectType());
+        textPaint = GeoShapePaints.createPolygonTextPaint(source.getObjectType());
     }
 
 
@@ -57,9 +48,19 @@ public class GeoShapePlot extends DrawableItem {
     public void draw(Canvas canvas) {
         if (doDraw) {
             if (screenPath != null) {
-                canvas.drawPath(screenPath, pathPaint);
+
+                if(polygonFillPaint != null) {
+                    canvas.drawPath(screenPath, polygonFillPaint);
+                }
+
+                if(polygonStrokePaint != null){
+                    canvas.drawPath(screenPath, polygonStrokePaint);
+                }
+
                 if (textPoint != null) {
-                    canvas.drawText(source.name, 0, source.name.length(), textPoint.x, textPoint.y, textPaint);
+                    if(textPaint != null) {
+                        canvas.drawText(source.name, 0, source.name.length(), textPoint.x, textPoint.y, textPaint);
+                    }
                 }
             }
         }
