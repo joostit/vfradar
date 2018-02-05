@@ -10,7 +10,8 @@ import com.joostit.vfradar.geo.GeoObjectTypes;
 
 public final class GeoShapePaints {
 
-    private GeoShapePaints(){}
+    private GeoShapePaints() {
+    }
 
     public static final int notificationAreaForeColor = 0x33ffff00;
     public static final int notificationAreaBackColor = 0x24ffff00;
@@ -28,8 +29,7 @@ public final class GeoShapePaints {
     public static final int nameTextSize = 25;
 
 
-
-    public static Paint createPolygonForePaint(GeoObjectTypes type){
+    public static Paint createPolygonForePaint(GeoObjectTypes type) {
         int color = 0;
         switch (type) {
             case GenericGeoArea:
@@ -44,10 +44,9 @@ public final class GeoShapePaints {
                 break;
         }
 
-        if(color == 0){
+        if (color == 0) {
             return null;
-        }
-        else {
+        } else {
             Paint retVal = new Paint(Paint.ANTI_ALIAS_FLAG);
             retVal.setStyle(Paint.Style.STROKE);
             retVal.setStrokeWidth(GeoShapePaints.strokeWidth);
@@ -57,7 +56,7 @@ public final class GeoShapePaints {
     }
 
 
-    public static Paint createPolygonBackPaint(GeoObjectTypes type){
+    public static Paint createPolygonBackPaint(GeoObjectTypes type) {
         int color = 0;
         switch (type) {
             case GenericGeoArea:
@@ -72,10 +71,9 @@ public final class GeoShapePaints {
                 break;
         }
 
-        if(color == 0){
+        if (color == 0) {
             return null;
-        }
-        else {
+        } else {
             Paint retVal = new Paint(Paint.ANTI_ALIAS_FLAG);
             retVal.setStyle(Paint.Style.FILL);
             retVal.setStrokeWidth(strokeWidth);
@@ -84,7 +82,7 @@ public final class GeoShapePaints {
         }
     }
 
-    public static Paint createPolygonTextPaint(GeoObjectTypes type){
+    public static Paint createPolygonTextPaint(GeoObjectTypes type) {
         int color = 0;
         switch (type) {
             case GenericGeoArea:
@@ -99,10 +97,9 @@ public final class GeoShapePaints {
                 break;
         }
 
-        if(color == 0){
+        if (color == 0) {
             return null;
-        }
-        else {
+        } else {
             Paint retVal = new Paint(Paint.ANTI_ALIAS_FLAG);
             retVal.setStyle(Paint.Style.FILL);
             retVal.setColor(color);

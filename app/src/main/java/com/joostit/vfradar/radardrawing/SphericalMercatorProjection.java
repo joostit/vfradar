@@ -2,8 +2,11 @@ package com.joostit.vfradar.radardrawing;
 
 
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 import com.joostit.vfradar.geo.LatLon;
+import com.joostit.vfradar.geo.LatLonRect;
+import com.joostit.vfradar.utilities.XyUtils;
 
 /**
  * Created by Joost on 16-1-2018.
@@ -76,6 +79,13 @@ public class SphericalMercatorProjection {
         final double y = 0.5 * Math.log((1 + siny) / (1 - siny)) / -(2 * Math.PI) + .5;
         PointF retVal = new PointF((float) (x * mWorldWidth), (float) (y * mWorldWidth));
         return retVal;
+    }
+
+
+    public RectF toScreenRect(LatLonRect geoBounds) {
+        PointF topLeft = toScreenPoint(geoBounds.leftLat, geoBounds.topLon);
+        PointF bottomRight = toScreenPoint(geoBounds.rightLat, geoBounds.bottomLon);
+        return XyUtils.createBoundsRect(topLeft, bottomRight);
     }
 
 }

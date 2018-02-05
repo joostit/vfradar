@@ -353,6 +353,7 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         zoomLevels.zoomIn();
         redrawGraphics();
     }
+
     private void zoomTo(int zoomLevel) {
         zoomLevels.zoomTo(zoomLevel);
         redrawGraphics();
@@ -441,14 +442,14 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
 
         int requiredZoomLevel = 0;
 
-        for(int zl = 0; zl < zoomLevels.size(); zl++){
-            if(zoomLevels.getZoomLevelInfoAt(zl).isDistanceWithinLastRing(distance)){
+        for (int zl = 0; zl < zoomLevels.size(); zl++) {
+            if (zoomLevels.getZoomLevelInfoAt(zl).isDistanceWithinLastRing(distance)) {
                 requiredZoomLevel = zl;
                 break;
             }
         }
 
-        if(requiredZoomLevel > zoomLevels.getCurrentZoomLevel()){
+        if (requiredZoomLevel > zoomLevels.getCurrentZoomLevel()) {
             zoomTo(requiredZoomLevel);
         }
     }

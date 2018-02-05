@@ -7,14 +7,14 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
-import com.joostit.vfradar.geo.GeoShape;
-import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geo.GeoObject;
 import com.joostit.vfradar.geo.GeoPolygon;
+import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geo.LatLonRect;
 import com.joostit.vfradar.radardrawing.DrawableItem;
 import com.joostit.vfradar.radardrawing.SphericalMercatorProjection;
 import com.joostit.vfradar.radardrawing.ZoomLevelInfo;
+import com.joostit.vfradar.utilities.XyUtils;
 
 /**
  * Created by Joost on 25-1-2018.
@@ -49,16 +49,16 @@ public class GeoShapePlot extends DrawableItem {
         if (doDraw) {
             if (screenPath != null) {
 
-                if(polygonFillPaint != null) {
+                if (polygonFillPaint != null) {
                     canvas.drawPath(screenPath, polygonFillPaint);
                 }
 
-                if(polygonStrokePaint != null){
+                if (polygonStrokePaint != null) {
                     canvas.drawPath(screenPath, polygonStrokePaint);
                 }
 
                 if (textPoint != null) {
-                    if(textPaint != null) {
+                    if (textPaint != null) {
                         canvas.drawText(source.name, 0, source.name.length(), textPoint.x, textPoint.y, textPaint);
                     }
                 }
@@ -70,7 +70,6 @@ public class GeoShapePlot extends DrawableItem {
     public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
         Path newPath = new Path();
         newPath.setFillType(Path.FillType.EVEN_ODD);
-        boolean isInView = false;
         PointF newTextPoint = null;
         double sumX = 0;
         double sumY = 0;
@@ -79,40 +78,32 @@ public class GeoShapePlot extends DrawableItem {
         float minY = Float.MAX_VALUE;
         float maxY = Float.MIN_VALUE;
         int pointCount = 0;
+        boolean shouldDraw = false;
+        boolean hasPointInScreenBounds = false;
+        boolean isInScreenBounds = false;
+        boolean hasIntersectInScreenBounds = false;
 
-
-        // Determine if the square bounding rectangle is anywhere within the screen bounds.
-        // Using only the bounding rectangle saves us from iterating though tens of thousands of Points
-        // on each redraw, thus increasing performance
         LatLonRect geoBounds = source.getBoundingRect();
-        LatLon bottomLeft = new LatLon(geoBounds.leftLat, geoBounds.bottomLon);
-        LatLon topLeft = new LatLon(geoBounds.leftLat, geoBounds.topLon);
-        LatLon topRight = new LatLon(geoBounds.rightLat, geoBounds.topLon);
-        LatLon bottomRight = new LatLon(geoBounds.rightLat, geoBounds.bottomLon);
+        RectF screenBounds = projection.toScreenRect(geoBounds);
 
-        PointF bottomLeftScreen = projection.toScreenPoint(bottomLeft);
-        PointF topLeftScreen = projection.toScreenPoint(topLeft);
-        PointF topRightScreen = projection.toScreenPoint(topRight);
-        PointF bottomRightScreen = projection.toScreenPoint(bottomRight);
+        boolean shapeBoundsIntersectWithScreen = RectF.intersects(screenBounds, bounds);
 
-        if (bounds.contains(bottomLeftScreen.x, bottomLeftScreen.y)
-                || bounds.contains(topLeftScreen.x, topLeftScreen.y)
-                || bounds.contains(topRightScreen.x, topRightScreen.y)
-                || bounds.contains(bottomRightScreen.x, bottomRightScreen.y)) {
-            isInView = true;
+        if (shapeBoundsIntersectWithScreen) {
+            isInScreenBounds = true;
         } else {
             doDraw = false;
             return false;
         }
 
         for (GeoPolygon polygon : source.shape.polygons) {
-
             if (polygon.points.size() < 2) {
                 continue;
             }
 
+            PointF previousPoint = projection.toScreenPoint(polygon.points.get(polygon.points.size() - 1));
             LatLon startlatLon = polygon.points.get(0);
             PointF startPoint = projection.toScreenPoint(startlatLon);
+            hasIntersectInScreenBounds = lineIntersectsBounds(bounds, previousPoint, startPoint) ? true : hasPointInScreenBounds;
 
             newPath.moveTo(startPoint.x, startPoint.y);
             sumX += startPoint.x;
@@ -137,15 +128,34 @@ public class GeoShapePlot extends DrawableItem {
                     minY = screenPoint.y;
                 }
 
+                if (bounds.contains(screenPoint.x, screenPoint.y)) {
+                    hasPointInScreenBounds = true;
+                }
+
+                // as long as we don't know whether we have points on screen and we don't know
+                // if there's a line crossing the screen, keep searching for it.
+                // If either one becomes true, we will draw this shape
+                if (!hasPointInScreenBounds) {
+                    if (!hasIntersectInScreenBounds) {
+                        hasIntersectInScreenBounds = lineIntersectsBounds(bounds, previousPoint, screenPoint) ? true : hasPointInScreenBounds;
+                    }
+                }
+
                 sumX += screenPoint.x;
                 sumY += screenPoint.y;
                 pointCount++;
+                previousPoint = screenPoint;
             }
 
             newPath.close();
         }
 
-        if (isInView) {
+
+        // Only draw if the shape is within view of the screen and if there ar points or lines in view.
+        // If we're fully zoomed in on the shape and don't see the outlines of it, we don't want to draw
+        shouldDraw = isInScreenBounds && (hasPointInScreenBounds || hasIntersectInScreenBounds);
+
+        if (shouldDraw) {
             float centerX = (float) (sumX / pointCount);
             float centerY = (float) (sumY / pointCount);
             float polyStretchX = maxX - minX;
@@ -171,8 +181,25 @@ public class GeoShapePlot extends DrawableItem {
 
         textPoint = newTextPoint;
         screenPath = newPath;
-        doDraw = isInView;
+        doDraw = shouldDraw;
 
         return doDraw;
     }
+
+
+    private boolean lineIntersectsBounds(RectF bounds, PointF p1, PointF p2) {
+
+        PointF intersectLeft = XyUtils.getLineIntersection(p1, p2, new PointF(bounds.left, bounds.top), new PointF(bounds.left, bounds.bottom));
+        PointF intersectTop = XyUtils.getLineIntersection(p1, p2, new PointF(bounds.left, bounds.top), new PointF(bounds.right, bounds.top));
+        PointF intersectRight = XyUtils.getLineIntersection(p1, p2, new PointF(bounds.right, bounds.top), new PointF(bounds.right, bounds.bottom));
+        PointF intersectBottom = XyUtils.getLineIntersection(p1, p2, new PointF(bounds.right, bounds.bottom), new PointF(bounds.left, bounds.bottom));
+
+        return ((intersectLeft != null)
+                || (intersectTop != null)
+                || (intersectRight != null)
+                || (intersectBottom != null));
+
+
+    }
+
 }
