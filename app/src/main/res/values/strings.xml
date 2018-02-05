@@ -143,4 +143,9 @@
     <string name="pref_header_data">Data files</string>
     <string name="pref_title_pick_data_folder">Data folder</string>
 
+    <!-- Appearance preferences -->
+    <string name="pref_header_appearance">Appearance</string>
+    <string name="pref_title_show_geofences">Show geo fences</string>
+    <string name="pref_summary_show_geofences">Shows the geo fence areas</string>
+
 </resources>

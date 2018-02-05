@@ -21,7 +21,7 @@ public class SysConfig {
     private static HeightUnits heightUnit;
     private static int siteElevation;
     private static VerticalRateUnits verticalRateUnit;
-
+    private static Boolean showGeoFences;
 
     static {
         setDefaults();
@@ -44,7 +44,9 @@ public class SysConfig {
         verticalRateUnit = value;
         setString(context, R.string.key_units_verticalRate, verticalRateUnit.name());
     }
-
+    public static Boolean getShowGeoFences() {
+        return showGeoFences;
+    }
 
     public static int getSiteElevation() {
         return siteElevation;
@@ -96,6 +98,7 @@ public class SysConfig {
         dataFolder = getString(context, R.string.key_data_datafolder, dataFolder);
         heightUnit = HeightUnits.valueOf(getString(context, R.string.key_units_height, heightUnit.name()));
         verticalRateUnit = VerticalRateUnits.valueOf(getString(context, R.string.key_units_verticalRate, verticalRateUnit.name()));
+        showGeoFences = getBoolean(context, R.string.key_appearance_showGeoFences, showGeoFences);
     }
 
     private static void setDefaults() {
@@ -107,6 +110,7 @@ public class SysConfig {
         dataFolder = "";
         heightUnit = HeightUnits.Feet;
         verticalRateUnit = VerticalRateUnits.FeetPerMinute;
+        showGeoFences = true;
     }
 
     private static int getInt(Context context, int resouceKeyId, int defaultValue) {
@@ -125,6 +129,12 @@ public class SysConfig {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String preferenceKey = context.getResources().getString(resouceKeyId);
         return preferences.getString(preferenceKey, defaultValue);
+    }
+
+    private static Boolean getBoolean(Context context, int resouceKeyId, boolean defaultValue) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String preferenceKey = context.getResources().getString(resouceKeyId);
+        return preferences.getBoolean(preferenceKey, defaultValue);
     }
 
     private static LatLon getLatLon(Context context, int resouceKeyId, LatLon defaultValue) {

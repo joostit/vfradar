@@ -16,4 +16,6 @@
 
     <string name="key_units_height">HeightUnit</string>
     <string name="key_units_verticalRate">VericalRateUnit</string>
+
+    <string name="key_appearance_showGeoFences">ShowGeoFences</string>
 </resources>

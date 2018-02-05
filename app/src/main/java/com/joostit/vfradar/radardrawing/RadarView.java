@@ -186,7 +186,9 @@ public class RadarView extends View implements GeoPlotter.OnRedrawRequestHandler
         geoPlotter.draw(canvas);
         crosshair.draw(canvas);
         drawSite(canvas);
-        geoFencePlotter.draw(canvas);
+        if(SysConfig.getShowGeoFences()) {
+            geoFencePlotter.draw(canvas);
+        }
         drawAllAircraft(canvas);
         drawButtons(canvas);
     }

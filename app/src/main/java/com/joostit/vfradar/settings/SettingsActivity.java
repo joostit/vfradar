@@ -145,7 +145,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || FilteringPreferenceFragment.class.getName().equals(fragmentName)
                 || SitePreferenceFragment.class.getName().equals(fragmentName)
                 || DataPreferencesFragment.class.getName().equals(fragmentName)
-                || UnitsPreferenceFragment.class.getName().equals(fragmentName);
+                || UnitsPreferenceFragment.class.getName().equals(fragmentName)
+                || AppearancePreferenceFragment.class.getName().equals(fragmentName);
     }
 
 }
