@@ -281,11 +281,11 @@ public class AircraftPlot extends DrawableItem {
         boolean areaWarning = false;
 
         for (FencedArea area : aircraft.isInside.areas) {
-            if (area.alertType == FenceAlerts.Notification) {
+            if (area.getAlerType() == FenceAlerts.Notification) {
                 areaHighlight = true;
             }
 
-            if(area.alertType == FenceAlerts.Warning){
+            if(area.getAlerType() == FenceAlerts.Warning){
                 areaWarning = true;
             }
         }

@@ -8,11 +8,11 @@ public class GeoObject {
 
     public String name = "";
     public GeoShape shape = new GeoShape();
-
+    private GeoObjectTypes objectType;
     private LatLonRect bounds = null;
 
-    public GeoObject() {
-
+    public GeoObject(GeoObjectTypes objectType) {
+        this.objectType = objectType;
     }
 
     public LatLonRect getBoundingRect(){
@@ -20,6 +20,14 @@ public class GeoObject {
             updateBoundingRect();
         }
         return bounds;
+    }
+
+    protected void setObjectType(GeoObjectTypes objectType){
+        this.objectType = objectType;
+    }
+
+    public GeoObjectTypes getObjectType(){
+        return objectType;
     }
 
     public void updateBoundingRect() {

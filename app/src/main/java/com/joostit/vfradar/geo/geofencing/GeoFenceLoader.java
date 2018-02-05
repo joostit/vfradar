@@ -67,7 +67,7 @@ public class GeoFenceLoader extends KmlLoader<FencedArea> {
         }
         else if (elementName.equals("areaType")) {
             String areaType = XmlParse.readText(parser);
-            geoObject.alertType = parseAreaType(areaType);
+            geoObject.setAlertType(parseAreaType(areaType));
             isParsed = true;
         }
 

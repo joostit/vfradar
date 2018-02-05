@@ -84,7 +84,7 @@ public class AircraftListCollection {
 
         for (FencedArea area : tracked.isInside.areas) {
             if(!acItem.hasNotification(area.name)){
-                acItem.notifications.add(new InfoListNotification(area.name, area.alertType));
+                acItem.notifications.add(new InfoListNotification(area.name, area.getAlerType()));
             }
         }
 
