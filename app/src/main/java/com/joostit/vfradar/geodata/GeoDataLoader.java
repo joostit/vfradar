@@ -155,8 +155,8 @@ public class GeoDataLoader {
 
             String name = parser.getName();
 
-            if (name.equals("ExtendedData")) {
-                readExtendedData(parser, newEntry);
+            if (name.equals("name")) {
+                newEntry.name = XmlParse.readText(parser);
             } else if (name.equals("Polygon")) {
                 readPolygonData(parser, newEntry);
             } else if (name.equals("MultiGeometry")) {
@@ -286,44 +286,5 @@ public class GeoDataLoader {
 
         return retVal;
     }
-
-
-    private void readExtendedData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
-
-        parser.require(XmlPullParser.START_TAG, ns, "ExtendedData");
-
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            String name = parser.getName();
-
-            if (name.equals("SchemaData")) {
-                readSchemaData(parser, newEntry);
-            } else {
-                XmlParse.skip(parser);
-            }
-        }
-
-    }
-
-    private void readSchemaData(XmlPullParser parser, GeoObject newEntry) throws XmlPullParserException, IOException {
-
-        parser.require(XmlPullParser.START_TAG, ns, "SchemaData");
-
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            String elementName = parser.getAttributeValue(null, "name");
-            if (elementName.equalsIgnoreCase("name")) {
-                newEntry.name = XmlParse.readElementText(parser, "SimpleData");
-            } else {
-                XmlParse.skip(parser);
-            }
-        }
-
-    }
-
 
 }
