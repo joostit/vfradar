@@ -21,6 +21,11 @@
         android:title="@string/pref_header_data" />
 
     <header
+        android:fragment="com.joostit.vfradar.settings.UnitsPreferenceFragment"
+        android:icon="@drawable/ic_units_black_24dp"
+        android:title="@string/pref_header_units" />
+
+    <header
         android:fragment="com.joostit.vfradar.settings.AppearancePreferenceFragment"
         android:icon="@drawable/ic_radar_black_24dp"
         android:title="@string/pref_header_appearance" />
