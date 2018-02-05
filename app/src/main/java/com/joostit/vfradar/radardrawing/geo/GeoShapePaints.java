@@ -13,12 +13,12 @@ public final class GeoShapePaints {
     private GeoShapePaints() {
     }
 
-    public static final int notificationAreaForeColor = 0x33ffff00;
-    public static final int notificationAreaBackColor = 0x24ffff00;
+    public static final int notificationAreaForeColor = 0x15ffff00;
+    public static final int notificationAreaBackColor = 0x10ffff00;
     public static final int notificationAreaTextColor = 0x70ffff00;
 
-    public static final int warningAreaForeColor = 0x33ff0000;
-    public static final int warningAreaBackColor = 0x24ff0000;
+    public static final int warningAreaForeColor = 0x25ff0000;
+    public static final int warningAreaBackColor = 0x15ff0000;
     public static final int warningAreaTextColor = 0x70ff0000;
 
     public static final int genericPolygonForeColor = 0;

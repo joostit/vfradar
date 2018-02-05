@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.AsyncTask;
+
 import com.joostit.vfradar.geo.GeoObject;
 import com.joostit.vfradar.radardrawing.DrawableItem;
 import com.joostit.vfradar.radardrawing.SphericalMercatorProjection;
@@ -24,7 +25,7 @@ public class GeoPlotter extends DrawableItem {
     private List<GeoShapePlot> shapePlots = new ArrayList<>();
     private Paint bitmapPaint;
     private Paint bitmapScaledPaint;
-    private int bitmapScaledColor = 0xCC000000;
+    private int bitmapScaledColor = 0xFF000000;
     private RedrawGeoDataTask redrawTask;
     private OnRedrawRequestHandler redrawHandler;
     private ZoomLevelInfo lastZoomlevel = null;
@@ -57,15 +58,16 @@ public class GeoPlotter extends DrawableItem {
                     bmpBounds.top + yDisplacement + plotHeight);
 
             canvas.drawBitmap(screenBuffer, bmpBounds, plotBounds, getBitmapPaint());
+        } else {
+            canvas.toString();
         }
     }
 
 
-    private Paint getBitmapPaint(){
-        if(Numbers.isDoubleZero(screenBufferScale - 1)){
-         return bitmapPaint;
-        }
-        else{
+    private Paint getBitmapPaint() {
+        if (Numbers.isDoubleZero(screenBufferScale - 1)) {
+            return bitmapPaint;
+        } else {
             return bitmapScaledPaint;
         }
     }
@@ -76,6 +78,7 @@ public class GeoPlotter extends DrawableItem {
         bitmapPaint.setFilterBitmap(false);
         bitmapPaint.setStyle(Paint.Style.STROKE);
         bitmapPaint.setDither(false);
+
         bitmapScaledPaint = new Paint();
         bitmapScaledPaint.setAntiAlias(false);
         bitmapScaledPaint.setFilterBitmap(false);
@@ -87,15 +90,14 @@ public class GeoPlotter extends DrawableItem {
     @Override
     public boolean updateDrawing(SphericalMercatorProjection projection, RectF bounds, ZoomLevelInfo zoomLevelInfo) {
 
-        if(lastZoomlevel != null) {
+        if (lastZoomlevel != null) {
             screenBufferScale = lastZoomlevel.rangeRadius / zoomLevelInfo.rangeRadius;
-        }
-        else{
+        } else {
             screenBufferScale = 1;
         }
         lastZoomlevel = zoomLevelInfo;
 
-        if(redrawTask != null){
+        if (redrawTask != null) {
             redrawTask.cancel(true);
         }
 
@@ -134,7 +136,7 @@ public class GeoPlotter extends DrawableItem {
             boolean itemsToDraw = false;
 
             for (GeoShapePlot plot : shapePlots) {
-                if(isCancelled()){
+                if (isCancelled()) {
                     itemsToDraw = false;
                     break;
                 }
@@ -144,9 +146,9 @@ public class GeoPlotter extends DrawableItem {
             bmp = Bitmap.createBitmap((int) bounds.width(), (int) bounds.height(), Bitmap.Config.ARGB_8888);
             Canvas drawCanvas = new Canvas(bmp);
 
-            if(itemsToDraw){
+            if (itemsToDraw) {
                 for (GeoShapePlot plot : shapePlots) {
-                    if(isCancelled()){
+                    if (isCancelled()) {
                         return false;
                     }
                     plot.draw(drawCanvas);
@@ -176,7 +178,7 @@ public class GeoPlotter extends DrawableItem {
 
     }
 
-    public interface OnRedrawRequestHandler{
+    public interface OnRedrawRequestHandler {
         void onRedrawRequest();
     }
 }
