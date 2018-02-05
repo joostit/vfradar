@@ -1,4 +1,4 @@
-package com.joostit.vfradar.geofencing;
+package com.joostit.vfradar.geo.geofencing;
 
 import java.util.ArrayList;
 import java.util.List;

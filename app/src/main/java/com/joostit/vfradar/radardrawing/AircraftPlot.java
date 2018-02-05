@@ -12,8 +12,8 @@ import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geofencing.FenceAlerts;
-import com.joostit.vfradar.geofencing.FencedArea;
+import com.joostit.vfradar.geo.geofencing.FenceAlerts;
+import com.joostit.vfradar.geo.geofencing.FencedArea;
 
 /**
  * Created by Joost on 15-1-2018.

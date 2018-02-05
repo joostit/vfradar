@@ -1,6 +1,6 @@
 package com.joostit.vfradar.infolisting;
 
-import com.joostit.vfradar.geofencing.FenceAlerts;
+import com.joostit.vfradar.geo.geofencing.FenceAlerts;
 
 /**
  * Created by Joost on 2-2-2018.

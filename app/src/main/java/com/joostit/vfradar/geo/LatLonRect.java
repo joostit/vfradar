@@ -1,6 +1,4 @@
-package com.joostit.vfradar.geodata;
-
-import com.joostit.vfradar.geo.LatLon;
+package com.joostit.vfradar.geo;
 
 /**
  * Created by Joost on 1-2-2018.

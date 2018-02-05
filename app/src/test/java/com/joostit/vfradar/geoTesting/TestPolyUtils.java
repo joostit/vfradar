@@ -2,8 +2,8 @@ package com.joostit.vfradar.geoTesting;
 
 
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geodata.GeoPolygon;
-import com.joostit.vfradar.geofencing.FencedArea;
+import com.joostit.vfradar.geo.GeoPolygon;
+import com.joostit.vfradar.geo.geofencing.FencedArea;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

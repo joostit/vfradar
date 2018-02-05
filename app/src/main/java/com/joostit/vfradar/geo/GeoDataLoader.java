@@ -1,9 +1,8 @@
-package com.joostit.vfradar.geodata;
+package com.joostit.vfradar.geo;
 
 import android.util.Xml;
 
 import com.joostit.vfradar.config.SysConfig;
-import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.XmlParse;
 
 import org.xmlpull.v1.XmlPullParser;

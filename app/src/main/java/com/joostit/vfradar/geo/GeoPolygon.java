@@ -1,6 +1,5 @@
-package com.joostit.vfradar.geodata;
+package com.joostit.vfradar.geo;
 
-import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.utilities.PolyUtil;
 
 import java.util.ArrayList;

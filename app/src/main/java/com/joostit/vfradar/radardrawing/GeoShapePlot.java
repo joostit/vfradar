@@ -8,9 +8,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geodata.GeoObject;
-import com.joostit.vfradar.geodata.GeoPolygon;
-import com.joostit.vfradar.geodata.LatLonRect;
+import com.joostit.vfradar.geo.GeoObject;
+import com.joostit.vfradar.geo.GeoPolygon;
+import com.joostit.vfradar.geo.LatLonRect;
 
 /**
  * Created by Joost on 25-1-2018.

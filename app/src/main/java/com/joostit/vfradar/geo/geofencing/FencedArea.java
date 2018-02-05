@@ -1,11 +1,7 @@
-package com.joostit.vfradar.geofencing;
+package com.joostit.vfradar.geo.geofencing;
 
 import com.joostit.vfradar.data.TrackedAircraft;
-import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geodata.GeoShape;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.joostit.vfradar.geo.GeoShape;
 
 /**
  * Created by Joost on 2-2-2018.

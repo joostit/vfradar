@@ -3,7 +3,7 @@ package com.joostit.vfradar.geoTesting;
 import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geofencing.FencedArea;
+import com.joostit.vfradar.geo.geofencing.FencedArea;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 

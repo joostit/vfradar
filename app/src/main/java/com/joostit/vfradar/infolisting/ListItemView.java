@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.joostit.vfradar.geofencing.FenceAlerts;
+import com.joostit.vfradar.geo.geofencing.FenceAlerts;
 import com.joostit.vfradar.utilities.DrawUtils;
 
 /**

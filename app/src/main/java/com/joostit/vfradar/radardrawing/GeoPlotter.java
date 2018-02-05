@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.AsyncTask;
-import com.joostit.vfradar.geodata.GeoObject;
+import com.joostit.vfradar.geo.GeoObject;
 import com.joostit.vfradar.utilities.Numbers;
 
 import java.util.ArrayList;

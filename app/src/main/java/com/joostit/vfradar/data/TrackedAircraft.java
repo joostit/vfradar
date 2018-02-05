@@ -1,6 +1,6 @@
 package com.joostit.vfradar.data;
 
-import com.joostit.vfradar.geofencing.GeoFenceStatus;
+import com.joostit.vfradar.geo.geofencing.GeoFenceStatus;
 
 /**
  * Created by Joost on 15-1-2018.

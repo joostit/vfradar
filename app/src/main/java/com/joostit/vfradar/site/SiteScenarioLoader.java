@@ -1,7 +1,7 @@
 package com.joostit.vfradar.site;
 
-import com.joostit.vfradar.geodata.GeoDataLoader;
-import com.joostit.vfradar.geodata.GeoObject;
+import com.joostit.vfradar.geo.GeoDataLoader;
+import com.joostit.vfradar.geo.GeoObject;
 
 import java.util.ArrayList;
 import java.util.List;

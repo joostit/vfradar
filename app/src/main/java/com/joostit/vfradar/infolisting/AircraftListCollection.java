@@ -8,7 +8,7 @@ import com.joostit.vfradar.config.UserUnitConvert;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
-import com.joostit.vfradar.geofencing.FencedArea;
+import com.joostit.vfradar.geo.geofencing.FencedArea;
 import com.joostit.vfradar.utilities.DistanceString;
 import com.joostit.vfradar.utilities.StringValue;
 

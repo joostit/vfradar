@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
-import com.joostit.vfradar.geodata.GeoObject;
+import com.joostit.vfradar.geo.GeoObject;
 import com.joostit.vfradar.site.SiteFeature;
 
 import java.util.List;

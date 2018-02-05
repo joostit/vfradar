@@ -12,7 +12,7 @@ import android.view.View;
 import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
-import com.joostit.vfradar.geodata.GeoObject;
+import com.joostit.vfradar.geo.GeoObject;
 import com.joostit.vfradar.site.ReportingPoint;
 import com.joostit.vfradar.site.RouteLine;
 import com.joostit.vfradar.site.Runway;

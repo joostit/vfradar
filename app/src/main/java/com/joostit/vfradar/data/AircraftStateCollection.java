@@ -1,6 +1,6 @@
 package com.joostit.vfradar.data;
 
-import com.joostit.vfradar.geofencing.GeoFenceHandler;
+import com.joostit.vfradar.geo.geofencing.GeoFenceHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;

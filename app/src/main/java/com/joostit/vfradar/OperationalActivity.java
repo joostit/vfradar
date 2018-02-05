@@ -16,7 +16,7 @@ import com.joostit.vfradar.data.AircraftStateCollection;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.data.VFRadarCore;
-import com.joostit.vfradar.geofencing.GeoFenceHandler;
+import com.joostit.vfradar.geo.geofencing.GeoFenceHandler;
 import com.joostit.vfradar.infolisting.InfoListFragment;
 import com.joostit.vfradar.radardrawing.RadarViewFragment;
 import com.joostit.vfradar.settings.SettingsActivity;
