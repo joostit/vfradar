@@ -17,12 +17,12 @@ public class GeoObject {
 
     public LatLonRect getBoundingRect(){
         if(bounds == null){
-            recalculateBoundingRect();
+            updateBoundingRect();
         }
         return bounds;
     }
 
-    public void recalculateBoundingRect() {
+    public void updateBoundingRect() {
         bounds = new LatLonRect();
         bounds.bottomLon = Double.MAX_VALUE;
         bounds.leftLat = Double.MAX_VALUE;

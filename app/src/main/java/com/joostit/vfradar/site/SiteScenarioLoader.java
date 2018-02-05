@@ -30,10 +30,6 @@ public class SiteScenarioLoader {
         }
 
         geoData = geoLoader.loadAllFilesInFolder();
-        for (GeoObject obj: geoData ) {
-            obj.recalculateBoundingRect();
-        }
-
         areaHandler = new GeoFenceHandler();
         areaHandler.loadFencedAreas();
     }

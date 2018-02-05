@@ -1,23 +1,15 @@
 package com.joostit.vfradar.geo;
 
 import android.util.Xml;
-
-import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.utilities.XmlParse;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Joost on 5-2-2018.
@@ -31,6 +23,7 @@ public abstract class KmlLoader <placeHolderObject extends GeoObject> {
 
     public List<placeHolderObject> loadFile(File kmlFile) {
 
+        List<placeHolderObject> geoObjects = new ArrayList<>();
         try {
             InputStream inStream = new FileInputStream(kmlFile);
 
@@ -39,18 +32,23 @@ public abstract class KmlLoader <placeHolderObject extends GeoObject> {
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                 parser.setInput(inStream, null);
                 parser.nextTag();
-                return readFeed(parser);
+                geoObjects = readXmlDocument(parser);
             } finally {
                 inStream.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new ArrayList<>();
+
+        for(placeHolderObject geoObject : geoObjects){
+            geoObject.updateBoundingRect();
+        }
+
+        return geoObjects;
     }
 
 
-    private List<placeHolderObject> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private List<placeHolderObject> readXmlDocument(XmlPullParser parser) throws XmlPullParserException, IOException {
         List<placeHolderObject> entries = null;
 
         parser.require(XmlPullParser.START_TAG, ns, "kml");
