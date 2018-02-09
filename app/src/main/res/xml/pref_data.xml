@@ -4,4 +4,16 @@
         android:key="@string/key_data_datafolder"
         android:title="@string/pref_title_pick_data_folder" />
 
+    <Preference android:title="Geo fences data subfolder"
+        android:summary="/GeoFences"
+        android:enabled="false"/>
+
+    <Preference android:title="Site data subfolder"
+        android:summary="/SiteData"
+        android:enabled="false"/>
+
+    <Preference android:title="Geo data subfolder"
+        android:summary="/GeoData"
+        android:enabled="false"/>
+
 </PreferenceScreen>
