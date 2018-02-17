@@ -10,6 +10,7 @@
   </fileInfo>
 
   <runways>
+    
     <runway name="EHTW">
       <width>45</width>
       <from name="05">
@@ -19,6 +20,7 @@
         <point>52.283316, 6.906594</point>
       </to>
     </runway>
+  
   </runways>
 
 </vfradarSiteData>

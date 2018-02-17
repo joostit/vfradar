@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="vfradarScenario">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="fileInfo" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="siteDataFiles" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="GeoFenceFiles" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="centerlocation"  minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="fileInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string"/>
+        <xs:element name="description" type="xs:string"/>
+        <xs:element name="author" type="xs:string"/>
+        <xs:element name="lastUpdated" type="xs:date"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="centerlocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="point"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="siteDataFiles">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="file" minOccurs="0" maxOccurs="unbounded" type="xmlFile"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="GeoFenceFiles">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="file" minOccurs="0" maxOccurs="unbounded" type="kmlFile"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="xmlFile">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xmlFile">
+          <xs:attribute name="name" type="xs:string" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="xmlFile">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="^(.+(\.(?i)(xml))$)"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="kmlFile">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="^(.+(\.(?i)(kml))$)"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="point">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="LatLonType">
+          <xs:attribute name="name" type="xs:string" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="LatLonType">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>

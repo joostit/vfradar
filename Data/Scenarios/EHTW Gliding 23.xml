@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<vfradarScenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.vfradar.com/ vfradarScenario.xsd">
+
+  <fileInfo>
+    <name>EHTW Gliding 23</name>
+    <description>EHTW gliding on 23</description>
+    <author>Joost Haverkort</author>
+    <lastUpdated>2018-02-17</lastUpdated>
+  </fileInfo>
+
+  <siteDataFiles>
+    <file>EHTW RWY0523.xml</file>
+    <file>EHTW Visual Approach VFR.xml</file>
+  </siteDataFiles>
+
+  <GeoFenceFiles>
+    <file>EHTW_Glider_Circuit_23.kml</file>
+  </GeoFenceFiles>
+
+  <centerlocation>
+    <point>52.278742, 6.899516</point>
+  </centerlocation>
+ 
+
+</vfradarScenario>
