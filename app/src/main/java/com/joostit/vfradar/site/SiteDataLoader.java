@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SiteDataLoader {
 
-    public static final String xmlExtensionRegex = "^([^\\s]+(\\.(?i)(xml))$)";
+    public static final String xmlExtensionRegex = "^(.+(\\.(?i)(xml))$)";
     public static final String siteDataFolder = "siteData/";
     private static final String ns = null;
 

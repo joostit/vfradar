@@ -3,10 +3,10 @@
           xsi:schemaLocation="http://www.vfradar.com/ vfradarSite.xsd">
 
   <fileInfo>
-    <name>EHTW</name>
-    <description>Runway and reporting points for EHTW GA</description>
+    <name>EHTW Visual Approach VFR</name>
+    <description>Reporting points / VFR Procedure for EHTW Visual approach</description>
     <author>Joost Haverkort</author>
-    <lastUpdated>2018-01-31</lastUpdated>
+    <lastUpdated>2018-02-17</lastUpdated>
   </fileInfo>
 
   <reportingPoints>
@@ -24,17 +24,6 @@
     </reportingPoint>
   </reportingPoints>
 
-  <runways>
-    <runway name="EHTW">
-      <width>45</width>
-      <from name="05">
-        <point>52.268293, 6.871564</point>
-      </from>
-      <to name="23">
-        <point>52.283316, 6.906594</point>
-      </to>
-    </runway>
-  </runways>
 
   <routes>
     <route name="EHTW_GA_inbound">

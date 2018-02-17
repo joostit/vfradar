@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<vfradarSiteData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.vfradar.com/ vfradarSite.xsd">
+
+  <fileInfo>
+    <name>EHTW Visual Approach</name>
+    <description>Reporting points for EHTW Visual approach</description>
+    <author>Joost Haverkort</author>
+    <lastUpdated>2018-02-17</lastUpdated>
+  </fileInfo>
+
+  <reportingPoints>
+    <reportingPoint name="BEKVU">
+      <point>52.213889, 6.743056</point>
+    </reportingPoint>
+    <reportingPoint name="TUXAR">
+      <point>52.245833, 6.817500</point>
+    </reportingPoint>
+    <reportingPoint name="LONLU">
+      <point>52.248611, 6.884167</point>
+    </reportingPoint>
+    <reportingPoint name="LUTET">
+      <point>52.275833, 6.972778</point>
+    </reportingPoint>
+  </reportingPoints>
+  
+  <runways/>
+  
+  <routes/>
+
+</vfradarSiteData>

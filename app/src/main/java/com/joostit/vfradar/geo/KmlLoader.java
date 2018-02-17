@@ -17,7 +17,7 @@ import java.util.List;
 
 public abstract class KmlLoader <placeHolderObject extends GeoObject> {
 
-    public static final String kmlExtensionRegex = "^([^\\s]+(\\.(?i)(kml))$)";
+    public static final String kmlExtensionRegex = "^(.+(\\.(?i)(kml))$)";
     protected static final String ns = null;
 
 

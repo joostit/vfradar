@@ -6,9 +6,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="fileInfo" minOccurs="1" maxOccurs="1"/>
-        <xs:element ref="reportingPoints" minOccurs="1" maxOccurs="1"/>
-        <xs:element ref="runways" minOccurs="1" maxOccurs="1"/>
-        <xs:element ref="routes" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="reportingPoints" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="runways" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="routes" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
