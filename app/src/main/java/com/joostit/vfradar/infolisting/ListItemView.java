@@ -207,11 +207,11 @@ public class ListItemView extends View {
         canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(currentState.isSelected));
 
         int columnRuler1 = 15;
-        canvas.drawText(currentState.nameType, columnRuler1 + 4, 28, nameTypePaint);
+        canvas.drawText(currentState.nameType, columnRuler1 + 3, 28, nameTypePaint);
         canvas.drawText(currentState.name, columnRuler1, 75, namePaint);
 
-        canvas.drawText(currentState.subNameType, columnRuler1 + 4, 101, nameTypePaint);
-        canvas.drawText(currentState.subName, columnRuler1, 130, cnPaint);
+        canvas.drawText(currentState.subNameType, columnRuler1 + 4, 106, nameTypePaint);
+        canvas.drawText(currentState.subName, columnRuler1 + 3, 135, cnPaint);
 
         int columnRuler2 = 290;
         int columnRuler3 = 385;
