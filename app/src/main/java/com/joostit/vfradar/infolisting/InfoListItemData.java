@@ -11,7 +11,7 @@ public class InfoListItemData {
 
     public int trackId;
     public String name = "";
-    public String cn = "";
+    public String subName = "";
     public String model = "";
     public String altitude = "";
     public String relativeDistance = "";
@@ -19,6 +19,7 @@ public class InfoListItemData {
     public String vRate = "";
 
     public String nameType = "";
+    public String subNameType = "";
 
     public boolean hasAdsb;
     public boolean hasOgn;

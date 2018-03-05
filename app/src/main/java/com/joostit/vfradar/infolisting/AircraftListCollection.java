@@ -66,7 +66,7 @@ public class AircraftListCollection {
 
         acItem.vRate = userUnitConverter.getVerticalRateString(tracked.data.vRate);
 
-        TrackedAircraft.IdTypes nameType = tracked.getUserIdType();
+        TrackedAircraft.IdTypes mainNameType = tracked.getUserIdType();
 
         if (tracked.data.alt != null) {
             acItem.altitude = userUnitConverter.getHeight(tracked.data.alt) + " " + userUnitConverter.getHeightUnitIndicator();
@@ -74,9 +74,27 @@ public class AircraftListCollection {
             acItem.altitude = "";
         }
         acItem.model = sanitizeModelString(tracked.data.model, tracked.data.type, context);
-        acItem.name = tracked.getId(nameType);
-        acItem.nameType = getNameTypeTranslation(nameType, context);
-        acItem.cn = tracked.data.cn != null ? tracked.data.cn.toString() : "";
+        acItem.name = tracked.getId(mainNameType);
+        acItem.nameType = getNameTypeTranslation(mainNameType, context);
+
+        String subName = "";
+        String subNameType = "";
+
+        if(mainNameType == TrackedAircraft.IdTypes.Callsign){
+            if(tracked.data.reg != null){
+                subName = tracked.data.reg;
+                subNameType = "reg:";
+            }
+        }
+        else{
+            if(tracked.data.cn != null){
+                subName = tracked.data.cn;
+                subNameType = "cn:";
+            }
+        }
+        acItem.subName = subName;
+        acItem.subNameType = subNameType;
+
         updateRelativePosition(acItem, tracked);
 
         acItem.hasAdsb = determineUpdateValid(tracked.data.adsbStation, tracked.data.adsbAge);

@@ -207,14 +207,16 @@ public class ListItemView extends View {
         canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(currentState.isSelected));
 
         int columnRuler1 = 15;
-        canvas.drawText(currentState.nameType, columnRuler1, 33, nameTypePaint);
-        canvas.drawText(currentState.name, columnRuler1, 95, namePaint);
-        canvas.drawText(currentState.cn, columnRuler1, 130, cnPaint);
+        canvas.drawText(currentState.nameType, columnRuler1 + 4, 28, nameTypePaint);
+        canvas.drawText(currentState.name, columnRuler1, 75, namePaint);
+
+        canvas.drawText(currentState.subNameType, columnRuler1 + 4, 101, nameTypePaint);
+        canvas.drawText(currentState.subName, columnRuler1, 130, cnPaint);
 
         int columnRuler2 = 290;
         int columnRuler3 = 385;
-        int row1 = 65;
-        int row2 = 95;
+        int row1 = 68;
+        int row2 = 98;
         int row3 = 130;
         canvas.drawText(currentState.model, columnRuler2, row1, modelTextPaint);
         canvas.drawText(currentState.altitude, columnRuler2, row2, dataTextPaint);
@@ -380,8 +382,13 @@ public class ListItemView extends View {
             hasChanged = true;
         }
 
-        if (update.cn != currentState.cn) {
-            currentState.cn = update.cn;
+        if (update.subName != currentState.subName) {
+            currentState.subName = update.subName;
+            hasChanged = true;
+        }
+
+        if (update.subNameType != currentState.subNameType) {
+            currentState.subNameType = update.subNameType;
             hasChanged = true;
         }
 
