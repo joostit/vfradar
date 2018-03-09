@@ -122,7 +122,7 @@ public class SysConfig {
     }
 
     private static void setDefaults() {
-        vfradarCoreDataAddress = "http://192.168.178.101:60002/live/all";
+        vfradarCoreDataAddress = "http://192.168.8.210:60002/";
         centerPosition = new LatLon(52.278758, 6.899437);
         siteElevation = 0;
         maxValidRxAge = 15;
