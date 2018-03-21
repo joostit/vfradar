@@ -4,10 +4,11 @@ import com.joostit.vfradar.data.AircraftState;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geo.geofencing.FencedArea;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Joost on 4-2-2018.
@@ -16,19 +17,18 @@ import org.junit.Test;
 public class TestGeoFence {
 
 
-
     @Test
-    public void TestPointsInsideGeoFence(){
+    public void TestPointsInsideGeoFence() {
         FencedArea area = GeoFenceTestData.createArea();
 
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(  52.518529, 6.639177), 500));
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon( 52.332467,  6.987891), 600));
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(  52.515420, 7.106871 ),700 ));
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon( 52.105877, 6.791978 ), 800));
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.045100 ,  6.583557 ),900 ));
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon( 52.122115,  6.404213 ), 1000));
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon( 51.966696 , 6.311605 ), 715 ));
-        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(  52.380422,  6.637388), 624));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.518529, 6.639177), 500));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.332467, 6.987891), 600));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.515420, 7.106871), 700));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.105877, 6.791978), 800));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.045100, 6.583557), 900));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.122115, 6.404213), 1000));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(51.966696, 6.311605), 715));
+        assertTrue("Aircraft is expected to be inside fence", putAircraftInArea(area, new LatLon(52.380422, 6.637388), 624));
     }
 
     @Test
@@ -48,8 +48,7 @@ public class TestGeoFence {
     }
 
 
-
-    private boolean putAircraftInArea(FencedArea area, LatLon point, Integer alt){
+    private boolean putAircraftInArea(FencedArea area, LatLon point, Integer alt) {
         TrackedAircraft ac = new TrackedAircraft();
         ac.data = new AircraftState();
         ac.data.position = point;
