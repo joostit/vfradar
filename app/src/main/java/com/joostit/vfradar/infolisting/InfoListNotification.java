@@ -26,15 +26,13 @@ public class InfoListNotification {
 
     public boolean isOtherMoreSevere(InfoListNotification other) {
 
-        if(other.notificationType == FenceAlerts.Warning){
-            if(this.notificationType == FenceAlerts.Notification){
+        if (other.notificationType == FenceAlerts.Warning) {
+            if (this.notificationType == FenceAlerts.Notification) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }

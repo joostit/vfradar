@@ -22,7 +22,7 @@ public class AircraftListCollection {
     public final List<InfoListItemData> items = new ArrayList<>();
     private final Map<Integer, InfoListItemData> itemMap = new HashMap<>();
     private UserUnitConvert userUnitConverter = new UserUnitConvert();
-    ;
+
 
     public AircraftListCollection() {
     }
@@ -80,14 +80,13 @@ public class AircraftListCollection {
         String subName = "";
         String subNameType = "";
 
-        if(mainNameType == TrackedAircraft.IdTypes.Callsign){
-            if(tracked.data.reg != null){
+        if (mainNameType == TrackedAircraft.IdTypes.Callsign) {
+            if (tracked.data.reg != null) {
                 subName = tracked.data.reg;
                 subNameType = "reg:";
             }
-        }
-        else{
-            if(tracked.data.cn != null){
+        } else {
+            if (tracked.data.cn != null) {
                 subName = tracked.data.cn;
                 subNameType = "cn:";
             }
@@ -101,14 +100,14 @@ public class AircraftListCollection {
         acItem.hasOgn = determineUpdateValid(tracked.data.ognStation, tracked.data.ognAge);
 
         for (FencedArea area : tracked.isInside.areas) {
-            if(!acItem.hasNotification(area.name)){
+            if (!acItem.hasNotification(area.name)) {
                 acItem.notifications.add(new InfoListNotification(area.name, area.getAlerType()));
             }
         }
 
-        for (int i = 0; i < acItem.notifications.size(); i++){
+        for (int i = 0; i < acItem.notifications.size(); i++) {
             InfoListNotification notification = acItem.notifications.get(i);
-            if(!tracked.isInside.isInArea(notification.name)){
+            if (!tracked.isInside.isInArea(notification.name)) {
                 acItem.notifications.remove(i);
             }
         }

@@ -93,6 +93,10 @@ public class ListItemView extends View {
         this.eventHandler = eventHandler;
     }
 
+    public InfoListItemData getState() {
+        return currentState;
+    }
+
     private void init() {
 
 
@@ -251,22 +255,21 @@ public class ListItemView extends View {
         InfoListNotification notificationToDisplay = null;
         boolean multipleNotifications = currentState.notifications.size() > 1;
 
-        for(InfoListNotification notification : currentState.notifications){
+        for (InfoListNotification notification : currentState.notifications) {
 
-            if(notificationToDisplay == null){
+            if (notificationToDisplay == null) {
                 notificationToDisplay = notification;
-            }
-            else{
-                if(notificationToDisplay.isOtherMoreSevere(notification)){
+            } else {
+                if (notificationToDisplay.isOtherMoreSevere(notification)) {
                     notificationToDisplay = notification;
                 }
             }
         }
 
-        if(notificationToDisplay != null) {
+        if (notificationToDisplay != null) {
             String notificationName = notificationToDisplay.name;
 
-            if(multipleNotifications){
+            if (multipleNotifications) {
                 notificationName += " , ...";
             }
 
@@ -280,7 +283,7 @@ public class ListItemView extends View {
     }
 
 
-    private Paint getStatusForePaint(FenceAlerts alertType){
+    private Paint getStatusForePaint(FenceAlerts alertType) {
         switch (alertType) {
 
             case Notification:
@@ -295,7 +298,7 @@ public class ListItemView extends View {
 
     }
 
-    private Paint getStatusBackPaint(FenceAlerts alertType){
+    private Paint getStatusBackPaint(FenceAlerts alertType) {
         switch (alertType) {
 
             case Notification:
@@ -470,6 +473,14 @@ public class ListItemView extends View {
         }
     }
 
+    @Override
+    public String toString() {
+        if (currentState == null) {
+            return super.toString();
+        } else {
+            return currentState.name + " " + currentState.notifications.getHighestNotificationLevel();
+        }
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

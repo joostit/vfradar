@@ -1,8 +1,5 @@
 package com.joostit.vfradar.infolisting;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Joost on 19-1-2018.
  */
@@ -28,11 +25,11 @@ public class InfoListItemData {
 
     public boolean isSelected = false;
 
-    public List<InfoListNotification> notifications = new ArrayList<>();
+    public NotificationCollection notifications = new NotificationCollection();
 
-    public boolean hasNotification(String name){
-        for(InfoListNotification existing : notifications){
-            if(name.equals(existing.name)){
+    public boolean hasNotification(String name) {
+        for (InfoListNotification existing : notifications) {
+            if (name.equals(existing.name)) {
                 return true;
             }
         }

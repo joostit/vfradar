@@ -5,6 +5,7 @@ package com.joostit.vfradar.geo.geofencing;
  */
 
 public enum FenceAlerts {
+    None,
     Notification,
     Warning
 }

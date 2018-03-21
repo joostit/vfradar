@@ -12,8 +12,8 @@ import android.widget.ScrollView;
 
 import com.joostit.vfradar.R;
 import com.joostit.vfradar.data.AircraftTrackingUpdate;
-import com.joostit.vfradar.data.TrackedAircraft;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +119,66 @@ public class InfoListFragment extends Fragment implements ListItemViewEventHandl
         for (InfoListItemData dataItem : list.getListItems()) {
             itemViews.get(dataItem.trackId).updateAircraftInfo(dataItem);
         }
-        ;
+
+        sortViews();
+    }
+
+
+    private void sortViews() {
+        int childCount = listView.getChildCount();
+        List<ListItemView> sortedViews = new ArrayList<>();
+
+        for (int i = 0; i < childCount; i++) {
+            ListItemView listItem = (ListItemView) listView.getChildAt(i);
+            putInSortedList(sortedViews, listItem);
+        }
+
+        putOrderedItemsInList(sortedViews);
+    }
+
+
+    private void putOrderedItemsInList(List<ListItemView> sortedViews) {
+
+        for (int i = 0; i < sortedViews.size(); i++) {
+            ListItemView itemToPut = sortedViews.get(i);
+            ListItemView itemExisting = (ListItemView) listView.getChildAt(i);
+
+            if (itemExisting != itemToPut) {
+                listView.removeView(itemToPut);
+                listView.addView(itemToPut, i);
+            }
+
+        }
+    }
+
+    private void putInSortedList(List<ListItemView> list, ListItemView toPut) {
+        InfoListItemData toPutState = toPut.getState();
+
+        for (int i = 0; i < list.size(); i++) {
+            ListItemView iterated = list.get(i);
+
+            InfoListItemData iteratedState = iterated.getState();
+
+            if (toPutState.notifications.isWarningLevel()) {
+                // get the first non-warning element
+                if (!iteratedState.notifications.isWarningLevel()) {
+                    // Put the toPut warning item before that element
+                    list.add(i, toPut);
+                    return;
+                }
+            }
+
+            if (toPutState.notifications.isNotificationLevel()) {
+                // Get the first element which is neither a warning nor a notification
+                if (!iteratedState.notifications.isWarningLevel() && !iteratedState.notifications.isNotificationLevel()) {
+                    list.add(i, toPut);
+                    return;
+                }
+            }
+        }
+
+        // If we haven't returned yet, add the new element to the bottom of the List
+        list.add(toPut);
 
     }
 
