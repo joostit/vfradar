@@ -6,29 +6,40 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.joostit.vfradar.R;
+import com.joostit.vfradar.scenarios.Scenario;
+import com.joostit.vfradar.scenarios.ScenarioLoader;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link OnStartupFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SetupSiteFragment#newInstance} factory method to
+ * Use the {@link SetupScenarioFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SetupSiteFragment extends Fragment {
+public class SetupScenarioFragment extends Fragment {
 
     private OnStartupFragmentInteractionListener mListener;
 
-    public SetupSiteFragment() {
+    private ListView scenarioListView;
+
+    public SetupScenarioFragment() {
         // Required empty public constructor
     }
 
 
-    public static SetupSiteFragment newInstance() {
-        SetupSiteFragment fragment = new SetupSiteFragment();
+
+    public static SetupScenarioFragment newInstance() {
+        SetupScenarioFragment fragment = new SetupScenarioFragment();
 
         return fragment;
     }
@@ -42,7 +53,7 @@ public class SetupSiteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_setup_site, container, false);
+        View view = inflater.inflate(R.layout.fragment_setup_scenario, container, false);
 
         Button button = view.findViewById(R.id.nextPageButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +62,33 @@ public class SetupSiteFragment extends Fragment {
             }
         });
 
+        scenarioListView = (ListView)view.findViewById(R.id.scenarioSelectionList);
+
+        initScenariosList();
+
         return view;
+    }
+
+
+    private void initScenariosList(){
+
+        ScenarioLoader loader = new ScenarioLoader();
+        List<Scenario> scenarios = loader.getAvailableScenarios();
+
+        ArrayAdapter<Scenario> myarrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1, scenarios);
+        scenarioListView.setAdapter(myarrayAdapter);
+
+        scenarioListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
 

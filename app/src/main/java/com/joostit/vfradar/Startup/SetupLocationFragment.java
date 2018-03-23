@@ -169,6 +169,9 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
         boolean validIinput = false;
 
         switch (selectedLocationOption) {
+            case R.id.fromScenarioRadioButton:
+                validIinput = true;
+                break;
             case R.id.useGpsRadioButton:
                 validIinput = true;
                 break;
@@ -198,13 +201,24 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
     }
 
     private void moveToNextPage() {
+        setUseScenario();
         mListener.allowPageSwitching(true);
         mListener.userSelectedNextTab();
     }
 
+    private void setUseScenario() {
+        mListener.useScenarioSelection(selectedLocationOption == R.id.fromScenarioRadioButton);
+    }
+
     private boolean applyLocationOption() {
         boolean proceed = false;
+
         switch (radioGroup.getCheckedRadioButtonId()) {
+
+            case R.id.fromScenarioRadioButton:
+                proceed = true;
+                break;
+
             case R.id.useGpsRadioButton:
                 startGpsUpdates();
                 break;
@@ -293,18 +307,24 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
     private void newRadioButtonSelected(RadioGroup group, int checkedId) {
 
         switch (checkedId) {
+            case R.id.fromScenarioRadioButton:
+                latLonTextBox.setEnabled(false);
+                selectedLocationOption = R.id.fromScenarioRadioButton;
+                break;
+
             case R.id.useGpsRadioButton:
                 latLonTextBox.setEnabled(false);
                 selectedLocationOption = R.id.useGpsRadioButton;
                 break;
+
             case R.id.useLocationPickerRadioButton:
                 latLonTextBox.setEnabled(false);
                 selectedLocationOption = R.id.useLocationPickerRadioButton;
                 break;
+
             case R.id.useLatLonRadioButton:
                 latLonTextBox.setEnabled(!locationMethodApplied);
                 selectedLocationOption = R.id.useLatLonRadioButton;
-
                 break;
         }
 
@@ -331,6 +351,7 @@ public class SetupLocationFragment extends Fragment implements LocationHelper.Lo
     }
 
     public void setAllowChanges(boolean allowChanges) {
+        ((RadioButton) rootView.findViewById(R.id.fromScenarioRadioButton)).setEnabled(allowChanges);
         ((RadioButton) rootView.findViewById(R.id.useGpsRadioButton)).setEnabled(allowChanges);
         ((RadioButton) rootView.findViewById(R.id.useLocationPickerRadioButton)).setEnabled(allowChanges);
         ((RadioButton) rootView.findViewById(R.id.useLatLonRadioButton)).setEnabled(allowChanges);

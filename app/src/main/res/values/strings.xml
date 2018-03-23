@@ -131,17 +131,20 @@
     <string name="pref_default_center_location">0.00000, 0.00000</string>
     <string name="title_activity_startup">VFRadar</string>
     <string name="startup_tab_location">Location</string>
-    <string name="startup_tab_site">Site</string>
+    <string name="startup_tab_scenario">Scenario</string>
     <string name="startup_tab_summary">Summary</string>
     <string name="action_settings">Preferences ToDo!</string>
     <string name="btn_next_page">Next</string>
     <string name="btn_start">Start</string>
 
     <string name="startup_location_center">Center location</string>
+    <string name="startup_location_fromScenario">From scenario</string>
     <string name="startup_location_useGps">Use GPS</string>
     <string name="startup_location_useLatLon">Set latitude/longitude manually</string>
     <string name="startup_location_usePicker">Pick a location</string>
     <string name="cancelButton">Cancel</string>
+
+    <string name="startup_scenarios_selectScenario">Select a scenario</string>
 
     <!-- Data preferences -->
     <string name="pref_header_data">Data files</string>

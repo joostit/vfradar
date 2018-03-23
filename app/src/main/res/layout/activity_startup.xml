@@ -72,19 +72,19 @@
                 android:layout_height="wrap_content">
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem"
+                    android:id="@+id/locationTabItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/startup_tab_location" />
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem2"
+                    android:id="@+id/scenarioTabItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/startup_tab_site" />
+                    android:text="@string/startup_tab_scenario" />
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem3"
+                    android:id="@+id/summaryTabItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/startup_tab_summary" />

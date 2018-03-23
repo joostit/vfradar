@@ -1,0 +1,49 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.joostit.vfradar.Startup.SetupScenarioFragment">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="130dp">
+
+        <TableRow android:layout_marginTop="50dp">
+            <TextView android:text="Select scenario" />
+        </TableRow>
+
+        <TableRow>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="#484848">
+                <ListView
+                    android:layout_margin="1px"
+                    android:choiceMode="singleChoice"
+                    android:listSelector="#666666"
+                    android:id="@+id/scenarioSelectionList"
+                    android:layout_width="500dp"
+                    android:layout_height="match_parent"
+                    android:background="#FF000000">
+                </ListView>
+            </LinearLayout>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/nextPageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/btn_next_page"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

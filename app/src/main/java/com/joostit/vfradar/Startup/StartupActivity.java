@@ -32,6 +32,8 @@ public class StartupActivity extends AppCompatActivity
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private TabLayout tabLayout;
     private ImageButton imageButton;
+    private boolean scenarioTabRemoved = false;
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -158,7 +160,18 @@ public class StartupActivity extends AppCompatActivity
         } else {
             disableTabs();
         }
+    }
 
+
+    @Override
+    public void useScenarioSelection(boolean useScenarioSelection) {
+        if(!useScenarioSelection) {
+            if (!scenarioTabRemoved) {
+                tabLayout.removeTab(tabLayout.getTabAt(1));
+                mViewPager.removeViewAt(1);
+                scenarioTabRemoved = true;
+            }
+        }
     }
 
     @Override
@@ -198,7 +211,7 @@ public class StartupActivity extends AppCompatActivity
                 case 0:
                     return SetupLocationFragment.newInstance();
                 case 1:
-                    return SetupSiteFragment.newInstance();
+                    return SetupScenarioFragment.newInstance();
                 case 2:
                     return SetupSummaryFragment.newInstance();
                 default:

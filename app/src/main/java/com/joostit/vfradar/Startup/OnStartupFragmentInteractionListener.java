@@ -10,4 +10,6 @@ public interface OnStartupFragmentInteractionListener {
     void userFinishesSetup();
 
     void allowPageSwitching(boolean allowed);
+
+    void useScenarioSelection(boolean forceScenarioSelection);
 }

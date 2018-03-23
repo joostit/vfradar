@@ -23,6 +23,12 @@
             <RadioGroup android:id="@+id/centerLocationRadioButtonsGroup">
 
                 <RadioButton
+                    android:id="@+id/fromScenarioRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/startup_location_fromScenario" />
+
+                <RadioButton
                     android:id="@+id/useGpsRadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
