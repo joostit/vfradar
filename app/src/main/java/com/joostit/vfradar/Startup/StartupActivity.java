@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -165,13 +166,14 @@ public class StartupActivity extends AppCompatActivity
 
     @Override
     public void useScenarioSelection(boolean useScenarioSelection) {
-        if(!useScenarioSelection) {
-            if (!scenarioTabRemoved) {
-                tabLayout.removeTab(tabLayout.getTabAt(1));
-                mViewPager.removeViewAt(1);
-                scenarioTabRemoved = true;
-            }
-        }
+//        if(!useScenarioSelection) {
+//            if (!scenarioTabRemoved) {
+//                tabLayout.removeTab(tabLayout.getTabAt(1));
+//                mViewPager.removeViewAt(1);
+//                mSectionsPagerAdapter.notifyDataSetChanged();
+//                scenarioTabRemoved = true;
+//            }
+//        }
     }
 
     @Override
@@ -203,6 +205,7 @@ public class StartupActivity extends AppCompatActivity
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
 
         @Override
         public Fragment getItem(int position) {
