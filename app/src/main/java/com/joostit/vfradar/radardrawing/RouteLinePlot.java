@@ -18,7 +18,7 @@ public class RouteLinePlot extends DrawableItem {
     private boolean doDraw;
     private Path screenPath = new Path();
 
-    private int lineColor = 0xFFe6e600;
+    private int lineColor = 0xFFb3b300;
     private Paint linePaint;
 
     public RouteLinePlot(RouteLine source) {

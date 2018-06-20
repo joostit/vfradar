@@ -15,12 +15,15 @@ import com.joostit.vfradar.site.ReportingPoint;
 
 public class ReportingPointPlot extends DrawableItem {
 
-    private final float symbolSize = 6;
+    private final float symbolSize = 8;
     private Path symbolPath = new Path();
     private ReportingPoint source;
-    private int symbolColor = 0xFFe6e600;
+    private int outlineColor = 0xFFffff00;
+    private int backColor = 0xFFb3b300;
     private int textColor = 0xFFe6e600;
-    private Paint symbolPaint;
+
+    private Paint outlinePaint;
+    private Paint backPaint;
     private Paint textPaint;
     private PointF screenPoint = null;
     private boolean doDraw;
@@ -32,10 +35,15 @@ public class ReportingPointPlot extends DrawableItem {
 
     private void init() {
 
-        symbolPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        symbolPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        symbolPaint.setStrokeWidth(5);
-        symbolPaint.setColor(symbolColor);
+        backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        backPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        backPaint.setStrokeWidth(1);
+        backPaint.setColor(backColor);
+
+        outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        outlinePaint.setStyle(Paint.Style.STROKE);
+        outlinePaint.setStrokeWidth(2f);
+        outlinePaint.setColor(outlineColor);
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setStyle(Paint.Style.FILL);
@@ -75,7 +83,9 @@ public class ReportingPointPlot extends DrawableItem {
         Rect nameBounds = new Rect();
         textPaint.getTextBounds(source.name, 0, source.name.length(), nameBounds);
 
-        canvas.drawPath(symbolPath, symbolPaint);
+        canvas.drawPath(symbolPath, backPaint);
+        canvas.drawPath(symbolPath, outlinePaint);
+
         canvas.drawText(source.name, screenPoint.x - (nameBounds.right / 2), screenPoint.y + (nameBounds.bottom - nameBounds.top) + 10, textPaint);
     }
 
