@@ -1,6 +1,7 @@
 package com.joostit.vfradar.radardrawing;
 
 import android.graphics.Canvas;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RadialGradient;
@@ -21,7 +22,7 @@ import com.joostit.vfradar.geo.geofencing.FencedArea;
 
 public class AircraftPlot extends DrawableItem {
 
-    private final int txtBackMargin = 4;
+    private final int txtBackMargin = 7;
     public int trackId;
     public float ScreenX;
     public float ScreenY;
@@ -39,8 +40,7 @@ public class AircraftPlot extends DrawableItem {
     private String infoLine;
 
 
-    private int selectedBackCenterColor = 0x22660066;
-    private int selectedBackEndColor = 0xFFcc00cc;
+
     private int acForeColor = 0xFF00FF00;
     private int acBackColor = 0xFF008000;
     private int acNameTextColor = 0xFF00FF00;
@@ -49,7 +49,13 @@ public class AircraftPlot extends DrawableItem {
     private int acSelectedoutlineColor = 0xFF00FF00;
     private int acHighlightBoxColor = 0xFFFFFF00;
     private int acTextGuideLineColor = 0xFF00AA00;
-    private int acTextBackColor = 0xFF660066;
+
+    private int selectedBackCenterColor = 0x22660066;
+    private int selectedBackMiddleColor = 0xFFcc00cc;
+    private int selectedBackBorderColor = 0xFFffccff;
+
+    private int txtBackCenterColor = 0xFF800080;
+    private int txtBackBorderColor = 0xFFffccff;
 
     private int noteBackEndColor = 0x00000000;
     private int noteBackCenterColor = 0xFF000000;
@@ -62,8 +68,11 @@ public class AircraftPlot extends DrawableItem {
 
     private UserUnitConvert unitConverter = new UserUnitConvert();
 
-    private float[] selectedGradientstops = new float[]{0, 1};
-    private int[] selectedGradientColors = new int[]{selectedBackCenterColor, selectedBackEndColor};
+    private float[] txtBackGradientstops = new float[]{0, .15f, .85f, 1};
+    private int[] txtBackGradientColors = new int[]{txtBackBorderColor, txtBackCenterColor, txtBackCenterColor, txtBackBorderColor};
+
+    private float[] selectedGradientstops = new float[]{0, 0.1f, 0.8f, 1};
+    private int[] selectedGradientColors = new int[]{selectedBackCenterColor, selectedBackCenterColor, selectedBackMiddleColor, selectedBackBorderColor};
 
     private float[] noteGradientstops = new float[]{0, 1};
     private int[] noteGradientColors = new int[]{noteBackCenterColor, noteBackEndColor};
@@ -84,7 +93,7 @@ public class AircraftPlot extends DrawableItem {
     private Paint acHighlightBoxPaint;
     private Paint acSelectedBoxPaint;
     private Paint acSelectedOutlinePaint;
-    private Paint acTextBackPaint;
+    private Paint txtBackGradientPaint;
 
     public AircraftPlot() {
         init();
@@ -130,17 +139,18 @@ public class AircraftPlot extends DrawableItem {
         acHighlightBoxPaint.setColor(acHighlightBoxColor);
 
         acSelectedBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acSelectedBoxPaint.setStyle(Paint.Style.FILL);
-        acSelectedBoxPaint.setColor(selectedBackEndColor);
+        acSelectedBoxPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        acSelectedBoxPaint.setColor(selectedBackBorderColor);
+
+        txtBackGradientPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        txtBackGradientPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        txtBackGradientPaint.setColor(txtBackCenterColor);
 
         acSelectedOutlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acSelectedOutlinePaint.setStyle(Paint.Style.STROKE);
         acSelectedOutlinePaint.setStrokeWidth(3);
         acSelectedOutlinePaint.setColor(acSelectedoutlineColor);
 
-        acTextBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        acTextBackPaint.setStyle(Paint.Style.FILL);
-        acTextBackPaint.setColor(acTextBackColor);
     }
 
 
@@ -198,7 +208,8 @@ public class AircraftPlot extends DrawableItem {
         canvas.drawCircle(x, y, backCircleRadius, backCirclePaint);
 
         if (isSelected) {
-            RadialGradient selectedGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
+            float gradientOversize = 10;
+            RadialGradient selectedGradient = new RadialGradient(x, y, selectedBoxRadius + gradientOversize, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
             acSelectedBoxPaint.setShader(selectedGradient);
             RectF selectBoxRect = new RectF(x - selectedBoxRadius, y - selectedBoxRadius, x + selectedBoxRadius, y + selectedBoxRadius);
             canvas.drawRoundRect(selectBoxRect, boxRound, boxRound, acSelectedBoxPaint);
@@ -217,12 +228,19 @@ public class AircraftPlot extends DrawableItem {
             }
         }
 
-        float nameTxtX = x + 20;
-        float nameTxtY = y - 64;
-        float infoTxtX = x + 20;
-        float infoTxtY = y - 37;
+        float txtXDisplacement = 35;
+        float txtYDisplacement = 37;
 
-        canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
+        float nameTxtX = x + txtXDisplacement;
+        float nameTxtY = y - (txtYDisplacement + 27);
+        float infoTxtX = x + txtXDisplacement;
+        float infoTxtY = y - txtYDisplacement;
+
+        if(!isSelected) {
+            float connectionX = x + (txtXDisplacement - 8);
+            float connectionY = y - (txtXDisplacement + 18);
+            canvas.drawLine(x, y, connectionX, connectionY, acTextGuideLinePaint);
+        }
 
         if (isWarning || isHighlighted || isSelected) {
             Rect nameTxtBounds = new Rect();
@@ -248,7 +266,10 @@ public class AircraftPlot extends DrawableItem {
             txtBackRect.bottom = nameBackRect.bottom > infoBackRect.bottom ? nameBackRect.bottom: infoBackRect.bottom;
             txtBackRect.right = nameBackRect.right > infoBackRect.right ? nameBackRect.right: infoBackRect.right;
 
-            canvas.drawRoundRect(txtBackRect, 3, 3, acTextBackPaint);
+            LinearGradient gradient = new LinearGradient(txtBackRect.left, txtBackRect.top, txtBackRect.left ,txtBackRect.bottom, txtBackGradientColors, txtBackGradientstops, Shader.TileMode.CLAMP);
+            txtBackGradientPaint.setShader(gradient);
+
+            canvas.drawRoundRect(txtBackRect, 3, 3, txtBackGradientPaint);
             canvas.drawRoundRect(txtBackRect, 3, 3, acSelectedOutlinePaint);
         }
 

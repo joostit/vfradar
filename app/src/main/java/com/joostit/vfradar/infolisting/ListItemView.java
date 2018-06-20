@@ -124,7 +124,7 @@ public class ListItemView extends View {
         boundingRectPaint.setStrokeWidth(2);
 
         selectedBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        selectedBackPaint.setStyle(Paint.Style.FILL);
+        selectedBackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         selectedBackPaint.setColor(selectedBackColor);
 
         backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -187,7 +187,6 @@ public class ListItemView extends View {
         bearingArrowBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bearingArrowBackPaint.setStyle(Paint.Style.FILL);
         bearingArrowBackPaint.setColor(bearingArrowBackColor);
-
 
         statusRectBoundsPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         statusRectBoundsPaint.setStyle(Paint.Style.STROKE);
