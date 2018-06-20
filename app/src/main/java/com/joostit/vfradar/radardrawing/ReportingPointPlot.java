@@ -18,8 +18,8 @@ public class ReportingPointPlot extends DrawableItem {
     private final float symbolSize = 6;
     private Path symbolPath = new Path();
     private ReportingPoint source;
-    private int symbolColor = 0xFF666600;
-    private int textColor = 0xFF666600;
+    private int symbolColor = 0xFFe6e600;
+    private int textColor = 0xFFe6e600;
     private Paint symbolPaint;
     private Paint textPaint;
     private PointF screenPoint = null;
@@ -76,7 +76,7 @@ public class ReportingPointPlot extends DrawableItem {
         textPaint.getTextBounds(source.name, 0, source.name.length(), nameBounds);
 
         canvas.drawPath(symbolPath, symbolPaint);
-        canvas.drawText(source.name, screenPoint.x - (nameBounds.right / 2), screenPoint.y + (nameBounds.bottom - nameBounds.top) + 8, textPaint);
+        canvas.drawText(source.name, screenPoint.x - (nameBounds.right / 2), screenPoint.y + (nameBounds.bottom - nameBounds.top) + 10, textPaint);
     }
 
 }

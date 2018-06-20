@@ -32,10 +32,10 @@ public class ListItemView extends View {
     private float touchDownY = -1;
     private boolean isPressing;
     private ListItemViewEventHandler eventHandler;
-    private int selectedBackColor = 0xFF333333;
+    private int selectedBackColor = 0xFFb3ffb3;
     private int boundingRectColor = 0xFF00FF00;
     private int brightTextColor = 0xFF00FF00;
-    private int darkTextColor = 0xFF00CC00;
+    private int darkTextColor = 0xFF00EE00;
     private int backColor = 0xFF000000;
     private int modelTextColor = 0xFF00EE00;
     private int dataTextColor = 0xFF00DD00;
@@ -205,23 +205,46 @@ public class ListItemView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        RectF boundingRect = new RectF(4, 4, this.getWidth() - 4, this.getHeight() - 4);
-
-        canvas.drawRoundRect(boundingRect, 3, 3, getBackPaint(currentState.isSelected));
-        canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(currentState.isSelected));
-
         int columnRuler1 = 15;
+        int columnRuler2 = 290;
+        int columnRuler3 = 385;
+        int row1 = 68;
+        int row2 = 98;
+        int row3 = 130;
+
+        int statusBoundWidth = 10;
+
+        RectF boundingRect = new RectF(4, 4, this.getWidth() - 4, this.getHeight() - 4);
+        //RectF statusBoundRect = new RectF(4, 4, columnRuler2 - 4, this.getHeight() - 4);
+        RectF statusBoundRect = boundingRect;
+        RectF innerStatusBoundRect = new RectF(statusBoundRect.left + statusBoundWidth, statusBoundRect.top + statusBoundWidth, statusBoundRect.right - statusBoundWidth, statusBoundRect.bottom - statusBoundWidth);
+
+        canvas.drawRoundRect(boundingRect, 3, 3, getBackPaint(false));
+
+
+        if(currentState.isSelected){
+            // Selection back color
+            canvas.drawRoundRect(statusBoundRect, 3, 3, getBackPaint(true));
+
+            // Inner back color
+            canvas.drawRoundRect(innerStatusBoundRect, 3, 3, getBackPaint(false));
+
+
+            canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(false));
+            canvas.drawRoundRect(statusBoundRect, 3, 3, getBoundingRectPaint(true));
+        }
+        else{
+            canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(currentState.isSelected));
+        }
+
+
         canvas.drawText(currentState.nameType, columnRuler1 + 3, 28, nameTypePaint);
         canvas.drawText(currentState.name, columnRuler1, 75, namePaint);
 
         canvas.drawText(currentState.subNameType, columnRuler1 + 4, 106, nameTypePaint);
         canvas.drawText(currentState.subName, columnRuler1 + 3, 135, cnPaint);
 
-        int columnRuler2 = 290;
-        int columnRuler3 = 385;
-        int row1 = 68;
-        int row2 = 98;
-        int row3 = 130;
+
         canvas.drawText(currentState.model, columnRuler2, row1, modelTextPaint);
         canvas.drawText(currentState.altitude, columnRuler2, row2, dataTextPaint);
         canvas.drawText(currentState.vRate, columnRuler3, row2, dataTextPaint);

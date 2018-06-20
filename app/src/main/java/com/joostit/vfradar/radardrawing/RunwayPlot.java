@@ -20,7 +20,7 @@ public class RunwayPlot extends DrawableItem {
     private boolean doDraw;
     private Path screenPath = new Path();
 
-    private int lineColor = 0xAA999900;
+    private int lineColor = 0xAAffbb33;
     private Paint linePaint;
     private int textColor = 0xFFb3b300;
     private Paint textPaint;

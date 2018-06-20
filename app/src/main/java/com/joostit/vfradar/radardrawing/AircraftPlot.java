@@ -28,9 +28,10 @@ public class AircraftPlot extends DrawableItem {
     public Boolean isSelected = false;
     public Boolean isHighlighted = false;
     public Boolean isWarning = false;
-    private int selectedBoxRadius = 30;
+    private int selectedBoxRadius = 40;
     private final int warnCircleRadius = 35;
     private final int noteCircleRadius = 30;
+    private final int backCircleRadius = 35;
     private boolean doDraw = false;
     public LatLon position = new LatLon();
     private Integer Track;
@@ -39,19 +40,22 @@ public class AircraftPlot extends DrawableItem {
 
 
     private int selectedBackCenterColor = 0x22000000;
-    private int selectedBackEndColor = 0xFF737373;
+    private int selectedBackEndColor = 0xFFD9D9D9;
     private int acForeColor = 0xFF00FF00;
     private int acBackColor = 0xFF008000;
     private int acNameTextColor = 0xFF00FF00;
-    private int acInfoTextColor = 0xFF00AA00;
+    private int acInfoTextColor = 0xFF00DD00;
     private int acWarningBoxColor = 0xFFFF0000;
-    private int acSelectedoutlineColor = 0xFF009900;
+    private int acSelectedoutlineColor = 0xFF00FF00;
     private int acHighlightBoxColor = 0xFFFFFF00;
     private int acTextGuideLineColor = 0xAA008000;
     private int acTextBackColor = 0xBB000000;
 
     private int noteBackEndColor = 0x00000000;
-    private int noteBackCenterColor = 0xFFFFFF00;
+    private int noteBackCenterColor = 0xFF000000;
+
+    private int backEndColor = 0x00000000;
+    private int backCenterColor = 0xAA000000;
 
     private int warnBackEndColor = 0x00000000;
     private int warnBackCenterColor = 0xFFFF0000;
@@ -64,6 +68,9 @@ public class AircraftPlot extends DrawableItem {
     private float[] noteGradientstops = new float[]{0, 1};
     private int[] noteGradientColors = new int[]{noteBackCenterColor, noteBackEndColor};
 
+    private float[] backGradientstops = new float[]{0, 1};
+    private int[] backGradientColors = new int[]{backCenterColor, backEndColor};
+
     private float[] warnGradientstops = new float[]{0, 1};
     private int[] warnGradientColors = new int[]{warnBackCenterColor, warnBackEndColor};
 
@@ -72,6 +79,7 @@ public class AircraftPlot extends DrawableItem {
     private Paint aircraftForePaint;
     private Paint aircraftBackPaint;
     private Paint acTextGuideLinePaint;
+    private Paint backCirclePaint;
     private Paint acWarningBoxPaint;
     private Paint acHighlightBoxPaint;
     private Paint acSelectedBoxPaint;
@@ -108,6 +116,10 @@ public class AircraftPlot extends DrawableItem {
         acTextGuideLinePaint.setStyle(Paint.Style.STROKE);
         acTextGuideLinePaint.setStrokeWidth(2);
         acTextGuideLinePaint.setColor(acTextGuideLineColor);
+
+        backCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        backCirclePaint.setStyle(Paint.Style.FILL);
+        backCirclePaint.setColor(warnBackCenterColor);
 
         acWarningBoxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acWarningBoxPaint.setStyle(Paint.Style.FILL);
@@ -180,6 +192,11 @@ public class AircraftPlot extends DrawableItem {
         float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
         float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
 
+
+        RadialGradient backGradient = new RadialGradient(x, y, backCircleRadius, backGradientColors, backGradientstops, Shader.TileMode.CLAMP);
+        backCirclePaint.setShader(backGradient);
+        canvas.drawCircle(x, y, backCircleRadius, backCirclePaint);
+
         if (isSelected) {
             RadialGradient selectedGradient = new RadialGradient(x, y, selectedBoxRadius + 5, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
             acSelectedBoxPaint.setShader(selectedGradient);
@@ -199,8 +216,6 @@ public class AircraftPlot extends DrawableItem {
                 canvas.drawCircle(x, y, noteCircleRadius, acHighlightBoxPaint);
             }
         }
-
-
 
         float nameTxtX = x + 20;
         float nameTxtY = y - 64;
