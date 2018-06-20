@@ -2,8 +2,10 @@ package com.joostit.vfradar.infolisting;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +49,14 @@ public class ListItemView extends View {
     private int noteRectBackColor = 0xFFe6e600;
     private int warnRectForeColor = 0xFF330000;
     private int warnRectBackColor = 0xFFff0000;
+
+    private int selectedCenterColor = 0xFF800080;
+    private int selectedBorderColor = 0xFFffccff;
+
+    private float[] selectedGradientstops = new float[]{0, .1f, .9f, 1};
+    private int[] selectedGradientColors = new int[]{selectedBorderColor, selectedCenterColor, selectedCenterColor, selectedBorderColor};
+
+    private Paint selectedGradientPaint;
 
     private int nameTextSize = 55;
     private int nameTypeTextSize = 18;
@@ -99,6 +109,9 @@ public class ListItemView extends View {
 
     private void init() {
 
+        selectedGradientPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectedGradientPaint.setStyle(Paint.Style.FILL);
+        selectedGradientPaint.setColor(selectedCenterColor);
 
         selectedBoundingRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         selectedBoundingRectPaint.setStyle(Paint.Style.STROKE);
@@ -212,26 +225,17 @@ public class ListItemView extends View {
         int row2 = 98;
         int row3 = 130;
 
-        int statusBoundWidth = 10;
-
         RectF boundingRect = new RectF(4, 4, this.getWidth() - 4, this.getHeight() - 4);
-        //RectF statusBoundRect = new RectF(4, 4, columnRuler2 - 4, this.getHeight() - 4);
-        RectF statusBoundRect = boundingRect;
-        RectF innerStatusBoundRect = new RectF(statusBoundRect.left + statusBoundWidth, statusBoundRect.top + statusBoundWidth, statusBoundRect.right - statusBoundWidth, statusBoundRect.bottom - statusBoundWidth);
-
         canvas.drawRoundRect(boundingRect, 3, 3, getBackPaint(false));
 
 
         if(currentState.isSelected){
-            // Selection back color
-            canvas.drawRoundRect(statusBoundRect, 3, 3, getBackPaint(true));
 
-            // Inner back color
-            canvas.drawRoundRect(innerStatusBoundRect, 3, 3, getBackPaint(false));
+            LinearGradient gradient = new LinearGradient(boundingRect.left, boundingRect.top, boundingRect.left ,boundingRect.bottom, selectedGradientColors, selectedGradientstops, Shader.TileMode.CLAMP);
 
-
-            canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(false));
-            canvas.drawRoundRect(statusBoundRect, 3, 3, getBoundingRectPaint(true));
+            selectedBackPaint.setShader(gradient);
+            canvas.drawRoundRect(boundingRect, 3, 3, selectedBackPaint);
+            canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(true));
         }
         else{
             canvas.drawRoundRect(boundingRect, 3, 3, getBoundingRectPaint(currentState.isSelected));

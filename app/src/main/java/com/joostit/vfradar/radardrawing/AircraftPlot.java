@@ -21,7 +21,7 @@ import com.joostit.vfradar.geo.geofencing.FencedArea;
 
 public class AircraftPlot extends DrawableItem {
 
-    private final int txtBackMargin = 2;
+    private final int txtBackMargin = 4;
     public int trackId;
     public float ScreenX;
     public float ScreenY;
@@ -39,8 +39,8 @@ public class AircraftPlot extends DrawableItem {
     private String infoLine;
 
 
-    private int selectedBackCenterColor = 0x22000000;
-    private int selectedBackEndColor = 0xFFD9D9D9;
+    private int selectedBackCenterColor = 0x22660066;
+    private int selectedBackEndColor = 0xFFcc00cc;
     private int acForeColor = 0xFF00FF00;
     private int acBackColor = 0xFF008000;
     private int acNameTextColor = 0xFF00FF00;
@@ -48,8 +48,8 @@ public class AircraftPlot extends DrawableItem {
     private int acWarningBoxColor = 0xFFFF0000;
     private int acSelectedoutlineColor = 0xFF00FF00;
     private int acHighlightBoxColor = 0xFFFFFF00;
-    private int acTextGuideLineColor = 0xAA008000;
-    private int acTextBackColor = 0xBB000000;
+    private int acTextGuideLineColor = 0xFF00AA00;
+    private int acTextBackColor = 0xFF660066;
 
     private int noteBackEndColor = 0x00000000;
     private int noteBackCenterColor = 0xFF000000;
@@ -222,6 +222,8 @@ public class AircraftPlot extends DrawableItem {
         float infoTxtX = x + 20;
         float infoTxtY = y - 37;
 
+        canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
+
         if (isWarning || isHighlighted || isSelected) {
             Rect nameTxtBounds = new Rect();
             Rect infoTxtBounds = new Rect();
@@ -229,7 +231,7 @@ public class AircraftPlot extends DrawableItem {
             acInfoPaint.getTextBounds(infoLine, 0, infoLine.length(), infoTxtBounds);
 
             float nameBackX = nameTxtX - txtBackMargin - 3;
-            float nameBackY = nameTxtY - nameTxtBounds.height() - txtBackMargin - 3;
+            float nameBackY = nameTxtY - nameTxtBounds.height() - txtBackMargin;
             float nameBackRight = nameTxtX + nameTxtBounds.width() + txtBackMargin + 3;
             float nameBackBottom = nameTxtY + txtBackMargin;
             RectF nameBackRect = new RectF(nameBackX, nameBackY, nameBackRight, nameBackBottom);
@@ -240,11 +242,15 @@ public class AircraftPlot extends DrawableItem {
             float infoBackBottom = infoTxtY + txtBackMargin + 3;
             RectF infoBackRect = new RectF(infoBackX, infoBackY, infoBackRight, infoBackBottom);
 
-            canvas.drawRoundRect(nameBackRect, 3, 3, acTextBackPaint);
-            canvas.drawRoundRect(infoBackRect, 3, 3, acTextBackPaint);
-        }
+            RectF txtBackRect = new RectF();
+            txtBackRect.left = nameBackRect.left < infoBackRect.left ? nameBackRect.left: infoBackRect.left;
+            txtBackRect.top = nameBackRect.top < infoBackRect.top ? nameBackRect.top: infoBackRect.top;
+            txtBackRect.bottom = nameBackRect.bottom > infoBackRect.bottom ? nameBackRect.bottom: infoBackRect.bottom;
+            txtBackRect.right = nameBackRect.right > infoBackRect.right ? nameBackRect.right: infoBackRect.right;
 
-        canvas.drawLine(x, y, x + 18, y - 55, acTextGuideLinePaint);
+            canvas.drawRoundRect(txtBackRect, 3, 3, acTextBackPaint);
+            canvas.drawRoundRect(txtBackRect, 3, 3, acSelectedOutlinePaint);
+        }
 
         // Track arrow line
         if (hasTrack) {
