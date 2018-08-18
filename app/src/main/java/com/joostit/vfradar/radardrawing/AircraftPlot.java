@@ -31,7 +31,7 @@ public class AircraftPlot extends DrawableItem {
     public Boolean isWarning = false;
     private int selectedBoxRadius = 40;
     private final int warnCircleRadius = 35;
-    private final int noteCircleRadius = 30;
+    private final int highlightCircleRadius = 30;
     private final int backCircleRadius = 35;
     private boolean doDraw = false;
     public LatLon position = new LatLon();
@@ -57,8 +57,8 @@ public class AircraftPlot extends DrawableItem {
     private int txtBackCenterColor = 0xFF800080;
     private int txtBackBorderColor = 0xFFffccff;
 
-    private int noteBackEndColor = 0x00000000;
-    private int noteBackCenterColor = 0xFF000000;
+    private int highlightBackEndColor = 0x00000000;
+    private int highlightBackCenterColor = 0xFFffff00;
 
     private int backEndColor = 0x00000000;
     private int backCenterColor = 0xAA000000;
@@ -74,8 +74,8 @@ public class AircraftPlot extends DrawableItem {
     private float[] selectedGradientstops = new float[]{0, 0.1f, 0.8f, 1};
     private int[] selectedGradientColors = new int[]{selectedBackCenterColor, selectedBackCenterColor, selectedBackMiddleColor, selectedBackBorderColor};
 
-    private float[] noteGradientstops = new float[]{0, 1};
-    private int[] noteGradientColors = new int[]{noteBackCenterColor, noteBackEndColor};
+    private float[] highlightGradientstops = new float[]{0, 1};
+    private int[] highlightGradientColors = new int[]{highlightBackCenterColor, highlightBackEndColor};
 
     private float[] backGradientstops = new float[]{0, 1};
     private int[] backGradientColors = new int[]{backCenterColor, backEndColor};
@@ -222,9 +222,9 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawCircle(x, y, warnCircleRadius, acWarningBoxPaint);
         } else {
             if (isHighlighted) {
-                RadialGradient highlightedGradient = new RadialGradient(x, y, noteCircleRadius, noteGradientColors, noteGradientstops, Shader.TileMode.CLAMP);
+                RadialGradient highlightedGradient = new RadialGradient(x, y, highlightCircleRadius, highlightGradientColors, highlightGradientstops, Shader.TileMode.CLAMP);
                 acHighlightBoxPaint.setShader(highlightedGradient);
-                canvas.drawCircle(x, y, noteCircleRadius, acHighlightBoxPaint);
+                canvas.drawCircle(x, y, highlightCircleRadius, acHighlightBoxPaint);
             }
         }
 
@@ -242,7 +242,7 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawLine(x, y, connectionX, connectionY, acTextGuideLinePaint);
         }
 
-        if (isWarning || isHighlighted || isSelected) {
+        if (isSelected) {
             Rect nameTxtBounds = new Rect();
             Rect infoTxtBounds = new Rect();
             acNamePaint.getTextBounds(nameLine, 0, nameLine.length(), nameTxtBounds);
