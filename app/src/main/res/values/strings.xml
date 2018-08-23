@@ -136,6 +136,8 @@
     <string name="action_settings">Preferences ToDo!</string>
     <string name="btn_next_page">Next</string>
     <string name="btn_start">Start</string>
+    <string name="no_scenario">NONE</string>
+    <string name="no_scenario_description">No scenario will be used. The center location can be set manually</string>
 
     <string name="startup_location_center">Center location</string>
     <string name="startup_location_fromScenario">From scenario</string>

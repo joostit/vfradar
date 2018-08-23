@@ -31,11 +31,18 @@ public class SetupScenarioFragment extends Fragment {
     private OnStartupFragmentInteractionListener mListener;
 
     private ListView scenarioListView;
+    TextView nameTxt;
+    TextView authorTxt;
+    TextView lastEditedTxt;
+    TextView descriptionTxt;
+    View view;
+    String NoneScenarioFileName = "JFGTW(KY^@$#(FJSGDRWTSJC&&@$UM,.HST";
+    private Scenario selectedScenario = null;
+
 
     public SetupScenarioFragment() {
         // Required empty public constructor
     }
-
 
 
     public static SetupScenarioFragment newInstance() {
@@ -53,7 +60,7 @@ public class SetupScenarioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_setup_scenario, container, false);
+        view = inflater.inflate(R.layout.fragment_setup_scenario, container, false);
 
         Button button = view.findViewById(R.id.nextPageButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +69,12 @@ public class SetupScenarioFragment extends Fragment {
             }
         });
 
-        scenarioListView = (ListView)view.findViewById(R.id.scenarioSelectionList);
+        scenarioListView = (ListView) view.findViewById(R.id.scenarioSelectionList);
+
+        nameTxt = (TextView) view.findViewById(R.id.scenarioNameTxt);
+        authorTxt = (TextView) view.findViewById(R.id.scenarioAuthorTxt);
+        lastEditedTxt = (TextView) view.findViewById(R.id.scenarioLastEditedTxt);
+        descriptionTxt = (TextView) view.findViewById(R.id.scenarioDescriptionTxt);
 
         initScenariosList();
 
@@ -70,32 +82,75 @@ public class SetupScenarioFragment extends Fragment {
     }
 
 
-    private void initScenariosList(){
+    private void initScenariosList() {
 
         ScenarioLoader loader = new ScenarioLoader();
         List<Scenario> scenarios = loader.getAvailableScenarios();
+
+        Scenario noScenario = new Scenario();
+        noScenario.fileName = NoneScenarioFileName;
+        noScenario.name = getResources().getString(R.string.no_scenario);
+        noScenario.author = "";
+        noScenario.lastUpdated = "";
+        noScenario.name = getResources().getString(R.string.no_scenario);
+        noScenario.description = getResources().getString(R.string.no_scenario_description);
+
+        scenarios.add(0, noScenario);
         ArrayAdapter<Scenario> myarrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1, scenarios);
         scenarioListView.setAdapter(myarrayAdapter);
 
-        scenarioListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long i)
-            {
+        scenarioListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long i) {
+                scenarioListView.setSelection(position);
 
+                Scenario selected = (Scenario) parent.getItemAtPosition(position);
+
+                updateSummary(selected);
+                processSelection(selected);
             }
         });
 
         scenarioListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                
+                updateSummary(null);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                updateSummary(null);
             }
         });
+    }
+
+
+    private void updateSummary(Scenario selected) {
+        String name = "-";
+        String author = "";
+        String date = "";
+        String description = "";
+
+        if (selected != null) {
+            if (selected.name != null) {
+                name = selected.name;
+            }
+            if (selected.author != null) {
+                author = selected.author;
+            }
+
+            if (selected.lastUpdated != null) {
+                date = selected.lastUpdated;
+            }
+
+            if (selected.description != null) {
+                description = selected.description;
+            }
+        }
+
+        nameTxt.setText(name);
+        authorTxt.setText(author);
+        lastEditedTxt.setText(date);
+        descriptionTxt.setText(description);
     }
 
 
@@ -115,5 +170,21 @@ public class SetupScenarioFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
+    private void processSelection(Scenario selected) {
+
+        if (selected == null) {
+            selectedScenario = null;
+        } else if (selected.fileName.equals(NoneScenarioFileName)) {
+            selectedScenario = null;
+        } else if (selected.name == null) {
+            selectedScenario = null;
+        }
+        else{
+            selectedScenario = selected;
+        }
+    }
+
 
 }

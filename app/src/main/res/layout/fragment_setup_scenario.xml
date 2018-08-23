@@ -8,42 +8,91 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="130dp">
+        android:layout_marginBottom="130dp"
+        android:weightSum="2">
 
         <TableRow android:layout_marginTop="50dp">
-            <TextView android:text="Select scenario" />
+
+            <TextView android:text="Select scenario"
+                android:layout_weight="1"/>
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="#484848">
+            <TableLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#484848"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TableRow>
+
                 <ListView
+                    android:id="@+id/scenarioSelectionList"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
                     android:layout_margin="1px"
+                    android:background="#FF000000"
                     android:choiceMode="singleChoice"
                     android:listSelector="#666666"
-                    android:id="@+id/scenarioSelectionList"
-                    android:layout_width="500dp"
-                    android:layout_height="match_parent"
-                    android:background="#FF000000">
-                </ListView>
-            </LinearLayout>
-
-        </TableRow>
-
-    </TableLayout>
-
-    <Button
-        android:id="@+id/nextPageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/btn_next_page"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+                    android:layout_weight="1"/>
+                </TableRow>
 
 
-</android.support.constraint.ConstraintLayout>
+            </TableLayout>
+
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20px"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/scenarioNameTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/scenarioAuthorTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/scenarioLastEditedTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/scenarioDescriptionTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-" />
+        </LinearLayout>
+
+    </TableRow>
+
+</TableLayout>
+
+<Button
+android:id="@+id/nextPageButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginBottom="16dp"
+android:layout_marginRight="16dp"
+android:text="@string/btn_next_page"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintRight_toRightOf="parent" />
+
+
+    </android.support.constraint.ConstraintLayout>
