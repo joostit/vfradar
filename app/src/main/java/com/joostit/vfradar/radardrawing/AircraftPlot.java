@@ -40,9 +40,7 @@ public class AircraftPlot extends DrawableItem {
     private String infoLine;
 
 
-
     private int acForeColor = 0xFF00FF00;
-    private int acBackColor = 0x00008000;
     private int acNameTextColor = 0xFF00FF00;
     private int acInfoTextColor = 0xFF00DD00;
     private int acWarningBoxColor = 0xFFFF0000;
@@ -86,7 +84,6 @@ public class AircraftPlot extends DrawableItem {
     private Paint acNamePaint;
     private Paint acInfoPaint;
     private Paint aircraftForePaint;
-    private Paint aircraftBackPaint;
     private Paint acTextGuideLinePaint;
     private Paint backCirclePaint;
     private Paint acWarningBoxPaint;
@@ -106,11 +103,6 @@ public class AircraftPlot extends DrawableItem {
         aircraftForePaint.setStrokeWidth(2);
         aircraftForePaint.setColor(acForeColor);
 
-        aircraftBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        aircraftBackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        aircraftBackPaint.setStrokeWidth(6);
-        aircraftBackPaint.setColor(acBackColor);
-
         acNamePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acNamePaint.setStyle(Paint.Style.FILL);
         acNamePaint.setColor(acNameTextColor);
@@ -123,7 +115,7 @@ public class AircraftPlot extends DrawableItem {
 
         acTextGuideLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acTextGuideLinePaint.setStyle(Paint.Style.STROKE);
-        acTextGuideLinePaint.setStrokeWidth(2);
+        acTextGuideLinePaint.setStrokeWidth(1);
         acTextGuideLinePaint.setColor(acTextGuideLineColor);
 
         backCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -163,7 +155,6 @@ public class AircraftPlot extends DrawableItem {
 
         float arrowAngle = 135;
         float longArrowLength = 10;
-        float shortArrowLength = 9;
 
         int boxRound = 7;
         double shortLineLength = 20;
@@ -193,15 +184,8 @@ public class AircraftPlot extends DrawableItem {
         float longArrRightX = shortEndX + (float) (longArrowLength * Math.sin(arrRightRad));
         float longArrRightY = shortEndY - (float) (longArrowLength * Math.cos(arrRightRad));
 
-        float shortArrRightX = shortEndX + (float) (shortArrowLength * Math.sin(arrRightRad));
-        float shortArrRightY = shortEndY - (float) (shortArrowLength * Math.cos(arrRightRad));
-
         float longArrLeftX = shortEndX + (float) (longArrowLength * Math.sin(arrLeftRad));
         float longArrLeftY = shortEndY - (float) (longArrowLength * Math.cos(arrLeftRad));
-
-        float shortArrLeftX = shortEndX + (float) (shortArrowLength * Math.sin(arrLeftRad));
-        float shortArrLeftY = shortEndY - (float) (shortArrowLength * Math.cos(arrLeftRad));
-
 
         RadialGradient backGradient = new RadialGradient(x, y, backCircleRadius, backGradientColors, backGradientstops, Shader.TileMode.CLAMP);
         backCirclePaint.setShader(backGradient);
@@ -272,15 +256,6 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawRoundRect(txtBackRect, 3, 3, txtBackGradientPaint);
             canvas.drawRoundRect(txtBackRect, 3, 3, acSelectedOutlinePaint);
         }
-
-        // Track arrow line
-        if (hasTrack) {
-            canvas.drawLine(shortEndX, shortEndY, shortArrLeftX, shortArrLeftY, aircraftBackPaint);
-            canvas.drawLine(shortEndX, shortEndY, shortArrRightX, shortArrRightY, aircraftBackPaint);
-            canvas.drawLine(x, y, shortEndX, shortEndY, aircraftBackPaint);
-        }
-
-        canvas.drawCircle(x, y, 7, aircraftBackPaint);
 
         if (hasTrack) {
             canvas.drawLine(x, y, longEndX, longEndY, aircraftForePaint);
