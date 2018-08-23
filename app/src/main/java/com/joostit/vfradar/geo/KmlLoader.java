@@ -120,7 +120,7 @@ public abstract class KmlLoader <placeHolderObject extends GeoObject> {
 
     private placeHolderObject readPlacemark(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        placeHolderObject newEntry = createNewPlaceholderObject();
+        placeHolderObject newEntry = createNewGenericObject();
 
         parser.require(XmlPullParser.START_TAG, ns, "Placemark");
 
@@ -272,7 +272,7 @@ public abstract class KmlLoader <placeHolderObject extends GeoObject> {
     }
 
 
-    protected abstract placeHolderObject createNewPlaceholderObject();
+    protected abstract placeHolderObject createNewGenericObject();
 
     protected boolean parseCustomPlaceholderElement(XmlPullParser parser, String elementName, placeHolderObject geoObject)  throws XmlPullParserException, IOException {
         return false;

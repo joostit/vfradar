@@ -74,14 +74,21 @@ public class SetupScenarioFragment extends Fragment {
 
         ScenarioLoader loader = new ScenarioLoader();
         List<Scenario> scenarios = loader.getAvailableScenarios();
-
         ArrayAdapter<Scenario> myarrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1, scenarios);
         scenarioListView.setAdapter(myarrayAdapter);
+
+        scenarioListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long i)
+            {
+
+            }
+        });
 
         scenarioListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                
             }
 
             @Override

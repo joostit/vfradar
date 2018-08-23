@@ -47,7 +47,7 @@ public class GeoFenceLoader extends KmlLoader<FencedArea> {
 
 
     @Override
-    protected FencedArea createNewPlaceholderObject() {
+    protected FencedArea createNewGenericObject() {
         return new FencedArea();
     }
 

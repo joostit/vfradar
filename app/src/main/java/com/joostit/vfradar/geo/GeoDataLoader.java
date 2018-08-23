@@ -46,7 +46,7 @@ public class GeoDataLoader extends KmlLoader<GeoObject> {
     }
 
     @Override
-    protected GeoObject createNewPlaceholderObject() {
+    protected GeoObject createNewGenericObject() {
         return new GeoObject(GeoObjectTypes.GenericGeoArea);
     }
 }
