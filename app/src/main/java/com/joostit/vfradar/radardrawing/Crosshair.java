@@ -25,8 +25,9 @@ public class Crosshair extends DrawableItem {
     private Paint crosshairPaint;
     private Paint crosshairTextPaint;
 
-    private int crosshairColor = 0xFF00BB00;
-    private int crosshairTextColor = 0xFF00CC00;
+    private int crosshairColor = 0xFF00AA00;
+    private int crosshairTextColor = 0xCC00CC00;
+    private float strokeWidth = 1.5f;
 
     private float width;
     private float height;
@@ -45,7 +46,7 @@ public class Crosshair extends DrawableItem {
 
         crosshairPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         crosshairPaint.setStyle(Paint.Style.STROKE);
-        crosshairPaint.setStrokeWidth(3);
+        crosshairPaint.setStrokeWidth(strokeWidth);
         crosshairPaint.setColor(crosshairColor);
     }
 

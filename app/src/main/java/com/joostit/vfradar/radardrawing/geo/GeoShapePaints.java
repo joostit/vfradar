@@ -13,19 +13,19 @@ public final class GeoShapePaints {
     private GeoShapePaints() {
     }
 
-    public static final int notificationAreaForeColor = 0xBBffff00;
-    public static final int notificationAreaBackColor = 0x44ffff00;
-    public static final int notificationAreaTextColor = 0xFFffff00;
+    public static final int notificationAreaForeColor = 0xAAffff00;
+    public static final int notificationAreaBackColor = 0x22ffff00;
+    public static final int notificationAreaTextColor = 0xCCffff00;
 
-    public static final int warningAreaForeColor = 0xBBff0000;
-    public static final int warningAreaBackColor = 0x44ff0000;
-    public static final int warningAreaTextColor = 0xFFff0000;
+    public static final int warningAreaForeColor = 0xAAff0000;
+    public static final int warningAreaBackColor = 0x22ff0000;
+    public static final int warningAreaTextColor = 0xCCff0000;
 
     public static final int genericPolygonForeColor = 0;
     public static final int genericPolygonBackColor = 0xFF404040;
     public static final int genericPolygonTextColor = 0xFF808080;
 
-    public static final int strokeWidth = 2;
+    public static final float strokeWidth = 1.5f;
     public static final int nameTextSize = 25;
 
 

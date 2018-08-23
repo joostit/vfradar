@@ -42,7 +42,7 @@ public class AircraftPlot extends DrawableItem {
 
 
     private int acForeColor = 0xFF00FF00;
-    private int acBackColor = 0xFF008000;
+    private int acBackColor = 0x00008000;
     private int acNameTextColor = 0xFF00FF00;
     private int acInfoTextColor = 0xFF00DD00;
     private int acWarningBoxColor = 0xFFFF0000;
