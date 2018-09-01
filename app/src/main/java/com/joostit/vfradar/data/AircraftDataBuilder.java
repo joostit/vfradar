@@ -63,6 +63,8 @@ public class AircraftDataBuilder {
             ac.adsbStation = getNullableString(jsonAc, JsonKeys.adsbStation);
             ac.adsbAge = getNullableInt(jsonAc, JsonKeys.adsbAge);
             ac.squawk = getNullableInt(jsonAc, JsonKeys.squawk);
+            ac.hAgl = getNullableInt(jsonAc, JsonKeys.hAgl);
+            ac.setAirState(getNullableString(jsonAc, JsonKeys.state));
 
         } catch (JSONException e) {
             e.printStackTrace();

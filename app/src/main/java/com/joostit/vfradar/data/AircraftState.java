@@ -30,6 +30,9 @@ public class AircraftState {
     public Integer adsbAge;
     public String rxChannel;
     public Integer squawk;
+    public Integer hAgl;
+    public AirborneStates airState;
+
 
     public boolean hasOgnStation() {
         return ognStation != null;
@@ -42,7 +45,6 @@ public class AircraftState {
     public boolean hasAdsbStation() {
         return adsbStation != null;
     }
-
 
     public boolean hasAdsbAge() {
         return adsbAge != null;
@@ -88,5 +90,46 @@ public class AircraftState {
         return !StringValue.nullOrEmpty(flarmId);
     }
 
+    public Integer gethAgl() {
+        return hAgl;
+    }
+
+    public void sethAgl(Integer hAgl) {
+        this.hAgl = hAgl;
+    }
+
+    public boolean hasHAgl(){
+        return (hAgl != null);
+    }
+
+    public AirborneStates getAirState() {
+        return airState;
+    }
+
+    public void setAirState(AirborneStates airState) {
+        this.airState = airState;
+    }
+
+    public void setAirState(String airState) {
+        if(airState == null){
+            this.airState = AirborneStates.Unknown;
+            return;
+        }
+
+        if(airState.isEmpty()){
+            this.airState = AirborneStates.Unknown;
+            return;
+        }
+
+        try {
+            this.airState = AirborneStates.valueOf(airState);
+        } catch (IllegalArgumentException e) {
+            this.airState = AirborneStates.Unknown;
+        }
+    }
+
+    public boolean hasAirState(){
+        return (airState != null);
+    }
 
 }

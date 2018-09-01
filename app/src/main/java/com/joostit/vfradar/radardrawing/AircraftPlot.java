@@ -11,6 +11,7 @@ import android.graphics.Shader;
 
 import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.config.UserUnitConvert;
+import com.joostit.vfradar.data.AirborneStates;
 import com.joostit.vfradar.data.TrackedAircraft;
 import com.joostit.vfradar.geo.LatLon;
 import com.joostit.vfradar.geo.geofencing.FenceAlerts;
@@ -38,7 +39,10 @@ public class AircraftPlot extends DrawableItem {
     private Integer Track;
     private String displayName;
     private String infoLine;
+    private AirborneStates airState = AirborneStates.Unknown;
 
+    private int acForeColorGnd = 0xFF996633;
+    private int acNameTextColorGnd = 0xFF996633;
 
     private int acForeColor = 0xFF00FF00;
     private int acNameTextColor = 0xFF00FF00;
@@ -47,6 +51,7 @@ public class AircraftPlot extends DrawableItem {
     private int acSelectedoutlineColor = 0xFF00FF00;
     private int acHighlightBoxColor = 0xFFFFFF00;
     private int acTextGuideLineColor = 0xFF00AA00;
+    private int acTextGuideLineColorGnd = 0x734d26;
 
     private int selectedBackCenterColor = 0x22660066;
     private int selectedBackMiddleColor = 0xFFcc00cc;
@@ -82,9 +87,13 @@ public class AircraftPlot extends DrawableItem {
     private int[] warnGradientColors = new int[]{warnBackCenterColor, warnBackEndColor};
 
     private Paint acNamePaint;
+    private Paint acNamePaintGnd;
     private Paint acInfoPaint;
+
+    private Paint aircraftForePaintGnd;
     private Paint aircraftForePaint;
     private Paint acTextGuideLinePaint;
+    private Paint acTextGuideLinePaintGnd;
     private Paint backCirclePaint;
     private Paint acWarningBoxPaint;
     private Paint acHighlightBoxPaint;
@@ -103,10 +112,20 @@ public class AircraftPlot extends DrawableItem {
         aircraftForePaint.setStrokeWidth(2);
         aircraftForePaint.setColor(acForeColor);
 
+        aircraftForePaintGnd = new Paint(Paint.ANTI_ALIAS_FLAG);
+        aircraftForePaintGnd.setStyle(Paint.Style.FILL_AND_STROKE);
+        aircraftForePaintGnd.setStrokeWidth(2);
+        aircraftForePaintGnd.setColor(acForeColorGnd);
+
         acNamePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acNamePaint.setStyle(Paint.Style.FILL);
         acNamePaint.setColor(acNameTextColor);
         acNamePaint.setTextSize(26);
+
+        acNamePaintGnd = new Paint(Paint.ANTI_ALIAS_FLAG);
+        acNamePaintGnd.setStyle(Paint.Style.FILL);
+        acNamePaintGnd.setColor(acNameTextColorGnd);
+        acNamePaintGnd.setTextSize(26);
 
         acInfoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         acInfoPaint.setStyle(Paint.Style.FILL);
@@ -117,6 +136,11 @@ public class AircraftPlot extends DrawableItem {
         acTextGuideLinePaint.setStyle(Paint.Style.STROKE);
         acTextGuideLinePaint.setStrokeWidth(1);
         acTextGuideLinePaint.setColor(acTextGuideLineColor);
+
+        acTextGuideLinePaintGnd = new Paint(Paint.ANTI_ALIAS_FLAG);
+        acTextGuideLinePaintGnd.setStyle(Paint.Style.STROKE);
+        acTextGuideLinePaintGnd.setStrokeWidth(1);
+        acTextGuideLinePaintGnd.setColor(acTextGuideLineColorGnd);
 
         backCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         backCirclePaint.setStyle(Paint.Style.FILL);
@@ -223,13 +247,14 @@ public class AircraftPlot extends DrawableItem {
         if(!isSelected) {
             float connectionX = x + (txtXDisplacement - 8);
             float connectionY = y - (txtXDisplacement + 18);
-            canvas.drawLine(x, y, connectionX, connectionY, acTextGuideLinePaint);
+            canvas.drawLine(x, y, connectionX, connectionY, getAcTextGuideLinePaint());
         }
 
+        Rect nameTxtBounds = new Rect();
+        getAcNamePaint().getTextBounds(nameLine, 0, nameLine.length(), nameTxtBounds);
+
         if (isSelected) {
-            Rect nameTxtBounds = new Rect();
             Rect infoTxtBounds = new Rect();
-            acNamePaint.getTextBounds(nameLine, 0, nameLine.length(), nameTxtBounds);
             acInfoPaint.getTextBounds(infoLine, 0, infoLine.length(), infoTxtBounds);
 
             float nameBackX = nameTxtX - txtBackMargin - 3;
@@ -257,19 +282,72 @@ public class AircraftPlot extends DrawableItem {
             canvas.drawRoundRect(txtBackRect, 3, 3, acSelectedOutlinePaint);
         }
 
-        if (hasTrack) {
-            canvas.drawLine(x, y, longEndX, longEndY, aircraftForePaint);
-        }
-
-        canvas.drawCircle(x, y, 6, aircraftForePaint);
+        canvas.drawCircle(x, y, 6, getAcForePaint());
 
         if (hasTrack) {
-            canvas.drawLine(longEndX, longEndY, longArrRightX, longArrRightY, aircraftForePaint);
-            canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, aircraftForePaint);
+            canvas.drawLine(longEndX, longEndY, longArrRightX, longArrRightY, getAcForePaint());
+            canvas.drawLine(x, y, longEndX, longEndY, getAcForePaint());
+            canvas.drawLine(longEndX, longEndY, longArrLeftX, longArrLeftY, getAcForePaint());
         }
 
-        canvas.drawText(nameLine, nameTxtX, nameTxtY, acNamePaint);
-        canvas.drawText(infoLine, infoTxtX, infoTxtY, acInfoPaint);
+        if(airState == AirborneStates.Ground){
+            nameTxtY += (nameTxtBounds.height() / 2);
+        }
+
+        canvas.drawText(nameLine, nameTxtX, nameTxtY, getAcNamePaint());
+
+        if(airState != AirborneStates.Ground){
+            canvas.drawText(infoLine, infoTxtX, infoTxtY, acInfoPaint);
+        }
+
+    }
+
+    private Paint getAcForePaint(){
+        switch (airState) {
+            case Unknown:
+                return aircraftForePaint;
+
+            case Ground:
+                return aircraftForePaintGnd;
+
+            case Airborne:
+                return aircraftForePaint;
+
+            default:
+                return aircraftForePaint;
+        }
+    }
+
+    private Paint getAcNamePaint(){
+        switch (airState) {
+            case Unknown:
+                return acNamePaint;
+
+            case Ground:
+                return acNamePaintGnd;
+
+            case Airborne:
+                return acNamePaint;
+
+            default:
+                return acNamePaint;
+        }
+    }
+
+    private Paint getAcTextGuideLinePaint(){
+        switch (airState) {
+            case Unknown:
+                return acTextGuideLinePaint;
+
+            case Ground:
+                return acTextGuideLinePaintGnd;
+
+            case Airborne:
+                return acTextGuideLinePaint;
+
+            default:
+                return acNamePaint;
+        }
     }
 
 
@@ -293,6 +371,7 @@ public class AircraftPlot extends DrawableItem {
         infoLine = infoLineString;
         Track = aircraft.data.track;
         position = aircraft.data.position;
+        airState = aircraft.data.airState;
 
         boolean areaHighlight = false;
         boolean areaWarning = false;

@@ -27,5 +27,7 @@ public final class JsonKeys {
     public static String adsbStation = "adsbStation";
     public static String adsbAge = "adsbAge";
     public static String squawk = "squawk";
+    public static String hAgl = "hAgl";
+    public static String state = "state";
 
 }

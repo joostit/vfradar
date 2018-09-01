@@ -1,5 +1,7 @@
 package com.joostit.vfradar.infolisting;
 
+import com.joostit.vfradar.data.AirborneStates;
+
 /**
  * Created by Joost on 19-1-2018.
  */
@@ -14,6 +16,7 @@ public class InfoListItemData {
     public String relativeDistance = "";
     public String relativeBearing = "";
     public String vRate = "";
+    public AirborneStates airState = AirborneStates.Unknown;
 
     public String nameType = "";
     public String subNameType = "";

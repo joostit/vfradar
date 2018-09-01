@@ -73,6 +73,9 @@ public class AircraftListCollection {
         } else {
             acItem.altitude = "";
         }
+
+        acItem.airState = tracked.data.airState;
+
         acItem.model = sanitizeModelString(tracked.data.model, tracked.data.type, context);
         acItem.name = tracked.getId(mainNameType);
         acItem.nameType = getNameTypeTranslation(mainNameType, context);
