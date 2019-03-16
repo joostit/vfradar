@@ -122,12 +122,12 @@ public class SysConfig {
     }
 
     private static void setDefaults() {
-        vfradarCoreDataAddress = "http://192.168.8.210:60002/";
-        centerPosition = new LatLon(52.278758, 6.899437);
+        vfradarCoreDataAddress = "http://10.10.10.10:60002/full";
+        centerPosition = new LatLon(52.278788, 6.899626);
         siteElevation = 0;
         maxValidRxAge = 15;
         connectionUpdateInterval = 500;
-        dataFolder = "";
+        dataFolder = "sdcard/VFRadar";
         heightUnit = HeightUnits.Feet;
         verticalRateUnit = VerticalRateUnits.FeetPerMinute;
         showGeoFences = true;
