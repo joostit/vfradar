@@ -66,7 +66,7 @@ public class OperationalActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         PermissionHelper.verifyWriteStoragePermissions(this);
-        PermissionHelper.verifLocationAndGpsPermissions(this);
+        PermissionHelper.verifyLocationAndGpsPermissions(this);
         SysConfig.loadSettings(getApplicationContext());
         createComponentObjects();
         startTimer();

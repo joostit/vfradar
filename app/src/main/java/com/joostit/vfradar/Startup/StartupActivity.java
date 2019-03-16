@@ -1,8 +1,10 @@
 package com.joostit.vfradar.Startup;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,9 +26,15 @@ import com.joostit.vfradar.R;
 import com.joostit.vfradar.config.SysConfig;
 import com.joostit.vfradar.settings.SettingsActivity;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.joostit.vfradar.PermissionHelper.REQUEST_EXTERNAL_STORAGE;
+import static com.joostit.vfradar.PermissionHelper.getAppPermissions;
+
 public class StartupActivity extends AppCompatActivity
         implements OnStartupFragmentInteractionListener {
 
+    private boolean hasStoragePermission =false;
+    private boolean hasLocationPermission =false;
 
     private final int CONFIG_INTENT_REQUEST_CODE = 1;
     boolean doubleBackToExitPressedOnce = false;
@@ -44,15 +52,36 @@ public class StartupActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SysConfig.loadSettings(this);
+        boolean hasAllPermissions = PermissionHelper.getAppPermissions(this);
 
-        PermissionHelper.verifyWriteStoragePermissions(this);
-        PermissionHelper.verifLocationAndGpsPermissions(this);
+        if(hasAllPermissions){
+            continueStartupAfterPermissions();
+        }
+        else{
+            // Wait for the callback to get all permissions and continue
+        }
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(PermissionHelper.hasAllNeededPermissions(this)){
+            continueStartupAfterPermissions();
+        }
+    }
+
+
+    private void continueStartupAfterPermissions(){
+        SysConfig.loadSettings(this);
 
         setContentView(R.layout.activity_startup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
